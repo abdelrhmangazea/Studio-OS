@@ -1,0 +1,689 @@
+[
+ {
+  "key": "stage_01_consultation",
+  "stage": "01_consultation",
+  "order": 1,
+  "title_ar": "الاستشارة التصميمية",
+  "title_en": "Design Consultation",
+  "sections": [
+   {
+    "title_ar": "التحضير للاستشارة",
+    "title_en": "Preparing for the Consultation",
+    "items": [
+     {
+      "ar": "البحث عن العقار إلكترونياً (السعر، الصور، المخطط)",
+      "en": "Research the property online — price, photos, floor plan"
+     },
+     {
+      "ar": "البحث عن العميل (محركات البحث، لينكدإن، وغيرها)",
+      "en": "Research the client — search engines, LinkedIn, and elsewhere"
+     },
+     {
+      "ar": "طباعة المخطط أو تحميله",
+      "en": "Print the floor plan or load it on your device"
+     },
+     {
+      "ar": "مراجعة ملاحظات الاستفسار الأول",
+      "en": "Review the notes from the first enquiry"
+     },
+     {
+      "ar": "تخطيط الطريق — مراجعة حالة المرور، وضبط الملاحة، وتثبيت الموعد في الأجندة",
+      "en": "Plan the route — check traffic, set navigation, block the appointment in your calendar"
+     },
+     {
+      "ar": "ترك هامش زمني كافٍ لتجنّب التأخّر",
+      "en": "Leave enough buffer time so you are not late"
+     },
+     {
+      "ar": "اختيار هدية وشراؤها، إن كان ذلك مناسباً",
+      "en": "Choose and buy a gift, if appropriate"
+     },
+     {
+      "ar": "الاطلاع على طبيعة الحي لتجهيز مدخل للحديث",
+      "en": "Look into the neighbourhood so you have an opening for conversation"
+     },
+     {
+      "ar": "شحن الأجهزة وتجهيز حقيبة الأدوات",
+      "en": "Charge your devices and pack your toolkit"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "حقيبة الأدوات — تُجهَّز مسبقاً",
+    "title_en": "Toolkit — packed in advance",
+    "items": [
+     {
+      "ar": "الجهاز اللوحي (iPad)",
+      "en": "Tablet (iPad)"
+     },
+     {
+      "ar": "التأكد من تحميل ملف تعريف الاستوديو عليه لعرضه أثناء اللقاء",
+      "en": "Studio portfolio loaded on it, ready to show during the meeting"
+     },
+     {
+      "ar": "هاتف أو كاميرا للتصوير",
+      "en": "Phone or camera for photos"
+     },
+     {
+      "ar": "نسخة مطبوعة من المخطط، أو محمّلة على الجهاز لتدوين المقاسات والملاحظات",
+      "en": "Printed floor plan, or loaded on the device, for measurements and notes"
+     },
+     {
+      "ar": "دفتر رسم منقّط للاسكتشات، في حال عدم استخدام الجهاز اللوحي",
+      "en": "Dotted sketchbook, in case you are not using the tablet"
+     },
+     {
+      "ar": "مقلمة تحوي أقلام رصاص وحبر وبراية وممحاة",
+      "en": "Pencil case with pencils, pens, sharpener and eraser"
+     },
+     {
+      "ar": "دفتر ملاحظات",
+      "en": "Notebook"
+     },
+     {
+      "ar": "جهاز قياس ليزري",
+      "en": "Laser measure"
+     },
+     {
+      "ar": "بطاريات احتياطية لجهاز القياس",
+      "en": "Spare batteries for the laser measure"
+     },
+     {
+      "ar": "شريط قياس ١٠ أمتار",
+      "en": "10-metre tape measure"
+     },
+     {
+      "ar": "مروحة ألوان الدهانات — الألوان (اختياري)",
+      "en": "Paint fan deck — colours (optional)"
+     },
+     {
+      "ar": "مروحة ألوان الدهانات — المحايدة (اختياري)",
+      "en": "Paint fan deck — neutrals (optional)"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "قبل البدء",
+    "title_en": "Before You Begin",
+    "items": [
+     {
+      "ar": "تسجيل اللقاء بعد أخذ إذن العميل، أو تسجيل ملخّص صوتي مفصّل في السيارة قبل المغادرة",
+      "en": "Record the meeting with the client's permission, or record a detailed voice summary in the car before leaving"
+     }
+    ],
+    "note_ar": "تذكّري: الاستشارة لقاء بيعي مدفوع، وليست حديثاً عاماً عن التصميم.",
+    "note_en": "Remember: the consultation is a paid sales meeting, not a general conversation about design."
+   },
+   {
+    "title_ar": "إدارة اللقاء",
+    "title_en": "Running the Meeting",
+    "items": [
+     {
+      "ar": "الحضور في الموعد تماماً — لا متأخراً ولا مبكراً",
+      "en": "Arrive exactly on time — not late, not early"
+     },
+     {
+      "ar": "البدء بمدخل قوي يكسر الجمود؛ فالعميل غالباً متوتّر، ولا يصحّ أن تكوني كذلك",
+      "en": "Open strongly and break the ice — the client is usually nervous, and you cannot be"
+     },
+     {
+      "ar": "طلب الإذن قبل التسجيل",
+      "en": "Ask permission before recording"
+     },
+     {
+      "ar": "التجوّل في المنزل قبل الجلوس",
+      "en": "Walk through the home before sitting down"
+     },
+     {
+      "ar": "عرض قيمة التحوّل المنتظر أثناء التنقّل بين الغرف",
+      "en": "Show the value of the transformation as you move between rooms"
+     },
+     {
+      "ar": "تحديد المشكلات الوظيفية وحلّها أثناء الحديث",
+      "en": "Identify functional problems and solve them out loud"
+     },
+     {
+      "ar": "تضمين قصص ونماذج من مشاريع وعملاء سابقين",
+      "en": "Bring in stories and examples from past projects and clients"
+     },
+     {
+      "ar": "التقاط الصور والمقاسات التقريبية — بالقدر اللازم لإعداد عرض الأتعاب فقط",
+      "en": "Take photos and rough measurements — only as much as the fee proposal needs"
+     },
+     {
+      "ar": "البحث عن نقاط تقارب لبناء علاقة مع العميل",
+      "en": "Look for common ground to build rapport"
+     },
+     {
+      "ar": "تقييم مدى التوافق في الذوق والطراز",
+      "en": "Assess whether your taste and theirs actually align"
+     },
+     {
+      "ar": "التأكد من واقعية الميزانية، أو توضيح التكاليف الفعلية في السوق حالياً",
+      "en": "Check the budget is realistic, or explain what the market actually costs today"
+     },
+     {
+      "ar": "الحفاظ على نبرة واثقة وإيجابية ومركّزة على العميل",
+      "en": "Keep a confident, positive, client-focused tone"
+     },
+     {
+      "ar": "الإنصات أكثر من الحديث — اجعلي اللقاء عنه هو",
+      "en": "Listen more than you talk — make the meeting about them"
+     }
+    ],
+    "note_ar": "إن لم يكن ذوق العميل متوافقاً مع أسلوبك، فالأفضل عدم قبول المشروع؛ نادراً ما ينجح هذا النوع من التعاون.",
+    "note_en": "If the client's taste does not match your style, it is better not to take the project. That kind of collaboration rarely works."
+   },
+   {
+    "title_ar": "ختام اللقاء",
+    "title_en": "Closing the Meeting",
+    "items": [
+     {
+      "ar": "تلخيص نطاق العمل الذي جرت مناقشته",
+      "en": "Summarise the scope of work discussed"
+     },
+     {
+      "ar": "توضيح الخطوة التالية — إرسال عرض الأتعاب خلال ٢٤ ساعة",
+      "en": "State the next step — the fee proposal within 24 hours"
+     },
+     {
+      "ar": "التأكيد على قيمة العمل معك (مثل خصومات الموردين)",
+      "en": "Reinforce the value of working with you, such as supplier discounts"
+     },
+     {
+      "ar": "عدم إعطاء أي سعر في اللقاء",
+      "en": "Give no price in the meeting"
+     },
+     {
+      "ar": "شكر العميل وتأكيد الحماس للمشروع",
+      "en": "Thank the client and confirm your enthusiasm for the project"
+     },
+     {
+      "ar": "تأكيد موعد إرسال عرض الأتعاب — فقط إن كان العميل مناسباً",
+      "en": "Confirm when the fee proposal will arrive — only if this is the right client"
+     }
+    ],
+    "note_ar": "يُقال للعميل إن الأمر يحتاج دراسة وسيرد في العرض المكتوب. لا التزام شفهي بأي رقم.",
+    "note_en": "Tell the client it needs proper costing and will come in the written proposal. Never commit verbally to a number."
+   },
+   {
+    "title_ar": "مباشرة بعد اللقاء",
+    "title_en": "Immediately After the Meeting",
+    "items": [
+     {
+      "ar": "تسجيل ما لم يُدوَّن في ملاحظة صوتية قبل مغادرة الموقع",
+      "en": "Record anything not written down as a voice note before leaving the site"
+     },
+     {
+      "ar": "إعداد ملخّص ونطاق عمل من محضر اللقاء بعد العودة للمكتب",
+      "en": "Write the summary and scope of work from the meeting notes once back at the office"
+     },
+     {
+      "ar": "تقييم العميل والتحقق من مدى ملاءمته",
+      "en": "Assess the client and check whether they are a fit"
+     },
+     {
+      "ar": "اتخاذ القرار: عميل مناسب أم عميل ذو مؤشرات تحذيرية",
+      "en": "Decide: right client, or client with red flags"
+     },
+     {
+      "ar": "عميل مناسب ← الانتقال إلى مرحلة عرض الأتعاب",
+      "en": "Right client → move to the fee proposal stage"
+     },
+     {
+      "ar": "عميل غير مناسب ← استخدام رسالة الاعتذار للانصراف باحترام",
+      "en": "Wrong client → use the decline message to step away respectfully"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "إذا كان العميل غير مناسب",
+    "title_en": "If the Client Is Not a Fit",
+    "items": [
+     {
+      "ar": "عدم عرض إرسال عرض أتعاب",
+      "en": "Do not offer to send a fee proposal"
+     },
+     {
+      "ar": "شكره على وقته، وإبلاغه بأن نطاق العمل يحتاج مراجعة أدق وسيصله رد قريباً",
+      "en": "Thank them for their time and say the scope needs closer review and you will come back to them shortly"
+     },
+     {
+      "ar": "استغلال هذه المهلة لتقييم المشروع بهدوء قبل أي التزام",
+      "en": "Use that window to assess the project calmly before committing to anything"
+     },
+     {
+      "ar": "في حال قرار عدم المتابعة، إرسال رسالة الاعتذار",
+      "en": "If you decide not to proceed, send the decline message"
+     }
+    ],
+    "note_ar": "صياغة مقترحة: «شكراً لعرضك المشروع اليوم. سأراجع نطاق العمل بتفصيل أكبر وأعود إليك بالخطوات التالية.»",
+    "note_en": "Suggested wording: \"Thank you for showing me the project today. I'll review the scope in more detail and come back to you with next steps.\""
+   }
+  ]
+ },
+ {
+  "key": "stage_02_fee_proposal",
+  "stage": "02_fee_proposal",
+  "order": 2,
+  "title_ar": "عرض الأتعاب",
+  "title_en": "Fee Proposal",
+  "sections": [
+   {
+    "title_ar": "إعداد العرض",
+    "title_en": "Preparing the Proposal",
+    "items": [
+     {
+      "ar": "فتح قالب عرض الأتعاب واستنساخ نسخة جديدة",
+      "en": "Open the fee proposal template and duplicate a new copy"
+     },
+     {
+      "ar": "استخدام حاسبة التسعير لتقدير المشروع",
+      "en": "Use the fee calculator to price the project"
+     },
+     {
+      "ar": "تخصيص نطاق العمل بناءً على ملخّص ملاحظات اللقاء",
+      "en": "Tailor the scope of work from the meeting summary"
+     },
+     {
+      "ar": "تحديث نطاق العمل والبنود المشمولة والجدول الزمني والأتعاب داخل القالب",
+      "en": "Update scope, inclusions, timeline and fees inside the template"
+     },
+     {
+      "ar": "المراجعة اللغوية والحسابية — اسم العميل، واسم المشروع، وكل رقم",
+      "en": "Proofread and check the maths — client name, project name, every number"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "إرسال العرض",
+    "title_en": "Sending the Proposal",
+    "items": [
+     {
+      "ar": "الإرسال خلال ١٢ ساعة، وبحد أقصى ٢٤ ساعة، بينما لا يزال حماس العميل قائماً",
+      "en": "Send within 12 hours, 24 at the latest, while the client is still excited"
+     },
+     {
+      "ar": "استخدام قالب رسالة إرسال عرض الأتعاب",
+      "en": "Use the fee proposal covering message template"
+     },
+     {
+      "ar": "إرفاق العرض بصيغة PDF باسم ملف مهني",
+      "en": "Attach the proposal as a PDF with a professional filename"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "المتابعة",
+    "title_en": "Follow-up",
+    "items": [
+     {
+      "ar": "في حال عدم الرد خلال ٤٨ ساعة، إرسال رسالة المتابعة",
+      "en": "If there is no reply within 48 hours, send the follow-up message"
+     },
+     {
+      "ar": "إضافة المتابعة إلى قائمة المهام اليومية الثابتة حتى لا تُنسى",
+      "en": "Add the follow-up to your standing daily task list so it is not forgotten"
+     },
+     {
+      "ar": "الرد على أسئلة العميل باستخدام القوالب المعدّة في قاعدة إجراءات العمل",
+      "en": "Answer the client's questions using the prepared templates in your procedures library"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "النتيجة",
+    "title_en": "Outcome",
+    "items": [
+     {
+      "ar": "عودة العرض موقّعاً ← الانتقال إلى مرحلة العقد",
+      "en": "Proposal returned signed → move to the contract stage"
+     },
+     {
+      "ar": "اعتذار العميل ← إرسال رسالة الاستفسار عن السبب",
+      "en": "Client declines → send the message asking why"
+     }
+    ],
+    "note_ar": "دوّني السبب في كل مرة. تكرار الأسباب عبر عدة عروض يكشف عن التسعير وعن آلية تأهيل العملاء أكثر مما يكشفه أي رد منفرد.",
+    "note_en": "Record the reason every time. Patterns across several proposals reveal more about your pricing and qualification than any single reply."
+   }
+  ]
+ },
+ {
+  "key": "stage_03_contract",
+  "stage": "03_contract",
+  "order": 3,
+  "title_ar": "العقد والدفعة الأولى",
+  "title_en": "Contract and First Payment",
+  "sections": [
+   {
+    "title_ar": "إعداد الملاحق",
+    "title_en": "Preparing the Annexes",
+    "items": [
+     {
+      "ar": "ملحق نطاق العمل — يوضّح ما يشمله العمل وما لا يشمله بدقة",
+      "en": "Scope of work annex — states precisely what is included and what is not"
+     },
+     {
+      "ar": "ملحق جدول الدفعات",
+      "en": "Payment schedule annex"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "التجميع والإرسال",
+    "title_en": "Assembling and Sending",
+    "items": [
+     {
+      "ar": "دمج العقد مع الملاحق في ملف PDF واحد",
+      "en": "Merge the contract and annexes into a single PDF"
+     },
+     {
+      "ar": "إصدار فاتورة الدفعة الأولى للمرحلة الأولى عبر النظام المحاسبي",
+      "en": "Issue the first-stage invoice through your accounting system"
+     },
+     {
+      "ar": "إرسال العقد كملف واحد، والفاتورة كملف منفصل",
+      "en": "Send the contract as one file and the invoice as a separate one"
+     },
+     {
+      "ar": "استخدام قالب رسالة إرسال العقد",
+      "en": "Use the contract covering message template"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "انتظار التوقيع والسداد",
+    "title_en": "Waiting for Signature and Payment",
+    "items": [
+     {
+      "ar": "التأكد من توقيع العقد وجميع الملاحق",
+      "en": "Confirm the contract and every annex are signed"
+     },
+     {
+      "ar": "عدم بدء أي عمل قبل استلام العقد الموقّع والدفعة الأولى معاً",
+      "en": "Start no work until both the signed contract and the first payment are received"
+     },
+     {
+      "ar": "في حال عدم الاستلام خلال ٤٨ ساعة، إرسال رسالة متابعة التوقيع",
+      "en": "If nothing arrives within 48 hours, send the signature follow-up message"
+     },
+     {
+      "ar": "إضافة المتابعة إلى قائمة المهام اليومية الثابتة",
+      "en": "Add the follow-up to your standing daily task list"
+     }
+    ],
+    "note_ar": "هذه أكثر نقطة يخسر عندها المصممون أموالهم. لا استثناءات، مهما بدا العميل متحمساً.",
+    "note_en": "This is the single point where designers most often lose money. No exceptions, however enthusiastic the client seems."
+   },
+   {
+    "title_ar": "إذا اعترض العميل على شروط السداد",
+    "title_en": "If the Client Objects to the Payment Terms",
+    "items": [
+     {
+      "ar": "استخدام قالب الرد على الاعتراض على شروط السداد",
+      "en": "Use the payment-terms objection response template"
+     },
+     {
+      "ar": "إعادة تقييم الرغبة في قبول المشروع",
+      "en": "Reassess whether you want this project at all"
+     }
+    ],
+    "note_ar": "الاعتراض على شروط الدفعة المقدّمة المعتادة مؤشر تحذيري في حد ذاته، يستحق التوقّف عنده قبل المضي.",
+    "note_en": "Objecting to a standard deposit is a red flag in itself, and worth pausing on before you proceed."
+   }
+  ]
+ },
+ {
+  "key": "stage_04_onboarding",
+  "stage": "04_onboarding",
+  "order": 4,
+  "title_ar": "استقبال العميل وبدء العمل",
+  "title_en": "Client Onboarding",
+  "gate_note_ar": "لا تبدأ هذه المرحلة إلا بعد استلام العقد الموقّع والدفعة الأولى معاً.",
+  "gate_note_en": "Do not begin this stage until both the signed contract and the first payment are received.",
+  "sections": [
+   {
+    "title_ar": "التجهيز الداخلي",
+    "title_en": "Internal Setup",
+    "items": [
+     {
+      "ar": "إنشاء مجلد جديد للعميل في نظام الملفات",
+      "en": "Create a new client folder in your filing system"
+     },
+     {
+      "ar": "تحديد تاريخ بدء المشروع بما يتوافق مع بقية الأعمال",
+      "en": "Set the project start date against your existing workload"
+     },
+     {
+      "ar": "تحديث بيانات العميل في متتبّع المشاريع",
+      "en": "Update the client's details in the project tracker"
+     },
+     {
+      "ar": "إضافة العميل إلى قائمة التحديث الأسبوعي",
+      "en": "Add the client to the weekly update list"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "تجهيز حقيبة الاستقبال",
+    "title_en": "Preparing the Welcome Pack",
+    "items": [
+     {
+      "ar": "استنساخ قالب حقيبة الترحيب وتحديثه وتصديره بصيغة PDF",
+      "en": "Duplicate the welcome pack template, update it, export as PDF"
+     },
+     {
+      "ar": "استنساخ قالب استمارة المعلومات وتحديثه وتصديره بصيغة PDF",
+      "en": "Duplicate the questionnaire template, update it, export as PDF"
+     },
+     {
+      "ar": "أو إرسال رابط استمارة إلكترونية بدلاً من ملف PDF",
+      "en": "Or send an online questionnaire link instead of a PDF"
+     },
+     {
+      "ar": "تسجيل فيديو قصير يشرح ما يتضمّنه الإرسال وأهم ما يجب الانتباه له",
+      "en": "Record a short video explaining what is being sent and what matters most"
+     },
+     {
+      "ar": "إبقاء الفيديو أقل من خمس دقائق",
+      "en": "Keep the video under five minutes"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "إرسال رسالة الترحيب",
+    "title_en": "Sending the Welcome Message",
+    "items": [
+     {
+      "ar": "ملف حقيبة الترحيب",
+      "en": "The welcome pack file"
+     },
+     {
+      "ar": "استمارة المعلومات بالصيغة المختارة",
+      "en": "The questionnaire in whichever format you chose"
+     },
+     {
+      "ar": "رابط الفيديو التعريفي",
+      "en": "The link to the introduction video"
+     },
+     {
+      "ar": "رابط نظام الحجز لاختيار موعد اجتماع الانطلاق أو رفع المقاسات",
+      "en": "The booking link for the kickoff meeting or site survey"
+     }
+    ],
+    "note_ar": "ليست كل المشاريع بحاجة إلى اجتماع انطلاق أو زيارة رفع مقاسات؛ يعتمد ذلك على نطاق المشروع وعلى ما تمّت تغطيته في الاستشارة.",
+    "note_en": "Not every project needs a kickoff meeting or a site survey. It depends on the scope and on what the consultation already covered."
+   },
+   {
+    "title_ar": "المتابعة",
+    "title_en": "Follow-up",
+    "items": [
+     {
+      "ar": "في حال عدم الحجز خلال ٣ أيام، إرسال رسالة التذكير بالحجز",
+      "en": "If nothing is booked within 3 days, send the booking reminder"
+     },
+     {
+      "ar": "إضافة التذكير إلى قائمة المهام اليومية الثابتة",
+      "en": "Add the reminder to your standing daily task list"
+     },
+     {
+      "ar": "في حال عدم عودة الاستمارة خلال ٣ أيام، إرسال رسالة تذكير الاستمارة",
+      "en": "If the questionnaire has not come back within 3 days, send the questionnaire reminder"
+     },
+     {
+      "ar": "إضافة التذكير إلى قائمة المهام اليومية الثابتة",
+      "en": "Add the reminder to your standing daily task list"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   },
+   {
+    "title_ar": "اجتماع الانطلاق",
+    "title_en": "Kickoff Meeting",
+    "items": [
+     {
+      "ar": "التحضير باستخدام إجراء «إدارة اجتماع الانطلاق»",
+      "en": "Prepare using the kickoff meeting procedure"
+     },
+     {
+      "ar": "استخدام قالب جدول أعمال الاجتماع",
+      "en": "Use the meeting agenda template"
+     },
+     {
+      "ar": "إرسال جدول الأعمال قبل الاجتماع بيوم على الأقل",
+      "en": "Send the agenda at least one day before the meeting"
+     },
+     {
+      "ar": "استخدام قالب رسالة جدول الأعمال، مع توضيح أي تفاصيل تخصّ الموقع",
+      "en": "Use the agenda covering message, adding any site-specific details"
+     },
+     {
+      "ar": "إضافة إرسال جدول الأعمال إلى قائمة المهام اليومية الثابتة",
+      "en": "Add sending the agenda to your standing daily task list"
+     }
+    ],
+    "note_ar": "إرسال جدول الأعمال مسبقاً يعكس قيادة واضحة للمشروع، ويضمن معرفة العميل بما سيُناقَش.",
+    "note_en": "Sending the agenda in advance signals clear project leadership and ensures the client knows what will be discussed."
+   },
+   {
+    "title_ar": "رفع المقاسات ومسح الحالة القائمة",
+    "title_en": "Site Survey and Existing Conditions",
+    "items": [
+     {
+      "ar": "استخدام قائمة تدقيق رفع المقاسات من قاعدة إجراءات العمل",
+      "en": "Use the site survey checklist from your procedures library"
+     },
+     {
+      "ar": "تنفيذ اجتماع الانطلاق أو زيارة رفع المقاسات وفق الإجراء المعتمد",
+      "en": "Run the kickoff meeting or the site survey according to the agreed procedure"
+     }
+    ],
+    "note_ar": null,
+    "note_en": null
+   }
+  ]
+ },
+ {
+  "key": "stage_10_followup",
+  "stage": "10_followup",
+  "order": 5,
+  "title_ar": "ما بعد التسليم",
+  "title_en": "Post-Delivery",
+  "sections": [
+   {
+    "title_ar": "المتابعة وخدمة ما بعد التسليم",
+    "title_en": "Follow-up and Aftercare",
+    "items": [
+     {
+      "ar": "التواصل مع العميل بعد التسليم بأيام قليلة",
+      "en": "Contact the client a few days after handover"
+     },
+     {
+      "ar": "إضافة التذكير إلى قائمة المهام اليومية الثابتة",
+      "en": "Add the reminder to your standing daily task list"
+     },
+     {
+      "ar": "متابعة ثانية بعد أسابيع للاطمئنان على مستوى الرضا",
+      "en": "A second follow-up a few weeks later to check on satisfaction"
+     },
+     {
+      "ar": "إضافة التذكير إلى قائمة المهام اليومية الثابتة",
+      "en": "Add the reminder to your standing daily task list"
+     },
+     {
+      "ar": "معالجة أي ملاحظات عالقة يذكرها العميل، وبسرعة",
+      "en": "Deal with any outstanding snags the client raises, quickly"
+     },
+     {
+      "ar": "إبقاء كل ملاحظة عالقة على القائمة حتى إغلاقها فعلياً",
+      "en": "Keep every open snag on the list until it is genuinely closed"
+     },
+     {
+      "ar": "ضبط تذكير متابعة دوري كل ٦ أشهر",
+      "en": "Set a recurring follow-up reminder every 6 months"
+     },
+     {
+      "ar": "استخدام سلسلة رسائل إعادة التواصل من قاعدة إجراءات العمل",
+      "en": "Use the re-engagement message series from your procedures library"
+     },
+     {
+      "ar": "تقييم المشروع بعد انتهائه — ما نجح، وما استهلك وقتاً، وما يجب تغييره لاحقاً",
+      "en": "Review the project once finished — what worked, what ate time, what to change next time"
+     }
+    ],
+    "note_ar": "هنا تحديداً تُفقد العلاقة مع العملاء. الملاحظة الصغيرة التي يتأخر الرد عليها تكلّف من الثقة أكثر مما تكلّفه المشكلة نفسها.",
+    "note_en": "This is exactly where client relationships are lost. A small snag answered late costs more trust than the problem itself ever did."
+   },
+   {
+    "title_ar": "التسويق بعد المشروع",
+    "title_en": "Post-Project Marketing",
+    "items": [
+     {
+      "ar": "تصوير المشروع",
+      "en": "Photograph the project"
+     },
+     {
+      "ar": "الاتفاق كتابةً على ما يُنشر، وهل يُذكر اسم العميل أو الموقع",
+      "en": "Agree in writing what may be published, and whether the client's name or location is mentioned"
+     },
+     {
+      "ar": "تحديث الموقع الإلكتروني وملف الأعمال بالصور",
+      "en": "Update the website and portfolio with the photos"
+     },
+     {
+      "ar": "ترشيح المشروع للنشر في المنصات والمجلات المتخصصة",
+      "en": "Submit the project to specialist platforms and magazines"
+     },
+     {
+      "ar": "طلب شهادة العميل، إن لم تكن قد وصلت بعد",
+      "en": "Request the client testimonial, if it has not arrived yet"
+     }
+    ],
+    "note_ar": "سهّل المهمة عليه: أرسل سؤالين أو ثلاثة محددة بدلاً من طلب «كلمة عن التجربة».",
+    "note_en": "Make it easy for them: send two or three specific questions instead of asking for \"a few words about the experience\"."
+   }
+  ]
+ }
+]

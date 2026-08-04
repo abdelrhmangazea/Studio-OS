@@ -147,3 +147,23 @@ export function fullName(contact) {
 export function contactClock(contact) {
   return contact?.last_contact_at || contact?.created_at || null
 }
+
+/* ---------------------------------------------------------------- */
+/* Projects, for the global search                                   */
+/* ---------------------------------------------------------------- */
+
+/** Finds projects by code or by name. */
+export async function searchProjects(term) {
+  const trimmed = term.trim()
+  if (trimmed.length < 2) return []
+
+  const like = `%${trimmed}%`
+  const { data, error } = await supabase
+    .from('projects')
+    .select('id, code, name, current_stage, is_archived')
+    .or(`code.ilike.${like},name.ilike.${like}`)
+    .limit(10)
+
+  if (error) throw error
+  return data ?? []
+}

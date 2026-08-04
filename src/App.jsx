@@ -10,6 +10,8 @@ import Leads from './pages/Leads'
 import Clients from './pages/Clients'
 import Contact from './pages/Contact'
 import Templates from './pages/Templates'
+import Projects from './pages/Projects'
+import ProjectWorkspace from './pages/ProjectWorkspace'
 import Generator from './pages/Generator'
 import Placeholder from './pages/Placeholder'
 
@@ -69,7 +71,8 @@ export default function App() {
         <Route path="/leads" element={<Leads />} />
         <Route path="/clients" element={<Clients />} />
         <Route path="/contacts/:id" element={<Contact />} />
-        <Route path="/projects" element={<Placeholder titleKey="nav.projects" />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:id" element={<ProjectWorkspace />} />
         <Route path="/tasks" element={<Placeholder titleKey="nav.tasks" />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="/generate/:key/:contactId" element={<Generator />} />

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { getContact, fullName } from '../lib/contacts'
+import { getProject } from '../lib/projects'
 import {
   getQuestionnaire,
   listTemplates,
@@ -43,11 +44,14 @@ import {
  */
 export default function Generator() {
   const { key, contactId } = useParams()
+  const [searchParams] = useSearchParams()
+  const projectId = searchParams.get('project')
   const { t, language: appLanguage } = useI18n()
   const { settings, profile } = useAuth()
   const navigate = useNavigate()
 
   const [contact, setContact] = useState(null)
+  const [project, setProject] = useState(null)
   const [pair, setPair] = useState(null)
   const [questionnaire, setQuestionnaire] = useState(null)
   const [language, setLanguage] = useState(appLanguage)
@@ -66,14 +70,16 @@ export default function Generator() {
   useEffect(() => {
     let cancelled = false
     ;(async () => {
-      const [loadedContact, allTemplates, q] = await Promise.all([
+      const [loadedContact, allTemplates, q, loadedProject] = await Promise.all([
         getContact(contactId),
         listTemplates(),
         getQuestionnaire(),
+        projectId ? getProject(projectId) : Promise.resolve(null),
       ])
       if (cancelled) return
 
       setContact(loadedContact)
+      setProject(loadedProject)
       setQuestionnaire(q)
       setPair(pairByKey(allTemplates).find((p) => p.key === key) ?? null)
       setLoading(false)
@@ -81,7 +87,7 @@ export default function Generator() {
     return () => {
       cancelled = true
     }
-  }, [key, contactId])
+  }, [key, contactId, projectId])
 
   const isQuestionnaire = !pair && questionnaire?.key === key
   const row = pair?.[language] ?? pair?.ar ?? pair?.en ?? null
@@ -109,14 +115,14 @@ export default function Generator() {
 
     let cancelled = false
     ;(async () => {
-      const auto = await resolveAutoFields({ contact, settings, profile, language })
+      const auto = await resolveAutoFields({ contact, settings, profile, project, language })
       if (cancelled) return
       setValues({ ...auto, ...(promptValues ?? {}) })
     })()
     return () => {
       cancelled = true
     }
-  }, [loading, contact, settings, profile, language, promptValues, promptNames.length])
+  }, [loading, contact, settings, profile, project, language, promptValues, promptNames.length])
 
   // Re-render the body whenever the values or the language change.
   useEffect(() => {
@@ -158,6 +164,7 @@ export default function Generator() {
     try {
       await saveGeneratedDocument({
         contact_id: contact.id,
+        project_id: project?.id ?? null,
         template_key: key,
         type: isQuestionnaire ? 'questionnaire' : row.type,
         language,
@@ -177,20 +184,29 @@ export default function Generator() {
       <PromptFieldsForm
         open={promptNames.length > 0 && promptValues === null}
         fields={promptNames}
-        onCancel={() => navigate('/templates')}
+        onCancel={() => navigate(project ? `/projects/${project.id}` : '/templates')}
         onDone={setPromptValues}
       />
 
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate('/templates')}
+            onClick={() => navigate(project ? `/projects/${project.id}` : '/templates')}
             className="mb-2 text-sm text-text-secondary hover:text-text"
           >
-            ← {t('nav.templates')}
+            ← {project ? project.name : t('nav.templates')}
           </button>
           <h1 className="text-2xl font-semibold text-text">{sourceTitle}</h1>
-          <p className="mt-1 text-sm text-text-secondary">{fullName(contact)}</p>
+          <p className="mt-1 text-sm text-text-secondary">
+            {fullName(contact)}
+            {project && (
+              <>
+                {' · '}
+                <span className="font-mono" dir="ltr">{project.code}</span>
+                {' '}{project.name}
+              </>
+            )}
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

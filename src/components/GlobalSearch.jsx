@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fullName, searchContacts } from '../lib/contacts'
+import { fullName, searchContacts, searchProjects } from '../lib/contacts'
 import { formatPhone } from '../lib/phone'
 import { useI18n } from '../i18n'
 import { Input } from './ui'
@@ -18,6 +18,7 @@ export default function GlobalSearch() {
 
   const [term, setTerm] = useState('')
   const [results, setResults] = useState([])
+  const [projects, setProjects] = useState([])
   const [open, setOpen] = useState(false)
   const [searching, setSearching] = useState(false)
   const containerRef = useRef(null)
@@ -34,15 +35,19 @@ export default function GlobalSearch() {
   useEffect(() => {
     if (term.trim().length < 2) {
       setResults([])
+      setProjects([])
       return
     }
 
     setSearching(true)
     const timer = setTimeout(async () => {
       try {
-        setResults(await searchContacts(term))
+        const [people, found] = await Promise.all([searchContacts(term), searchProjects(term)])
+        setResults(people)
+        setProjects(found)
       } catch {
         setResults([])
+        setProjects([])
       }
       setSearching(false)
     }, 250)
@@ -57,6 +62,12 @@ export default function GlobalSearch() {
     setOpen(false)
     setTerm('')
     navigate(`/contacts/${contact.id}`)
+  }
+
+  function goProject(project) {
+    setOpen(false)
+    setTerm('')
+    navigate(`/projects/${project.id}`)
   }
 
   return (
@@ -77,12 +88,13 @@ export default function GlobalSearch() {
             <p className="p-3 text-xs text-text-secondary">{t('search.hint')}</p>
           ) : searching ? (
             <p className="p-3 text-xs text-text-secondary">{t('common.loading')}</p>
-          ) : results.length === 0 ? (
+          ) : results.length === 0 && projects.length === 0 ? (
             <p className="p-3 text-xs text-text-secondary">{t('search.noResults')}</p>
           ) : (
             <>
               <ResultGroup title={t('search.leadsGroup')} items={leads} onPick={go} />
               <ResultGroup title={t('search.clientsGroup')} items={clients} onPick={go} />
+              <ProjectGroup title={t('search.projectsGroup')} items={projects} onPick={goProject} />
             </>
           )}
         </div>
@@ -107,6 +119,30 @@ function ResultGroup({ title, items, onPick }) {
           <span className="block text-sm text-text">{fullName(contact)}</span>
           <span className="block text-xs text-text-secondary">
             {contact.email || formatPhone(contact.phone_country_code, contact.phone_number)}
+          </span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/** Projects match on code as well as name, which is how you find one years later. */
+function ProjectGroup({ title, items, onPick }) {
+  if (items.length === 0) return null
+
+  return (
+    <div className="border-b border-border last:border-0">
+      <p className="px-3 pb-1 pt-2 text-xs uppercase tracking-wide text-text-secondary">{title}</p>
+
+      {items.map((project) => (
+        <button
+          key={project.id}
+          onClick={() => onPick(project)}
+          className="block w-full px-3 py-2 text-start hover:bg-bg"
+        >
+          <span className="block text-sm text-text">{project.name}</span>
+          <span className="block font-mono text-xs text-text-secondary" dir="ltr">
+            {project.code}
           </span>
         </button>
       ))}

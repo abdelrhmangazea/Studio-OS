@@ -11,6 +11,7 @@ import { extractFields, splitFields } from '../lib/mergeEngine'
 import { NOT_YET_AVAILABLE } from '../data/mergeFields'
 import { useI18n } from '../i18n'
 import TemplateEditor from '../components/templates/TemplateEditor'
+import ChecklistEditor from '../components/templates/ChecklistEditor'
 import ContactPicker from '../components/templates/ContactPicker'
 import { Badge, Button, Card, EmptyState, Modal, PageTitle } from '../components/ui'
 
@@ -30,6 +31,7 @@ export default function Templates() {
   const [editing, setEditing] = useState(null)
   const [previewing, setPreviewing] = useState(null)
   const [pickingFor, setPickingFor] = useState(null)
+  const [editingChecklist, setEditingChecklist] = useState(null)
 
   async function load() {
     const [templates, q] = await Promise.all([listTemplates(), getQuestionnaire()])
@@ -59,7 +61,12 @@ export default function Templates() {
 
       <Section title={t('templates.checklists')} empty={t('templates.checklistsEmpty')} pairs={bySection.checklist}>
         {bySection.checklist.map((pair) => (
-          <Row key={pair.key} pair={pair} {...{ setEditing, setPreviewing, setPickingFor, load }} />
+          <Row
+            key={pair.key}
+            pair={pair}
+            {...{ setEditing, setPreviewing, setPickingFor, load }}
+            onEditChecklist={setEditingChecklist}
+          />
         ))}
       </Section>
 
@@ -96,6 +103,13 @@ export default function Templates() {
         template={editing?.pair}
         language={editing?.language}
         onClose={() => setEditing(null)}
+        onSaved={load}
+      />
+
+      <ChecklistEditor
+        open={Boolean(editingChecklist)}
+        pair={editingChecklist}
+        onClose={() => setEditingChecklist(null)}
         onSaved={load}
       />
 
@@ -140,7 +154,7 @@ function Section({ title, empty, pairs, children }) {
   )
 }
 
-function Row({ pair, setEditing, setPreviewing, setPickingFor, load }) {
+function Row({ pair, setEditing, setPreviewing, setPickingFor, load, onEditChecklist }) {
   const { t, language } = useI18n()
 
   const primary = pair[language] || pair.ar || pair.en
@@ -197,7 +211,11 @@ function Row({ pair, setEditing, setPreviewing, setPickingFor, load }) {
                 {t(lang === 'ar' ? 'templates.arabic' : 'templates.english')}
               </span>
               <button
-                onClick={() => setEditing({ pair, language: lang, row: pair[lang] })}
+                onClick={() =>
+                  pair.type === 'checklist'
+                    ? onEditChecklist(pair)
+                    : setEditing({ pair, language: lang, row: pair[lang] })
+                }
                 className="text-xs text-accent hover:underline"
               >
                 {t('templates.edit')}

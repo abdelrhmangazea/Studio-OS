@@ -52,7 +52,7 @@ function endOfWeek() {
  * written in Arabic formats its dates in Arabic even if the app is in
  * English.
  */
-export async function resolveAutoFields({ contact, settings, profile, language }) {
+export async function resolveAutoFields({ contact, settings, profile, project, language }) {
   const contractSentAt = contact ? await findContractSentDate(contact.id) : null
 
   const values = {
@@ -83,14 +83,14 @@ export async function resolveAutoFields({ contact, settings, profile, language }
     // generated_documents
     contract_sent_date: contractSentAt ? formatDate(contractSentAt, language) : null,
 
-    // Everything below needs projects, bookings or portal links, which
-    // are Buckets 4-6. Explicitly null so they render as [[markers]]
-    // rather than silently disappearing.
-    project_name: null,
-    project_code: null,
-    project_description: null,
-    project_type: null,
-    property_address: null,
+    // projects — resolved once a document is generated from inside one
+    project_name: project?.name ?? null,
+    project_code: project?.code ?? null,
+    project_description: project?.requirements ?? null,
+    project_type: project?.project_type ?? null,
+    property_address: project?.address ?? null,
+
+    // Still waiting on bookings and portal links, Buckets 5-6.
     consultation_date: null,
     consultation_time: null,
     consultation_mode: null,

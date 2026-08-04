@@ -32,18 +32,16 @@ export function isPromptField(name) {
 }
 
 /**
- * Fields whose data lives in tables that do not exist yet (projects,
- * bookings, portal links). They resolve to nothing until those buckets
- * are built, and will show as [[field]] with a warning. That is the
- * specified behaviour, not a bug — but the Templates screen uses this
- * list to say so plainly rather than letting it look broken.
+ * Fields whose data lives in tables that do not exist yet. They resolve
+ * to nothing until those buckets are built, and show as [[field]] with a
+ * warning — the specified behaviour, not a bug. The Templates screen
+ * uses this list to say so plainly rather than letting it look broken.
+ *
+ * The five project fields came off this list in Bucket 4. They resolve
+ * whenever a document is generated from inside a project; generated from
+ * the Templates screen with no project, they are simply empty.
  */
 export const NOT_YET_AVAILABLE = new Set([
-  'project_name',
-  'project_code',
-  'project_description',
-  'project_type',
-  'property_address',
   'consultation_date',
   'consultation_time',
   'consultation_mode',

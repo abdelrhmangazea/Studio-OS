@@ -7,6 +7,7 @@ import { useI18n } from '../i18n'
 import DetailsTab from '../components/contact/DetailsTab'
 import NotesTab from '../components/contact/NotesTab'
 import DocumentsTab from '../components/contact/DocumentsTab'
+import ProjectsTab from '../components/contact/ProjectsTab'
 import { Badge, Card, EmptyState, Tabs } from '../components/ui'
 
 /**
@@ -109,9 +110,11 @@ export default function Contact() {
           />
         )}
 
+        {tab === 'projects' && <ProjectsTab contact={contact} />}
+
         {tab === 'documents' && <DocumentsTab contact={contact} />}
 
-        {['projects', 'tasks', 'payments'].includes(tab) && (
+        {['tasks', 'payments'].includes(tab) && (
           <Card>
             <p className="text-sm text-text-secondary">{t('common.comingSoon')}</p>
           </Card>
