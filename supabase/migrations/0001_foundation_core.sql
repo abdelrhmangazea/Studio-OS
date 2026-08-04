@@ -1,5 +1,6 @@
 -- =============================================================
--- Studio OS — Bucket 1: Foundation
+-- Studio OS — Bucket 1: Foundation (core)
+--
 -- Creates: workspaces, profiles, studio_settings
 --          + workspace isolation (RLS) + signup bootstrap trigger
 --
@@ -32,7 +33,8 @@ create table public.workspaces (
 
 
 -- One row per user. Always linked to exactly one workspace.
--- language + theme are this user's personal choice.
+-- language + theme are this user's own choice, so a member can
+-- switch to English on a dark theme without touching anyone else.
 create table public.profiles (
   id           uuid primary key references auth.users (id) on delete cascade,
   workspace_id uuid not null       references public.workspaces (id) on delete cascade,
@@ -49,8 +51,8 @@ create index profiles_workspace_id_idx on public.profiles (workspace_id);
 
 
 -- One row per workspace. Branding + workspace-wide defaults.
--- default_language / default_theme are what a NEW member starts with,
--- and what the client-facing pages use in later buckets.
+-- default_language / default_theme are what a NEW member starts
+-- with, and what the client-facing pages use in later buckets.
 create table public.studio_settings (
   id                  uuid primary key default gen_random_uuid(),
   workspace_id        uuid unique not null references public.workspaces (id) on delete cascade,
@@ -72,9 +74,9 @@ create table public.studio_settings (
 -- -------------------------------------------------------------
 -- 3. Helper functions
 --
--- Both are SECURITY DEFINER on purpose. They run with the
--- privileges of their owner, which means they are NOT subject to
--- RLS themselves.
+-- The two policy helpers are SECURITY DEFINER on purpose. They
+-- run with the privileges of their owner, so they are NOT subject
+-- to RLS themselves.
 --
 -- This matters: the policies on `profiles` call
 -- current_workspace_id(), and that function reads `profiles`.
@@ -124,6 +126,7 @@ $$;
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
+set search_path = public
 as $$
 begin
   new.updated_at = now();
@@ -177,7 +180,8 @@ create policy "profiles_select_same_workspace"
   to authenticated
   using (workspace_id = public.current_workspace_id());
 
--- Anyone can edit their own row (this is how theme + language save).
+-- Anyone can edit their own row. This is how theme + language save,
+-- and it works for members and viewers, not just owners.
 create policy "profiles_update_self"
   on public.profiles for update
   to authenticated
@@ -258,48 +262,3 @@ $$;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
-
-
--- -------------------------------------------------------------
--- 6. Storage — studio logos
---
--- Public read, because client-facing pages in later buckets show
--- the logo without anyone being signed in.
--- Writes are locked to `{workspace_id}/...`, owners only, so a
--- workspace can only ever write inside its own folder.
--- -------------------------------------------------------------
-
-insert into storage.buckets (id, name, public)
-values ('studio-logos', 'studio-logos', true)
-on conflict (id) do nothing;
-
-create policy "studio_logos_public_read"
-  on storage.objects for select
-  using (bucket_id = 'studio-logos');
-
-create policy "studio_logos_owner_insert"
-  on storage.objects for insert
-  to authenticated
-  with check (
-    bucket_id = 'studio-logos'
-    and (storage.foldername(name))[1] = public.current_workspace_id()::text
-    and public.is_owner()
-  );
-
-create policy "studio_logos_owner_update"
-  on storage.objects for update
-  to authenticated
-  using (
-    bucket_id = 'studio-logos'
-    and (storage.foldername(name))[1] = public.current_workspace_id()::text
-    and public.is_owner()
-  );
-
-create policy "studio_logos_owner_delete"
-  on storage.objects for delete
-  to authenticated
-  using (
-    bucket_id = 'studio-logos'
-    and (storage.foldername(name))[1] = public.current_workspace_id()::text
-    and public.is_owner()
-  );
