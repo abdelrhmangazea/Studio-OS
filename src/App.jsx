@@ -13,6 +13,9 @@ import Templates from './pages/Templates'
 import Projects from './pages/Projects'
 import ProjectWorkspace from './pages/ProjectWorkspace'
 import Generator from './pages/Generator'
+import BookingHome from './pages/BookingHome'
+import PublicBooking from './pages/PublicBooking'
+import BookingConfirmation from './pages/BookingConfirmation'
 import Placeholder from './pages/Placeholder'
 
 function Loading() {
@@ -47,6 +50,10 @@ function RequireAuth({ children }) {
 export default function App() {
   return (
     <Routes>
+      {/* Public, no login, outside the app shell entirely. */}
+      <Route path="/book/:slug" element={<PublicBooking />} />
+      <Route path="/booking/:token" element={<BookingConfirmation />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
@@ -76,7 +83,7 @@ export default function App() {
         <Route path="/tasks" element={<Placeholder titleKey="nav.tasks" />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="/generate/:key/:contactId" element={<Generator />} />
-        <Route path="/booking-setup" element={<Placeholder titleKey="nav.bookingSetup" />} />
+        <Route path="/booking-setup" element={<BookingHome />} />
         <Route path="/suppliers" element={<Placeholder titleKey="nav.suppliers" />} />
         <Route path="/reports" element={<Placeholder titleKey="nav.reports" />} />
         <Route path="/settings" element={<Settings />} />

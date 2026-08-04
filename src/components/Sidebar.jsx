@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { countUnseenBookings } from '../lib/booking'
 import { useI18n } from '../i18n'
 
 /**
@@ -25,6 +27,19 @@ export const NAV_ITEMS = [
 
 export default function Sidebar({ studioName }) {
   const { t } = useI18n()
+  const [unseen, setUnseen] = useState(0)
+
+  // New bookings are "unseen" until opened. This count IS the notification.
+  useEffect(() => {
+    let stop = false
+    const check = () => countUnseenBookings().then((n) => !stop && setUnseen(n))
+    check()
+    const timer = setInterval(check, 60000)
+    return () => {
+      stop = true
+      clearInterval(timer)
+    }
+  }, [])
 
   return (
     <aside className="flex w-60 shrink-0 flex-col border-e border-border bg-surface">
@@ -45,7 +60,14 @@ export default function Sidebar({ studioName }) {
                 : 'text-text-secondary hover:bg-bg hover:text-text')
             }
           >
-            {t(item.key)}
+            <span className="flex items-center justify-between gap-2">
+              {t(item.key)}
+              {item.to === '/booking-setup' && unseen > 0 && (
+                <span className="rounded-full bg-accent px-1.5 py-0.5 text-xs text-white">
+                  {unseen}
+                </span>
+              )}
+            </span>
           </NavLink>
         ))}
       </nav>

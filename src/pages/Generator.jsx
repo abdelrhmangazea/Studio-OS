@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { getContact, fullName } from '../lib/contacts'
 import { getProject } from '../lib/projects'
+import { getBooking } from '../lib/booking'
 import {
   getQuestionnaire,
   listTemplates,
@@ -46,12 +47,14 @@ export default function Generator() {
   const { key, contactId } = useParams()
   const [searchParams] = useSearchParams()
   const projectId = searchParams.get('project')
+  const bookingId = searchParams.get('booking')
   const { t, language: appLanguage } = useI18n()
   const { settings, profile } = useAuth()
   const navigate = useNavigate()
 
   const [contact, setContact] = useState(null)
   const [project, setProject] = useState(null)
+  const [booking, setBooking] = useState(null)
   const [pair, setPair] = useState(null)
   const [questionnaire, setQuestionnaire] = useState(null)
   const [language, setLanguage] = useState(appLanguage)
@@ -76,10 +79,12 @@ export default function Generator() {
         getQuestionnaire(),
         projectId ? getProject(projectId) : Promise.resolve(null),
       ])
+      const loadedBooking = bookingId ? await getBooking(bookingId) : null
       if (cancelled) return
 
       setContact(loadedContact)
       setProject(loadedProject)
+      setBooking(loadedBooking)
       setQuestionnaire(q)
       setPair(pairByKey(allTemplates).find((p) => p.key === key) ?? null)
       setLoading(false)
@@ -87,7 +92,7 @@ export default function Generator() {
     return () => {
       cancelled = true
     }
-  }, [key, contactId, projectId])
+  }, [key, contactId, projectId, bookingId])
 
   const isQuestionnaire = !pair && questionnaire?.key === key
   const row = pair?.[language] ?? pair?.ar ?? pair?.en ?? null
@@ -115,14 +120,14 @@ export default function Generator() {
 
     let cancelled = false
     ;(async () => {
-      const auto = await resolveAutoFields({ contact, settings, profile, project, language })
+      const auto = await resolveAutoFields({ contact, settings, profile, project, booking, language })
       if (cancelled) return
       setValues({ ...auto, ...(promptValues ?? {}) })
     })()
     return () => {
       cancelled = true
     }
-  }, [loading, contact, settings, profile, project, language, promptValues, promptNames.length])
+  }, [loading, contact, settings, profile, project, booking, language, promptValues, promptNames.length])
 
   // Re-render the body whenever the values or the language change.
   useEffect(() => {

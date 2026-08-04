@@ -42,11 +42,7 @@ export function isPromptField(name) {
  * the Templates screen with no project, they are simply empty.
  */
 export const NOT_YET_AVAILABLE = new Set([
-  'consultation_date',
-  'consultation_time',
-  'consultation_mode',
-  'consultation_duration',
-  'consultation_type',
-  'booking_link',
+  // Only the client portal is left, in Bucket 6. The consultation fields
+  // and the booking link came off this list in Bucket 5.
   'portal_link',
 ])

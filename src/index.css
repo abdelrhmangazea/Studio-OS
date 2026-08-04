@@ -72,3 +72,63 @@ body {
   padding: 0 3px;
   border-radius: 2px;
 }
+
+/* -------------------------------------------------------------
+   The public, white-label pages (booking page, confirmation).
+
+   These are seen by the SUBSCRIBER'S clients, so they never inherit
+   the Interior Zone dark theme or the designer's own theme choice.
+   Always light, always neutral, with only the studio's accent colour
+   carried through.
+   ------------------------------------------------------------- */
+
+.public-page {
+  --pub-bg: #ffffff;
+  --pub-surface: #f7f7f7;
+  --pub-text: #1d191a;
+  --pub-muted: #5a5a5a;
+  --pub-border: #e4e4e4;
+
+  min-height: 100vh;
+  background: var(--pub-bg);
+  color: var(--pub-text);
+  font-family: 'Inter', 'Cairo', system-ui, sans-serif;
+}
+
+.public-page .pub-card {
+  background: var(--pub-surface);
+  border: 1px solid var(--pub-border);
+  border-radius: 6px;
+}
+.public-page .pub-muted { color: var(--pub-muted); }
+.public-page input,
+.public-page select,
+.public-page textarea {
+  background: #fff;
+  color: var(--pub-text);
+  border: 1px solid var(--pub-border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  width: 100%;
+}
+.public-page input:focus,
+.public-page select:focus,
+.public-page textarea:focus {
+  outline: none;
+  border-color: var(--pub-accent);
+}
+.public-page .pub-slot {
+  border: 1px solid var(--pub-border);
+  background: #fff;
+  border-radius: 4px;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+.public-page .pub-slot:hover { border-color: var(--pub-accent); }
+.public-page .pub-slot[data-selected='true'] {
+  background: var(--pub-accent);
+  border-color: var(--pub-accent);
+  color: #fff;
+}

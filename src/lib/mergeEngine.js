@@ -52,8 +52,9 @@ function endOfWeek() {
  * written in Arabic formats its dates in Arabic even if the app is in
  * English.
  */
-export async function resolveAutoFields({ contact, settings, profile, project, language }) {
+export async function resolveAutoFields({ contact, settings, profile, project, booking, language }) {
   const contractSentAt = contact ? await findContractSentDate(contact.id) : null
+  const bookingLink = await findBookingLink()
 
   const values = {
     // contacts
@@ -90,17 +91,47 @@ export async function resolveAutoFields({ contact, settings, profile, project, l
     project_type: project?.project_type ?? null,
     property_address: project?.address ?? null,
 
-    // Still waiting on bookings and portal links, Buckets 5-6.
-    consultation_date: null,
-    consultation_time: null,
-    consultation_mode: null,
-    consultation_duration: null,
-    consultation_type: null,
-    booking_link: null,
+    // bookings — resolved once a document is generated from a booking
+    consultation_date: booking ? formatDate(booking.slot_start, language) : null,
+    consultation_time: booking ? formatBookingTime(booking, language) : null,
+    consultation_mode: booking?.session_type
+      ? (language === 'ar' ? booking.session_type.label_ar : booking.session_type.label_en)
+      : null,
+    consultation_duration: booking?.session_type
+      ? `${booking.session_type.duration_minutes} ${language === 'ar' ? 'دقيقة' : 'minutes'}`
+      : null,
+    consultation_type: booking?.session_type
+      ? (language === 'ar' ? booking.session_type.label_ar : booking.session_type.label_en)
+      : null,
+    booking_link: bookingLink,
+
+    // Still waiting on the client portal, Bucket 6.
     portal_link: null,
   }
 
   return values
+}
+
+/** The consultation time, in the STUDIO's timezone — never the reader's. */
+function formatBookingTime(booking, language) {
+  const tz = booking.timezone ?? 'Africa/Cairo'
+  return new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: tz,
+  }).format(new Date(booking.slot_start))
+}
+
+/** The studio's own public booking URL, if it has one turned on. */
+async function findBookingLink() {
+  const { data } = await supabase
+    .from('booking_settings')
+    .select('public_slug, is_active')
+    .maybeSingle()
+
+  if (!data?.is_active || !data.public_slug) return null
+  return `${window.location.origin}/book/${data.public_slug}`
 }
 
 /** When the contract message was last generated for this contact. */
