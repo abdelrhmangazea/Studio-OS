@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { convertToClient, fullName, getContact } from '../lib/contacts'
+import { fullName, getContact } from '../lib/contacts'
 import { formatDate } from '../lib/format'
 import { useLists } from '../lib/useLists'
 import { useI18n } from '../i18n'
 import DetailsTab from '../components/contact/DetailsTab'
 import NotesTab from '../components/contact/NotesTab'
-import { Badge, Button, Card, EmptyState, Modal, Tabs } from '../components/ui'
+import { Badge, Card, EmptyState, Tabs } from '../components/ui'
 
 /**
  * One contact, whether they are still a lead or already a client.
@@ -23,8 +23,6 @@ export default function Contact() {
   const [contact, setContact] = useState(null)
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('details')
-  const [converting, setConverting] = useState(false)
-  const [busy, setBusy] = useState(false)
 
   useEffect(() => {
     getContact(id).then((data) => {
@@ -32,13 +30,6 @@ export default function Contact() {
       setLoading(false)
     })
   }, [id])
-
-  async function handleConvert() {
-    setBusy(true)
-    setContact(await convertToClient(contact.id))
-    setBusy(false)
-    setConverting(false)
-  }
 
   if (loading || listsLoading) {
     return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
@@ -88,8 +79,10 @@ export default function Contact() {
           </div>
         </div>
 
+        {/* No convert button: a contact becomes a client by being moved
+            onto a won status, on the Details tab or from the Leads views. */}
         {!contact.is_client && (
-          <Button onClick={() => setConverting(true)}>{t('contact.convertToClient')}</Button>
+          <p className="max-w-xs text-xs text-text-secondary">{t('contact.convertHint')}</p>
         )}
       </div>
 
@@ -122,26 +115,6 @@ export default function Contact() {
         )}
       </div>
 
-      {/* ---------- Convert confirmation ---------- */}
-      <Modal
-        open={converting}
-        title={t('contact.convertTitle')}
-        onClose={() => setConverting(false)}
-        footer={
-          <>
-            <Button variant="ghost" onClick={() => setConverting(false)} disabled={busy}>
-              {t('common.cancel')}
-            </Button>
-            <Button onClick={handleConvert} disabled={busy}>
-              {busy ? t('common.saving') : t('contact.convertToClient')}
-            </Button>
-          </>
-        }
-      >
-        <p className="text-sm text-text-secondary">
-          {t('contact.convertBody', { name: fullName(contact) })}
-        </p>
-      </Modal>
     </div>
   )
 }

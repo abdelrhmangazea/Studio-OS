@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { contactClock, fullName, updateContact } from '../lib/contacts'
+import { conversionPatch } from '../lib/conversion'
 import { daysSince, stalenessColor } from '../lib/phone'
 import { listLabel } from '../lib/useLists'
 import { useI18n } from '../i18n'
@@ -22,12 +23,19 @@ export default function LeadsKanban({ contacts, statuses, sources, onChanged }) 
   const columns = statuses.filter((status) => status.is_active)
   const sourceById = Object.fromEntries(sources.map((source) => [source.id, source]))
 
+  /**
+   * Dropping a card on a won column converts that lead to a client, so
+   * the card leaves the board entirely. That is the intended behaviour:
+   * booking is the conversion.
+   */
   async function moveTo(contact, statusId) {
     if (contact.status_id === statusId) return
 
-    onChanged({ ...contact, status_id: statusId })
+    const extra = conversionPatch(contact, statusId, statuses)
+
+    onChanged({ ...contact, status_id: statusId, ...extra })
     try {
-      await updateContact(contact.id, { status_id: statusId })
+      await updateContact(contact.id, { status_id: statusId, ...extra })
     } catch {
       onChanged(contact)
     }

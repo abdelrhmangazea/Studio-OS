@@ -129,7 +129,9 @@
     "filterSource": "Source",
     "count": "{count} leads",
     "newLead": "New lead",
-    "dropHere": "Drop here"
+    "dropHere": "Drop here",
+    "convertedNotice": "{name} booked a consultation and is now a client.",
+    "openClient": "Open"
   },
 
   "clients": {
@@ -179,9 +181,11 @@
     "tabPayments": "Payments",
     "lead": "Lead",
     "client": "Client",
-    "convertToClient": "Convert to Client",
-    "convertTitle": "Convert to client?",
-    "convertBody": "{name} will move out of the Leads views and into Clients. All their data is kept. This cannot be undone from here.",
+    "convertHint": "Set the status to a booked one to turn this lead into a client. Booking the consultation is what makes someone a client.",
+    "revertTitle": "Move this client back to Leads?",
+    "revertBody": "{name} is a client because their status is a booked one. Changing it to a status that is not returns them to the Leads views and clears their conversion date.",
+    "revertLaterWarning": "Nothing else is attached to them yet. Once projects, documents and payments exist, this will affect those too — so use it to correct a mistake, not as a normal step.",
+    "revertConfirm": "Move back to Leads",
     "convertedOn": "Converted on {date}",
     "addNote": "Add note",
     "notePlaceholder": "What was said? What was agreed?",

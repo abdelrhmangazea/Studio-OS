@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createContact, findDuplicateEmail, fullName } from '../lib/contacts'
 import { EMPTY_CONTACT, toContactRow, validateContact } from '../lib/contactForm'
+import { conversionPatch } from '../lib/conversion'
 import { useI18n } from '../i18n'
 import ContactFields from './ContactFields'
 import { Button, ErrorText, SidePanel, WarningText } from './ui'
@@ -46,7 +47,13 @@ export default function AddLeadPanel({ open, onClose, onCreated, statuses, sourc
     setBusy(true)
     setFailed('')
     try {
-      const created = await createContact(toContactRow(form))
+      // Adding someone straight onto a won status makes them a client
+      // immediately — same rule as changing the status later.
+      const row = toContactRow(form)
+      const created = await createContact({
+        ...row,
+        ...conversionPatch({ is_client: false }, row.status_id, statuses),
+      })
       onCreated(created)
       onClose()
     } catch (error) {

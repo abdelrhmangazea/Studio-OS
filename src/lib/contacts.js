@@ -56,11 +56,6 @@ export async function updateContact(id, patch) {
   return data
 }
 
-/** Manual conversion. Bucket 5 will also trigger this on booking. */
-export async function convertToClient(id) {
-  return updateContact(id, { is_client: true, converted_at: new Date().toISOString() })
-}
-
 /**
  * Warns about a duplicate email — it never blocks. Two family members
  * sharing an address is normal and not the app's business to refuse.

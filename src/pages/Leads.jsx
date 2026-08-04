@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { listContacts } from '../lib/contacts'
+import { Link } from 'react-router-dom'
+import { fullName, listContacts } from '../lib/contacts'
 import { listLabel, useLists } from '../lib/useLists'
 import { useI18n } from '../i18n'
 import LeadsTable from './LeadsTable'
@@ -25,6 +26,7 @@ export default function Leads() {
   const [sourceFilter, setSourceFilter] = useState('')
   const [adding, setAdding] = useState(false)
   const [importing, setImporting] = useState(false)
+  const [justConverted, setJustConverted] = useState(null)
 
   async function load() {
     setLoading(true)
@@ -46,7 +48,17 @@ export default function Leads() {
     [contacts, statusFilter, sourceFilter]
   )
 
+  /**
+   * A lead that has just been moved onto a won status is now a client,
+   * so it leaves these views. The banner explains where it went —
+   * without it, the row would simply vanish.
+   */
   function replaceContact(updated) {
+    if (updated.is_client) {
+      setContacts((current) => current.filter((contact) => contact.id !== updated.id))
+      setJustConverted(updated)
+      return
+    }
     setContacts((current) =>
       current.map((contact) => (contact.id === updated.id ? updated : contact))
     )
@@ -127,6 +139,26 @@ export default function Leads() {
         )}
       </div>
 
+      {justConverted && (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded border border-success px-4 py-2.5">
+          <span className="text-sm text-text">
+            {t('leads.convertedNotice', { name: fullName(justConverted) })}
+          </span>
+          <div className="flex items-center gap-2">
+            <Link to={`/contacts/${justConverted.id}`} className="text-sm text-accent hover:underline">
+              {t('leads.openClient')}
+            </Link>
+            <button
+              onClick={() => setJustConverted(null)}
+              className="text-lg leading-none text-text-secondary hover:text-text"
+              aria-label="close"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       {contacts.length === 0 ? (
         <EmptyState>{t('leads.empty')}</EmptyState>
       ) : view === 'table' ? (
@@ -148,7 +180,11 @@ export default function Leads() {
       <AddLeadPanel
         open={adding}
         onClose={() => setAdding(false)}
-        onCreated={(created) => setContacts((current) => [created, ...current])}
+        onCreated={(created) =>
+          created.is_client
+            ? setJustConverted(created)
+            : setContacts((current) => [created, ...current])
+        }
         statuses={statuses}
         sources={sources}
       />

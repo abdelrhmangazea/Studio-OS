@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { contactClock, fullName, updateContact } from '../lib/contacts'
+import { conversionPatch } from '../lib/conversion'
 import { daysSince, stalenessColor } from '../lib/phone'
 import { formatDate } from '../lib/format'
 import { listLabel, selectableList } from '../lib/useLists'
@@ -85,14 +86,23 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
     }
   }
 
-  /** Optimistic: update the row on screen, then persist. */
+  /**
+   * Optimistic: update the row on screen, then persist.
+   *
+   * Moving a lead onto a won status converts them to a client in the
+   * same write, which is why the conversion patch is merged in here
+   * rather than handled as a separate action.
+   */
   async function saveField(contact, field, value) {
     const next = value === '' ? null : value
     if ((contact[field] ?? null) === next) return
 
-    onChanged({ ...contact, [field]: next })
+    const extra = field === 'status_id' ? conversionPatch(contact, next, statuses) : {}
+    const updated = { ...contact, [field]: next, ...extra }
+
+    onChanged(updated)
     try {
-      await updateContact(contact.id, { [field]: next })
+      await updateContact(contact.id, { [field]: next, ...extra })
     } catch {
       onChanged(contact) // put it back if the database refused
     }
