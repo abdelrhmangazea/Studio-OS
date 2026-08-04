@@ -6,6 +6,9 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Onboarding from './pages/Onboarding'
 import Settings from './pages/Settings'
+import Leads from './pages/Leads'
+import Clients from './pages/Clients'
+import Contact from './pages/Contact'
 import Placeholder from './pages/Placeholder'
 
 function Loading() {
@@ -61,8 +64,9 @@ export default function App() {
       >
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Placeholder titleKey="nav.dashboard" />} />
-        <Route path="/leads" element={<Placeholder titleKey="nav.leads" />} />
-        <Route path="/clients" element={<Placeholder titleKey="nav.clients" />} />
+        <Route path="/leads" element={<Leads />} />
+        <Route path="/clients" element={<Clients />} />
+        <Route path="/contacts/:id" element={<Contact />} />
         <Route path="/projects" element={<Placeholder titleKey="nav.projects" />} />
         <Route path="/tasks" element={<Placeholder titleKey="nav.tasks" />} />
         <Route path="/templates" element={<Placeholder titleKey="nav.templates" />} />

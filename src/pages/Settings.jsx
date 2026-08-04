@@ -4,6 +4,7 @@ import { CURRENCIES, uploadLogo } from '../lib/uploadLogo'
 import { useAuth } from '../lib/AuthContext'
 import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
+import ListsSettings from '../components/ListsSettings'
 import {
   Button,
   Card,
@@ -264,6 +265,9 @@ export default function Settings() {
         {saved && <span className="text-sm text-success">{t('common.saved')}</span>}
         <ErrorText>{error}</ErrorText>
       </div>
+
+      {/* ---------- Lists ---------- */}
+      <ListsSettings />
 
       {/* ---------- Later buckets ---------- */}
       <Card className="mb-4">
