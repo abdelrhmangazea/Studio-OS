@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "studio-os",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/abdelrhmangazea/Desktop/cc-test/studio-os",
+        "run",
+        "dev"
+      ],
+      "port": 5173
+    }
+  ]
+}

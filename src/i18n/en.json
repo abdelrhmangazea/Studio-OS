@@ -1,0 +1,97 @@
+{
+  "app": { "name": "Studio OS" },
+
+  "nav": {
+    "dashboard": "Dashboard",
+    "leads": "Leads",
+    "clients": "Clients",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "templates": "Templates",
+    "bookingSetup": "Booking Setup",
+    "suppliers": "Suppliers",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+
+  "common": {
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "loading": "Loading…",
+    "signOut": "Sign out",
+    "optional": "optional",
+    "comingSoon": "This section is built in a later bucket."
+  },
+
+  "theme": { "dark": "Dark", "light": "Light", "toggle": "Switch theme" },
+  "language": { "ar": "العربية", "en": "English", "toggle": "Switch language" },
+
+  "auth": {
+    "signInTitle": "Sign in",
+    "signInSubtitle": "Welcome back.",
+    "signUpTitle": "Create your studio",
+    "signUpSubtitle": "One account per studio. You can invite your team later.",
+    "name": "Your name",
+    "studioName": "Studio name",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "passwordHint": "At least 6 characters."
+  },
+
+  "onboarding": {
+    "title": "Set up your studio",
+    "subtitle": "One pass. You can change any of this later in Settings.",
+    "step": "Step {current} of {total}",
+    "stepStudio": "Your studio",
+    "stepBranding": "Branding",
+    "stepPreferences": "Preferences",
+    "stepDefaults": "Defaults",
+    "studioNameLabel": "Studio name",
+    "studioNameHelp": "Shown on every document you generate.",
+    "logoLabel": "Logo",
+    "logoHelp": "PNG or JPG. Appears on your booking page and documents.",
+    "logoChoose": "Choose a file",
+    "logoUploading": "Uploading…",
+    "accentLabel": "Accent color",
+    "accentHelp": "Used on your client-facing pages.",
+    "languageLabel": "Default language",
+    "themeLabel": "Default theme",
+    "currencyLabel": "Currency",
+    "prefixLabel": "Project code prefix",
+    "prefixHelp": "Project codes look like {example}.",
+    "done": "Finish setup"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "studioProfile": "Studio Profile",
+    "studioProfileHelp": "Your branding and contact details. These appear on client-facing pages and generated documents.",
+    "preferences": "Preferences",
+    "preferencesHelp": "Theme and language are yours alone. Currency and code prefix apply to the whole studio.",
+    "yourPreferences": "Your preferences",
+    "studioDefaults": "Studio defaults",
+    "studioDefaultsHelp": "What a new team member starts with.",
+    "team": "Team",
+    "subscription": "Subscription",
+    "contactEmail": "Contact email",
+    "contactPhone": "Contact phone",
+    "website": "Website",
+    "ownerOnly": "Only the studio owner can change these."
+  },
+
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "signIn": "Could not sign in. Check your email and password.",
+    "signUp": "Could not create the account.",
+    "upload": "Could not upload the file."
+  }
+}

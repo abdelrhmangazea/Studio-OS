@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -------------------------------------------------------------
+   Theme tokens.
+
+   Dark is the default. Adding data-theme="light" to <html>
+   swaps the four surface colours. The status colours below do
+   not change between themes — that is deliberate, it is what
+   keeps a data-heavy screen readable.
+
+   Every colour in the app comes from these variables, via the
+   Tailwind names in tailwind.config.js. No component should
+   ever contain a raw hex value.
+   ------------------------------------------------------------- */
+
+:root {
+  --bg: #1d191a;
+  --surface: #26201f;
+  --text: #ffffff;
+  --text-secondary: #b7b7b7;
+  --border: #3a3231;
+
+  /* Shared across both themes */
+  --accent: #0077b6;
+  --warning: #f2d709;
+  --danger: #e11d3c;
+  --success: #22c55e;
+  --muted: #b7b7b7;
+}
+
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --surface: #f7f7f7;
+  --text: #1d191a;
+  --text-secondary: #5a5a5a;
+  --border: #e4e4e4;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  /* Flat by design: no shadows, no gradients anywhere in this app. */
+}

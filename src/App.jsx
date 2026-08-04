@@ -1,0 +1,78 @@
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { useAuth } from './lib/AuthContext'
+import { useI18n } from './i18n'
+import AppShell from './components/AppShell'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Onboarding from './pages/Onboarding'
+import Settings from './pages/Settings'
+import Placeholder from './pages/Placeholder'
+
+function Loading() {
+  const { t } = useI18n()
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-bg">
+      <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+    </div>
+  )
+}
+
+/** Signed out → sign-in screen. Onboarding not done → the wizard. */
+function RequireStudio({ children }) {
+  const { session, workspace, loading } = useAuth()
+
+  if (loading) return <Loading />
+  if (!session) return <Navigate to="/login" replace />
+  if (workspace && !workspace.onboarding_complete) return <Navigate to="/onboarding" replace />
+
+  return children
+}
+
+function RequireAuth({ children }) {
+  const { session, loading } = useAuth()
+
+  if (loading) return <Loading />
+  if (!session) return <Navigate to="/login" replace />
+
+  return children
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+
+      <Route
+        path="/onboarding"
+        element={
+          <RequireAuth>
+            <Onboarding />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        element={
+          <RequireStudio>
+            <AppShell />
+          </RequireStudio>
+        }
+      >
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<Placeholder titleKey="nav.dashboard" />} />
+        <Route path="/leads" element={<Placeholder titleKey="nav.leads" />} />
+        <Route path="/clients" element={<Placeholder titleKey="nav.clients" />} />
+        <Route path="/projects" element={<Placeholder titleKey="nav.projects" />} />
+        <Route path="/tasks" element={<Placeholder titleKey="nav.tasks" />} />
+        <Route path="/templates" element={<Placeholder titleKey="nav.templates" />} />
+        <Route path="/booking-setup" element={<Placeholder titleKey="nav.bookingSetup" />} />
+        <Route path="/suppliers" element={<Placeholder titleKey="nav.suppliers" />} />
+        <Route path="/reports" element={<Placeholder titleKey="nav.reports" />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
+}

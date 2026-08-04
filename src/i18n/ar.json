@@ -1,0 +1,97 @@
+{
+  "app": { "name": "استوديو أو إس" },
+
+  "nav": {
+    "dashboard": "الرئيسية",
+    "leads": "العملاء المحتملون",
+    "clients": "العملاء",
+    "projects": "المشاريع",
+    "tasks": "المهام",
+    "templates": "القوالب",
+    "bookingSetup": "إعدادات الحجز",
+    "suppliers": "الموردون",
+    "reports": "التقارير",
+    "settings": "الإعدادات"
+  },
+
+  "common": {
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ…",
+    "saved": "تم الحفظ",
+    "cancel": "إلغاء",
+    "back": "رجوع",
+    "next": "التالي",
+    "finish": "إنهاء",
+    "loading": "جارٍ التحميل…",
+    "signOut": "تسجيل الخروج",
+    "optional": "اختياري",
+    "comingSoon": "هذا القسم يُبنى في مرحلة لاحقة."
+  },
+
+  "theme": { "dark": "داكن", "light": "فاتح", "toggle": "تبديل المظهر" },
+  "language": { "ar": "العربية", "en": "English", "toggle": "تبديل اللغة" },
+
+  "auth": {
+    "signInTitle": "تسجيل الدخول",
+    "signInSubtitle": "أهلاً بعودتك.",
+    "signUpTitle": "أنشئ استوديوك",
+    "signUpSubtitle": "حساب واحد لكل استوديو. يمكنك دعوة فريقك لاحقاً.",
+    "name": "اسمك",
+    "studioName": "اسم الاستوديو",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "signIn": "دخول",
+    "signUp": "إنشاء حساب",
+    "noAccount": "ليس لديك حساب؟",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "passwordHint": "٦ أحرف على الأقل."
+  },
+
+  "onboarding": {
+    "title": "إعداد الاستوديو",
+    "subtitle": "مرة واحدة فقط. يمكنك تغيير أي شيء لاحقاً من الإعدادات.",
+    "step": "خطوة {current} من {total}",
+    "stepStudio": "الاستوديو",
+    "stepBranding": "الهوية البصرية",
+    "stepPreferences": "التفضيلات",
+    "stepDefaults": "الإعدادات الافتراضية",
+    "studioNameLabel": "اسم الاستوديو",
+    "studioNameHelp": "يظهر على كل مستند تُنشئه.",
+    "logoLabel": "الشعار",
+    "logoHelp": "PNG أو JPG. يظهر على صفحة الحجز والمستندات.",
+    "logoChoose": "اختر ملفاً",
+    "logoUploading": "جارٍ الرفع…",
+    "accentLabel": "اللون المميز",
+    "accentHelp": "يُستخدم في الصفحات التي يراها عملاؤك.",
+    "languageLabel": "اللغة الافتراضية",
+    "themeLabel": "المظهر الافتراضي",
+    "currencyLabel": "العملة",
+    "prefixLabel": "بادئة كود المشروع",
+    "prefixHelp": "أكواد المشاريع تكون بالشكل {example}.",
+    "done": "إنهاء الإعداد"
+  },
+
+  "settings": {
+    "title": "الإعدادات",
+    "studioProfile": "ملف الاستوديو",
+    "studioProfileHelp": "هويتك البصرية وبيانات التواصل. تظهر في الصفحات التي يراها عملاؤك وفي المستندات.",
+    "preferences": "التفضيلات",
+    "preferencesHelp": "المظهر واللغة خاصان بك وحدك. العملة وبادئة الكود تخص الاستوديو كله.",
+    "yourPreferences": "تفضيلاتك",
+    "studioDefaults": "الإعدادات الافتراضية للاستوديو",
+    "studioDefaultsHelp": "ما يبدأ به أي عضو جديد في الفريق.",
+    "team": "الفريق",
+    "subscription": "الاشتراك",
+    "contactEmail": "البريد الإلكتروني للتواصل",
+    "contactPhone": "رقم الهاتف",
+    "website": "الموقع الإلكتروني",
+    "ownerOnly": "مالك الاستوديو وحده يمكنه تغيير هذه الإعدادات."
+  },
+
+  "errors": {
+    "generic": "حدث خطأ ما. حاول مرة أخرى.",
+    "signIn": "تعذّر تسجيل الدخول. تأكد من البريد وكلمة المرور.",
+    "signUp": "تعذّر إنشاء الحساب.",
+    "upload": "تعذّر رفع الملف."
+  }
+}
