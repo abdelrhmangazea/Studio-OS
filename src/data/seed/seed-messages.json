@@ -1,0 +1,668 @@
+[
+ {
+  "key": "consultation_booking_invite",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "en",
+  "title": "Next Step – Booking Your Consultation",
+  "subject": "Next Step – Booking Your Consultation",
+  "body": "Hi {{client_first_name}},\nThank you for reaching out about {{project_name}} — I'd be glad to help you design your space.\nThe next step is a {{consultation_type}} consultation, {{consultation_duration}} long, where we'll walk through the space and talk about what you're hoping it will do for you. You'll come away with a clear picture of the project scope and the step that follows.\nYou can choose a time that works for you here:\n{{booking_link}}\nOnce your appointment is confirmed, you'll receive an email with the full details.\nLooking forward to it,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 0,
+  "merge_fields": [
+   "booking_link",
+   "client_first_name",
+   "consultation_duration",
+   "consultation_type",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "consultation_booking_invite",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "ar",
+  "title": "حجز موعد الاستشارة",
+  "subject": "الخطوة التالية – حجز موعد الاستشارة",
+  "body": "أهلاً {{client_first_name}}،\nسعدت بتواصلك بخصوص {{project_name}}، ويسعدني أن أساعدك في تصميم مساحتك.\nالخطوة التالية استشارة {{consultation_type}} مدتها {{consultation_duration}}، نتعرّف فيها على المساحة وعلى التوقعات المرجوة منها، ونخرج بتصوّر واضح لنطاق العمل والخطوة التي تليه.\nيمكنك اختيار الموعد المناسب من هنا:\n{{booking_link}}\nوبعد تثبيت الموعد ستصلك رسالة تأكيد تتضمّن التفاصيل.\nفي انتظارك،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 0,
+  "merge_fields": [
+   "booking_link",
+   "client_first_name",
+   "consultation_duration",
+   "consultation_type",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "consultation_confirmation",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "en",
+  "title": "Confirmed: Your Design Consultation",
+  "subject": "Confirmed: Your Design Consultation – {{consultation_date}}",
+  "body": "Hi {{client_first_name}},\nI'm glad to confirm your consultation. Here are the details:\n• Date and time: {{consultation_date}}\n• Meeting format: {{consultation_mode}}\n• Location / link: {{property_address}}\n• Expected duration: {{consultation_duration}}\nDuring our meeting, we'll talk about what the space needs to do and how daily life works in it, and I'll come away with an initial sense of the design direction and the next step.\nTo make the most of our time together, it helps if I can see the following beforehand:\n• Photos of the space as it is now, from a few different angles — these give me an early read on the lighting and layout.\n• Rough measurements if you have them, or the floor plan if one is available.\n• Images or references you like — and any you don't like, which are just as useful to me.\n• A rough sense of your budget, even as a range, so the conversation about solutions stays realistic from the start.\nIf none of these are available, that's completely fine — we'll start with whatever you have.\nIf you need to reschedule, just reply to this email at least 24 hours before the appointment and I'll rearrange it.\nLooking forward to meeting you,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 1,
+  "merge_fields": [
+   "client_first_name",
+   "consultation_date",
+   "consultation_duration",
+   "consultation_mode",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "property_address"
+  ]
+ },
+ {
+  "key": "consultation_confirmation",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "ar",
+  "title": "ما قبل الاستشاره- تأكيد الموعد",
+  "subject": "تأكيد موعد استشارتك التصميمية – {{consultation_date}}",
+  "body": "أهلاً {{client_first_name}}،\nسعيدة بتأكيد موعد استشارتك. هذه تفاصيل اللقاء:\n• التاريخ والوقت: {{consultation_date}}\n• طريقة اللقاء: {{consultation_mode}}\n• المكان / الرابط: {{property_address}}\n• المدة المتوقعة: {{consultation_duration}}\nخلال اللقاء سنتحدث عن احتياجات المساحة وطبيعة الحياة اليومية فيها، وأخرج بتصوّر مبدئي لاتجاه العمل والخطوة التالية.\nولأستثمر وقت اللقاء بأفضل شكل، يفيدني الاطلاع مسبقاً على:\n• صور للمساحة الحالية من زوايا مختلفة — تعطيني قراءة أولية للإضاءة والتوزيع.\n• مقاسات تقريبية إن توفّرت، أو مخطط الوحدة إن كان متاحاً.\n• صور أو مراجع أعجبتك — وأي مرجع لم يعجبك أيضاً، فهو مفيد بالقدر نفسه.\n• تصوّر مبدئي للميزانية، ولو كنطاق تقريبي، ليكون الحديث عن الحلول واقعياً منذ البداية.\nوإن لم يتوفّر أي من هذه العناصر، فلا مشكلة إطلاقاً — نبدأ بما هو متاح.\nفي حال الحاجة إلى تعديل الموعد، يكفي الرد على هذا البريد قبل 24 ساعة من اللقاء وسأتولّى إعادة الترتيب.\nفي انتظار لقائنا،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 1,
+  "merge_fields": [
+   "client_first_name",
+   "consultation_date",
+   "consultation_duration",
+   "consultation_mode",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "property_address"
+  ]
+ },
+ {
+  "key": "decline_project_after_consultation",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "en",
+  "title": "Rejection email",
+  "subject": "Rejection email",
+  "body": "Hi {{client_first_name}},\nThank you for your time during our consultation on {{consultation_date}}, and for trusting me with your project.\nAfter reviewing the details of {{project_name}} carefully, I've come to the conclusion that the project as it currently stands calls for a different approach than the one the studio offers. I'd rather be straightforward with you about that now than take on work I couldn't give the attention it deserves.\nThis isn't a judgment on the project — it's a question of fit between what you need and what we specialize in.\nI'd be glad to recommend someone I think would be a better match, or to answer any questions that help you with your next step. And if the scope changes down the road, our door stays open.\nWishing you all the best,\n{{designer_name}}\n{{designer_title}}",
+  "is_system": true,
+  "sort_order": 2,
+  "merge_fields": [
+   "client_first_name",
+   "consultation_date",
+   "designer_name",
+   "designer_title",
+   "project_name"
+  ]
+ },
+ {
+  "key": "decline_project_after_consultation",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "ar",
+  "title": "اعتذار عن المشروع بعد الاستشاره",
+  "subject": "اعتذار عن المشروع بعد الاستشاره",
+  "body": "t: اعتذار عن المشروع\n{{client_first_name}}، تحية طيبة،\nشكرًا لوقتك في استشارة {{consultation_date}} ولثقتك في عرض مشروعك عليّ.\nبعد مراجعة تفاصيل {{project_name}} بعناية، وجدت أن المشروع في وضعه الحالي يحتاج إلى مقاربة مختلفة عمّا يقدّمه الاستوديو، وأفضّل أن أصارحك بهذا من البداية بدل أن ندخل في عمل لا أستطيع أن أعطيه ما يستحق.\nهذا ليس حكمًا على المشروع — هو مسألة توافق بين ما تحتاجه وما نتخصّص فيه.\nيسعدني أن أرشّح لك من أراه أنسب، أو أن أجيب على أي سؤال يساعدك في خطوتك التالية. وإن تغيّر نطاق المشروع مستقبلًا فبابنا مفتوح.\nأتمنى لك التوفيق،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 2,
+  "merge_fields": [
+   "client_first_name",
+   "consultation_date",
+   "designer_name",
+   "project_name"
+  ]
+ },
+ {
+  "key": "client_declined_followup",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "en",
+  "title": "Thank you for letting me know",
+  "subject": "Thank you for letting me know – {{project_name}}",
+  "body": "If the client rejected you after consultation\nHi {{client_first_name}},\nThank you for letting me know your decision on {{project_name}}. I appreciate the clarity at this stage, and I wish the project every success.\nIf you have a moment for one question:\nwhat was the main factor that tipped the decision the other way — the price, the scope of work, the timing, or something I may have missed? A single line is enough.\nI'm asking to improve what I offer. There will be no follow-up pitch and no attempt to change your mind.\nAnd if anything comes up that's worth discussing down the road, my door is open.\nAll the best,\n{{designer_name}}\n{{designer_title}}",
+  "is_system": true,
+  "sort_order": 3,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_title",
+   "project_name"
+  ]
+ },
+ {
+  "key": "client_declined_followup",
+  "type": "message",
+  "channel": "email",
+  "stage": "01_consultation",
+  "language": "ar",
+  "title": "لو العميل هو الي رفض- ايميل متابعة",
+  "subject": "شكرًا لك",
+  "body": "لو العميل هو الي رفض- ايميل متابعة\nأهلاً {{client_first_name}}،\nشكراً لإعلامي بالقرار بخصوص {{project_name}}؛ الوضوح في هذه المرحلة أمر أقدّره فعلاً، وأتمنى للمشروع كل التوفيق.\nولو سمح الوقت بسؤال واحد فقط: ما العامل الأساسي الذي رجّح الاتجاه الآخر — السعر، أم نطاق العمل، أم التوقيت، أم شيء آخر لم أنتبه إليه؟ سطر واحد يكفي تماماً.\nأطرح السؤال لتحسين ما أقدّمه لا أكثر، ولن تتبعه أي محاولة لإعادة العرض أو للإقناع بالعدول عن القرار.\nوإن جدّ ما يستدعي النقاش لاحقاً، فالباب مفتوح في أي وقت.\nمع خالص التقدير،\n{{designer_name}}\n{{designer_title}}",
+  "is_system": true,
+  "sort_order": 3,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_title",
+   "project_name"
+  ]
+ },
+ {
+  "key": "fee_proposal_send",
+  "type": "message",
+  "channel": "email",
+  "stage": "02_fee_proposal",
+  "language": "en",
+  "title": "fee proprosal",
+  "subject": "fee proprosal",
+  "body": "Subject- Design Fee Proposal\n1. Project Overview\nProject Type: {{project_type}}\nLocation: {{property_address}}\nProposed Start: {{requested_start_date}}\n{{project_description}}\nBased on our consultation on {{consultation_date}}, my understanding of the brief is as follows:\n[Write your understanding of the project here, in your own words — what the client actually wants, and what problem the design solves. This paragraph is what makes the proposal personal rather than a generic template.]\n2. Scope of Work\nPhase 1 — Concept Design\nSpace study and spatial distribution\nMood board and design direction\nPreliminary layout plans\nPhase 2 — Design Development\nWorking drawings\nSelection of materials and finishes\n3D visualizations of the primary spaces\nPhase 3 — FF&E (Furniture, Fixtures & Equipment)\nFull specification schedule\nProcurement schedule with pricing and suppliers\nPhase 4 — Tendering\nPreparation of the tender package\nBid review and contractor recommendation\nPhase 5 — Site Supervision\nPeriodic site visits\nReview of executed works against the approved design\n[Remove or add phases according to what has been agreed with this client.]\nExclusions\nThe following fall outside the scope of this proposal:\nStructural works and permits\nProfessional photography after handover\nAny phase not listed above\n3. Fee Structure\nNotes:\nFees do not include the cost of furniture, materials, or contractor works.\nAny material revision requested after a phase has been approved will be quoted separately as an additional service.\nThis proposal is valid for 30 days from the date above.\n4. Next Step\nUpon your approval of this proposal, we will send the contract and the payment schedule, and work will commence within [___] of receipt of the first payment.\nThank you,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 4,
+  "merge_fields": [
+   "consultation_date",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_description",
+   "project_type",
+   "property_address",
+   "requested_start_date"
+  ]
+ },
+ {
+  "key": "fee_proposal_send",
+  "type": "message",
+  "channel": "email",
+  "stage": "02_fee_proposal",
+  "language": "ar",
+  "title": "ايميل الاتعاب",
+  "subject": "ايميل الاتعاب",
+  "body": "عنوان - عرض الاتعاب\nعرض أتعاب — {{project_name}}\nكود المشروع: {{project_code}}\nالتاريخ: {{today_date}}\nمُعدّ لـ: {{client_full_name}}\n١. نظرة عامة على المشروع\nنوع المشروع: {{project_type}}\nالموقع: {{property_address}}\nالبداية المقترحة: {{requested_start_date}}\n{{project_description}}\nبناءً على ما ناقشناه في استشارة {{consultation_date}}، فهمي للمطلوب هو:\n[اكتب هنا فهمك للمشروع بكلماتك — ما الذي يريده العميل فعلًا، وما المشكلة التي يحلّها التصميم. هذه الفقرة هي التي تجعل العرض شخصيًا وليس نموذجًا جاهزًا.]\n٢. نطاق العمل\nالمرحلة الأولى — التصميم المبدئي\n• دراسة المساحة وتوزيع الفراغات\n• لوحة المزاج واتجاه التصميم\n• مخططات مبدئية للتوزيع\nالمرحلة الثانية — تطوير التصميم\n• مخططات تنفيذية\n• اختيار الخامات والتشطيبات\n• رسومات ثلاثية الأبعاد للمساحات الرئيسية\nالمرحلة الثالثة — الأثاث والمفروشات والتجهيزات\n• قائمة مواصفات كاملة\n• جدول مشتريات بالأسعار والموردين\nالمرحلة الرابعة — طرح المناقصة\n• إعداد ملف الطرح\n• مراجعة العروض والترشيح\nالمرحلة الخامسة — الإشراف على التنفيذ\n• زيارات موقع دورية\n• مراجعة الأعمال ومطابقتها للتصميم\n[احذف أو أضف حسب المتفق عليه مع هذا العميل.]\nخارج نطاق هذا العرض:\n• الأعمال الإنشائية والتراخيص\n• التصوير الاحترافي بعد التسليم\n• أي مرحلة غير مذكورة أعلاه\n٣. هيكل الأتعاب\nالمرحلة                          الأتعاب        موعد السداد\nالمرحلة الأولى                   ___ {{currency}}   عند التوقيع\nالمرحلة الثانية                  ___ {{currency}}   عند اعتماد التصميم المبدئي\nالمرحلة الثالثة                  ___ {{currency}}   عند تسليم المخططات التنفيذية\nالمرحلة الرابعة                  ___ {{currency}}   عند طرح المناقصة\nالمرحلة الخامسة                  ___ {{currency}}   على دفعات شهرية أثناء التنفيذ\nالإجمالي                         ___ {{currency}}\nملاحظات:\n• الأتعاب لا تشمل قيمة الأثاث أو الخامات أو أعمال المقاولين.\n• أي تعديل جوهري بعد اعتماد مرحلة يُسعّر بشكل منفصل.\n• هذا العرض ساري لمدة ٣٠ يومًا من تاريخه.\n٤. الخطوة التالية\nعند موافقتك على هذا العرض نرسل لك العقد وجدول الدفعات، ونبدأ العمل خلال [___] من استلام الدفعة الأولى.\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 4,
+  "merge_fields": [
+   "client_full_name",
+   "consultation_date",
+   "currency",
+   "designer_name",
+   "project_code",
+   "project_description",
+   "project_name",
+   "project_type",
+   "property_address",
+   "requested_start_date",
+   "today_date"
+  ]
+ },
+ {
+  "key": "contract_send",
+  "type": "message",
+  "channel": "email",
+  "stage": "03_contract",
+  "language": "en",
+  "title": "Contract Document",
+  "subject": "Contract Documents",
+  "body": "Hi {{client_first_name}},\nThank you for approving the proposal, and for trusting me with {{project_name}}.\nAttached is everything needed to formally begin:\n1. The contract — covering the scope of work, the project phases, and the responsibilities on both sides\n2. The scope appendix — a breakdown of what each phase includes and what it does not\n3. The payment schedule\n4. The initial invoice\nWhat's needed from your side:\n• Review the contract and the appendix, and let me know if any clause needs discussion before signing\n• Send the signed copy back\n• Pay the initial invoice via {{payment_method}}\nThe scope appendix sets out what each phase does not include.\nThe intent is to protect both of us from any misunderstanding later on.\nI'm glad to walk you through any clause.\nWork begins as soon as I receive the signed copy and the first payment.\nKindly sign the contract by {{signing_deadline}}.\nBest regards,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 5,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "payment_method",
+   "project_name",
+   "signing_deadline"
+  ]
+ },
+ {
+  "key": "contract_send",
+  "type": "message",
+  "channel": "email",
+  "stage": "03_contract",
+  "language": "ar",
+  "title": "التعاقد",
+  "subject": "مستندات التعاقد",
+  "body": "أهلاً {{client_first_name}}،\nشكراً لموافقتك على العرض، وللثقة فيما سنعمل عليه معاً في {{project_name}}.\nمرفق ما يلزم لبدء العمل رسمياً:\n١. العقد — يشمل نطاق العمل والمراحل والالتزامات المتبادلة\n٢. ملحق نطاق الأعمال — تفصيل ما تشمله كل مرحلة وما لا تشمله\n٣. جدول الدفعات\n٤. الدفعة الأولى للبدء\nوالخطوات المطلوبة:\n• مراجعة العقد والملحق، وإخباري بأي بند يحتاج نقاشاً قبل التوقيع\n• إرسال النسخة موقّعة\n• سداد فاتورة البدء عبر {{payment_method}}\nملحق نطاق الأعمال يوضّح ما لا تشمله كل مرحلة بالدقة والغرض حماية الطرفين من أي التباس لاحقاً.\nيسعدني شرح أي بند.\nسيبدأ العمل فور استلام النسخة الموقّعة من العقد والدفعة الأولى.\nيرجى توقيع العقد في خلال يومين {{signing_deadline}}.\nتحياتي،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 5,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "payment_method",
+   "project_name",
+   "signing_deadline"
+  ]
+ },
+ {
+  "key": "contract_followup",
+  "type": "message",
+  "channel": "email",
+  "stage": "03_contract",
+  "language": "en",
+  "title": "Following up – {{project_name}} contract",
+  "subject": "Following up – {{project_name}} contract",
+  "body": "Hi {{client_first_name}},\nJust following up on the contract for {{project_name}}, sent on {{contract_sent_date}}.\nI haven't received the signed copy yet.\nIf there's a clause you'd like to discuss, I'm happy to walk through it — and if it's simply a matter of a busy schedule, that's completely fine; just let me know a timeframe that works for you.\nOne note on timing: your place in the studio schedule is reserved from the date the signed contract is received.\nBest regards,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 6,
+  "merge_fields": [
+   "client_first_name",
+   "contract_sent_date",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "contract_followup",
+  "type": "message",
+  "channel": "email",
+  "stage": "03_contract",
+  "language": "ar",
+  "title": "تذكير — عقد {{project_name}}",
+  "subject": "تذكير — عقد {{project_name}}",
+  "body": "Subject- تذكير — عقد {{project_name}}\n{{client_first_name}}، تذكير سريع.\nتذكير بسيط بخصوص عقد {{project_name}} المرسل في {{contract_sent_date}}.\nلم تصلني النسخة الموقّعة بعد. لو في أي بند يحتاج نقاشًا أنا جاهز — ولو الموضوع مجرد انشغال، لا مشكلة إطلاقًا، أخبرني فقط بموعد يناسبك.\nأذكّر أن حجز فترة العمل في جدول الاستوديو يبدأ من تاريخ استلام العقد الموقّع.\nتحياتي،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 6,
+  "merge_fields": [
+   "client_first_name",
+   "contract_sent_date",
+   "designer_name",
+   "project_name"
+  ]
+ },
+ {
+  "key": "onboarding_getting_started",
+  "type": "message",
+  "channel": "email",
+  "stage": "04_onboarding",
+  "language": "en",
+  "title": "Subject: Getting Started on {{project_name}} – Fi…",
+  "subject": "Getting Started -First Steps",
+  "body": "Hi {{client_first_name}},\nI've received the signed contract and the first payment, which means work on {{project_name}} is officially underway. I'm glad to be getting started.\nAttached are three documents:\n1. The welcome pack — how we work, what to expect at each phase, and the payment schedule\nhttps://www.canva.com/design/DAHRI3TbBBc/XibmaGfah2S4bn7TfIjCZA/edit\n2. The questionnaire form — the most important document at this stage, since the design is built on your answers. It takes about {{form_duration}}\nhttps://docs.google.com/document/d/1H5fcP4sj3536fcluvSepKn20TYV1FWjL/edit?usp=sharing&ouid=117448710378731351809&rtpof=true&sd=true\n3. A short video (3 minutes) explaining the steps ahead\nWelcome Video — Sample Script\nTarget length: 3 minutes\n1. Welcome (20 seconds)\n\"Hi {{client_first_name}}. I recorded this short video to welcome you officially to {{project_name}} and walk you through what happens next — in about three minutes.\"\n2. What Happens Now (45 seconds)\nCover: the information form → the kickoff meeting → the first design direction. Give real dates, not general statements.\n\"The first thing you'll find is the information form. Next comes the kickoff meeting. And about [___] after that, you'll have the first design direction to look at.\"\n3. What We Need From You (45 seconds)\nBe specific: the form within two days, the kickoff meeting booked, photos and measurements of the space.\n\"The one thing that keeps the project on schedule more than anything else is getting that form back to me within two days.\"\n4. How We Communicate (30 seconds)\nTalk through your preferred channels and your availability — for example: email for decisions, replies within one to two business days.\n5. Closing (20 seconds)\n\"I'm glad we're underway. If anything comes up, I'm here — any time. I'll talk to you at the kickoff meeting.\"\nFilming Notes\nRecord it in one take — natural beats perfect\nShare your screen while walking through the welcome pack\nSay the client's name at least twice\nTwo things are needed from you-\n• Complete the questionnaire form\n• Book the kickoff meeting here: {{booking_link}}\nI'd suggest completing the form before the meeting, so our time together goes to discussion and finer details rather than gathering the basics.\nYou're also welcome to bring anyone who has a say in the project's decisions — aligning on the vision early saves a great deal of time later.\nWelcome aboard,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 7,
+  "merge_fields": [
+   "booking_link",
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "form_duration",
+   "project_name"
+  ]
+ },
+ {
+  "key": "onboarding_getting_started",
+  "type": "message",
+  "channel": "email",
+  "stage": "04_onboarding",
+  "language": "ar",
+  "title": "Subject: بداية العمل  – الخطوات الأولى",
+  "subject": "بداية العمل  – الخطوات الأولى",
+  "body": "أهلاً {{client_first_name}}،\nوصلني العقد الموقّع والدفعة الأولى، وبهذا يبدأ العمل على {{project_name}} رسمياً.\nسعيدة بانطلاق المشروع.\nمرفق ثلاثة مستندات:\n١. حقيبة الترحيب — آلية العمل، وما يمكن توقّعه في كل مرحلة، وجدول الدفعات\nhttps://www.canva.com/design/DAHRI4vGLO0/ptMN3inJXqQ3iGUJa7Q7qA/edit\n٢. استمارة المعلومات — أهم مستند في هذه المرحلة؛ فالتصميم يُبنى على إجاباتها. تستغرق نحو {{form_duration}}\nhttps://docs.google.com/document/d/1kMOWnO40D7nVqXHjLNy5ONi53Mq7kB-m/edit?usp=sharing&ouid=117448710378731351809&rtpof=true&sd=true\n٣. فيديو قصير (٣ دقائق) يشرح الخطوات القادمة\n(مثال عن السكريبت\nالمدة المستهدفة: ٣ دقائق\n١. الترحيب (٢٠ ثانية)\n\"أهلًا {{client_first_name}}، أنا {{designer_name}}. سجّلت لك الفيديو ده عشان أرحّب بيك رسميًا في {{project_name}} وأوضّح لك الخطوات الجاية في ٣ دقايق.\"\n٢. ماذا سيحدث الآن (٤٥ ثانية)\nاشرح: الاستمارة ← اجتماع الانطلاق ← أول عرض تصميم.\nاذكر تواريخ حقيقية لا كلامًا عامًا.\n\"أول حاجة هتلاقيها الاستمارة. تاني حاجة اجتماع الانطلاق. وبعدها بـ[___] هيبقى عندك أول تصوّر للتصميم.\"\n٣. ما نحتاجه منك (٤٥ ثانية)\nكن محدّدًا: الاستمارة خلال يومين، حجز الاجتماع، صور ومقاسات المساحة.\n\"أكتر حاجة هتخلّي المشروع يمشي في وقته إن الاستمارة توصلني خلال يومين.\"\n٤. كيف نتواصل (٣٠ ثانية)\nاتكلم عن طريقتك المفضله في التواصل و المواعيد المناسبه ليك مثل -\nالإيميل للقرارات، الرد خلال يوم عمل إلى يومين.\n٥. الختام (٢٠ ثانية)\n\"مبسوط إننا بدأنا. لو في أي سؤال مستني منك في أي وقت. نتكلم في اجتماع الانطلاق.\"\nملاحظات تصوير:\n• سجّل الفيديو مرة واحدة — العفوية أفضل من الكمال\n• شارك الشاشة وأنت تعرض حقيبة الترحيب\n• اذكر اسم العميل مرتين على الأقل)\nالمطلوب الان\n• إكمال استمارة المعلومات\n• حجز اجتماع الانطلاق من هنا: {{booking_link}}\nويُفضّل إكمال الاستمارة قبل الاجتماع، حتى يكون وقتنا فيه مخصصاً للنقاش والتفاصيل الدقيقة لا لجمع المعلومات الأساسية.\nويسعدني حضور كل من له رأي في قرارات المشروع؛ فاتفاق الرؤية من البداية يوفّر وقتاً كثيراً لاحقاً.\nأهلاً بك في المشروع،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 7,
+  "merge_fields": [
+   "booking_link",
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "form_duration",
+   "project_name"
+  ]
+ },
+ {
+  "key": "weekly_progress_update",
+  "type": "message",
+  "channel": "email",
+  "stage": "execution",
+  "language": "en",
+  "title": "friday reminder",
+  "subject": "{{project_name}} — Weekly Update (date)",
+  "body": "Hi {{client_first_name}},\nStatus: {{overall_status}}\nCurrent phase: {{delivery_stage}}\nNext milestone: {{next_milestone}} on {{milestone_date}}\nNEEDED FROM YOU\n• [Item] — by [date] — [what it unblocks]\n• [Item] — by [date] — [what it unblocks]\n(If nothing is needed this week: \"Nothing needed from you this week — you're all clear.\")\nCOMPLETED THIS WEEK\n• [...]\n• [...]\nWATCH LIST\n• [Issue] — [impact on schedule or budget] — [what I'm doing about it]\n(Raise things early. A problem named on time gets solved; a problem hidden gets bigger.)\nNEXT WEEK\n• [...]\n• [...]\nAny questions, just reply to this email.\nBest regards,\n{{designer_name}}\n{{designer_title}}\n—\nStatus key: ( state th status) like : On track · Needs attention · At risk",
+  "is_system": true,
+  "sort_order": 8,
+  "merge_fields": [
+   "client_first_name",
+   "delivery_stage",
+   "designer_name",
+   "designer_title",
+   "milestone_date",
+   "next_milestone",
+   "overall_status",
+   "project_name"
+  ]
+ },
+ {
+  "key": "weekly_progress_update",
+  "type": "message",
+  "channel": "email",
+  "stage": "execution",
+  "language": "ar",
+  "title": "تحديث الأسبوع",
+  "subject": "}} — تحديث الأسبوع ({{week_ending_date}})",
+  "body": "أهلاً {{client_first_name}}،\nالحالة العامة: {{overall_status}}\nالمرحلة الحالية: {{delivery_stage}}\nالمحطة القادمة: {{next_milestone}} بتاريخ {{milestone_date}}\nالمطلوب منك\n• [البند] — قبل [التاريخ] — [ما الذي يتوقّف عليه]\n• [البند] — قبل [التاريخ] — [ما الذي يتوقّف عليه]\n(وإن لم يكن هناك مطلوب هذا الأسبوع: «لا مطلوب منك هذا الأسبوع — كل شيء يسير كما ينبغي.»)\nما أُنجز هذا الأسبوع\n• [...]\n• [...]\nتحت المتابعة\n• [المسألة] — [أثرها على الجدول أو الميزانية] — [ما يجري فعله بشأنها]\n(تُذكر المسائل مبكّراً. ما يُذكر في وقته يُحلّ، وما يُخفى يكبر.)\nخطة الأسبوع القادم\n• [...]\n• [...]\nلأي استفسار، يكفي الرد على هذا البريد.\nتحياتي،\n{{designer_name}}\n{{designer_title}}\n—\nمفتاح الحالة: اكتب احله المشروع زي\nيسير حسب الخطة · يحتاج انتباهاً · معرّض للتأخير",
+  "is_system": true,
+  "sort_order": 8,
+  "merge_fields": [
+   "client_first_name",
+   "delivery_stage",
+   "designer_name",
+   "designer_title",
+   "milestone_date",
+   "next_milestone",
+   "overall_status",
+   "week_ending_date"
+  ]
+ },
+ {
+  "key": "followup_6_months",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "6 months follow up",
+  "subject": "6 months follow up {{project_name}}",
+  "body": "Hi {{client_first_name}},\nIt's been 6 months since {{project_name}} was handed over — and that's exactly the stretch of time that reveals what handover day can't.\nIf you have a moment, just two questions:\n• What's working better than you expected?\n• What's quietly annoying in daily use?\nA line or two is plenty.\nNotes from someone actually living in the space shape my decisions on the projects that follow more than you'd think.\nThis ia a deliberate part of how I work.\nA design isn't finished at handover, it's finished when it proves itself in daily life.\nAnd if anything needs a small adjustment, just tell me and I'll be glad to arrange it.\nBest regards,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 9,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "followup_6_months",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "٦ شهور متابعه",
+  "subject": "متابعة بعد ٦ أشهر {{project_name}}",
+  "body": "أهلاً {{client_first_name}}،\nمرّت ستة أشهر على تسليم المشروع {{project_name}}، وهذه المدة تحديداً هي التي تكشف ما لا يظهر يوم التسليم\nلو سمح الوقت، سؤالان فقط:\n• ما الذي يعمل جيداً أكثر ممّا كان متوقّعاً؟\n• وما الذي يسبّب إزعاجاً صغيراً في الاستخدام اليومي؟\nسطران يكفيان تماماً.\nملاحظاتك  ستفيدني جدا من تطوير الخدمة المقدمة.\nوهي جزء أصيل من طريقة عملي\nالتصميم لا ينتهي بالتسليم، بل بما يثبت أنه صالح للحياة اليومية.\nوإن كان هناك ما يحتاج تعديلاً بسيطاً، يكفي إخباري ويسعدني ترتيب ذلك.\nتحياتي،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 9,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "followup_1_year",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "1 year follow up",
+  "subject": "One year follow up  {{project_name}}",
+  "body": "Hi {{client_first_name}},\nIt's been a year since {{project_name}}, and I hope you  have settled in the space.\nCan I take few minutes to answer this question:\nIs there a part of the space you now use differently than either of us expected?\nThat answer teaches me more than almost anything else, because it measures the design against life rather than against drawings.\nIf a next phase or another space is on your mind, I'm here whenever the timing suits.\nBest regards,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 10,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "followup_1_year",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "سنه متابعة",
+  "subject": "متابعة بعد سنة",
+  "body": "أهلاً {{client_first_name}}،\nمرّ عام على {{project_name}}، وأتمنى أن يكون التصميم مريح لك.\nسأخذ من وققتك دقيقة لتجيبيني عن هذا السؤال:\nهل هناك جزء من المساحة يُستخدم اليوم بطريقة مختلفة عمّا كان متوقّعاً؟\nالإجابة عن هذا السؤال تحديداً هي أكثر ما يطوّر عملي، لأنها تقيس التصميم بالحياة لا بالرسم.\nوإن كانت في ذهنك مرحلة قادمة أو مساحة أخرى، فأنا هنا وقتما يناسب التوقيت.\nتحياتي،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 10,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "followup_2_years",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "2 years follow up",
+  "subject": "2 years follow up {{project_name}}",
+  "body": "Hi {{client_first_name}},\nIt's been 2 years since {{project_name}}. The 2-year mark is usually when things start to surface like -\nAn appetite for a small refresh, a room whose use has shifted as life changed, or an entirely new project.\nIf any of that is on the horizon, it's worth knowing that your project file is still complete on my side — the drawings, the FF&E schedule, the paint codes, and the supplier details.\nAnything new picks up where we left off rather than starting from zero, which saves both time and money and keeps the space coherent, rather than looking like pieces were added to it later.\nIf nothing is on the horizon, then it is a pleasure knowing that you are doing well.\nBest regards,\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 11,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "followup_2_years",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "سنتين متابعة",
+  "subject": "متابعة بعد عامين",
+  "body": "أهلاً {{client_first_name}}،\nمرّ عامان على {{project_name}}. وما بعد العامين عادةً ما تبدأ أمور بالظهور مثل:\nرغبة في تجديد بسيط، أو غرفة تغيّر استخدامها مع تغيّر الحياة، أو مشروع جديد بالكامل.\nوإن كان أيٌّ من ذلك في الأفق، فمن المفيد أن تعرف أن ملف مشروعك محفوظ لديّ كاملاً: المخططات، وجدول الأثاث والتجهيزات، وأكواد الدهانات، وبيانات موردي الخامات.\nأي عمل قادم يبدأ من حيث انتهينا لا من الصفر — وهذا يوفّر وقتاً ومالاً، ويحافظ على اتساق المساحة بدل أن تبدو وكأن قطعاً غريبة عنها أُضيفت إليها لاحقاً.\nإن لم يكن هناك ما يستدعي شيئاً الآن، فيسعدني أن أتواصل معك.\nتحياتي،\n{{designer_name}}\n{{designer_title}}\n{{designer_phone}} | {{designer_website}}",
+  "is_system": true,
+  "sort_order": 11,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "designer_phone",
+   "designer_title",
+   "designer_website",
+   "project_name"
+  ]
+ },
+ {
+  "key": "occasion_hijri_new_year",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "Happy New Hijri Year, 🎉",
+  "subject": "Happy New Hijri Year, 🎉",
+  "body": "Subject - Happy New Hijri Year, 🎉\nHappy New Hijri Year, {{client_first_name}}.\nA new Hijri year is here — may it bring goodness and success to you and your family.\nWarm regards,\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 12,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_hijri_new_year",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "هجري",
+  "subject": "هجري",
+  "body": "عنوان- كل عام وأنت بخير 🎉\nكل عام وأنت بخير {{client_first_name}},\nسنة هجرية جديدة — أسأل الله أن تكون سنة خير وتوفيق عليك وعلى أهلك.\nتحياتي،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 12,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_ramadan",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "Ramadan Kareem",
+  "subject": "Ramadan Kareem",
+  "body": "Subject - Ramadan Kareem\nRamadan Kareem, {{client_first_name}}.\nMay this month bring you and your family blessings, good health, and peace of mind.\nI hope the space is bringing you all together for suhoor and iftar, just as we imagined it would.\nRamadan Mubarak,\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 13,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_ramadan",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "رمضان",
+  "subject": "رمضان",
+  "body": "عنوان - رمضان كريم {{client_first_name}},\nرمضان كريم {{client_first_name}}\nأعاده الله عليك وعلى أهلك بالخير والصحة وراحة البال.\nتذكّرت {{project_name}} وأنا أكتب لك — أتمنى أن تكون المساحة تجمعكم على السحور والإفطار كما تخيّلناها.\nكل عام وأنتم بخير،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 13,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "project_name"
+  ]
+ },
+ {
+  "key": "occasion_eid_fitr",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "eid fitr",
+  "subject": "eid fitr",
+  "body": "Subject - Eid Mubarak, {{client_first_name}}.\nEid Mubarak, {{client_first_name}}.\nWishing you and your family a joyful Eid, filled with health and happiness.\nI hope the Eid days brings to you and your family joy and loving.\nWarm regards,\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 14,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_eid_fitr",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "عنوان- عيد مبارك 🎉",
+  "subject": "عنوان- عيد مبارك 🎉",
+  "body": "عنوان- عيد مبارك 🎉\nعيد مبارك {{client_first_name}},\nكل عام وأنت وأهلك بخير. أعاده الله عليكم بالفرح والصحة.\nتحياتي،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 14,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_eid_adha",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "eid adha",
+  "subject": "eid adha",
+  "body": "Subject - Eid al-Adha Mubarak, {{client_first_name}}.\nEid al-Adha Mubarak, {{client_first_name}}.\nMay Allah accept from us and from you. Wishing you and your family calm, beautiful days.\nWarm regards,\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 15,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_eid_adha",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "عيد أضحى مبارك",
+  "subject": "عيد أضحى مبارك",
+  "body": "عنوان - عيد أضحى مبارك {{client_first_name}}🎉\nعيد أضحى مبارك {{client_first_name}}\nتقبّل الله منّا ومنكم، وكل عام وأنتم بخير.\nأتمنى لك ولأهلك أيامًا هادئة وجميلة.\nتحياتي،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 15,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ },
+ {
+  "key": "occasion_new_year",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "en",
+  "title": "new year",
+  "subject": "new year",
+  "body": "Subject - Happy New Year, {{client_first_name}} 🎉\nHappy New Year, {{client_first_name}} 🎉\nWishing you a wonderful year ahead — and I hope the space we worked on at {{project_name}} keeps adding something good to your days.\nWarm regards,\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 16,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name",
+   "project_name"
+  ]
+ },
+ {
+  "key": "occasion_new_year",
+  "type": "message",
+  "channel": "email",
+  "stage": "10_followup",
+  "language": "ar",
+  "title": "عام جديد",
+  "subject": "عام جديد",
+  "body": "عنوان - كل عام و انت بخير {{client_first_name}} 🎉\nكل عام و انت بخير {{client_first_name}} 🎉\nأتمنى لك سنة سعيدة و جميلة،\nتحياتي،\n{{designer_name}}",
+  "is_system": true,
+  "sort_order": 16,
+  "merge_fields": [
+   "client_first_name",
+   "designer_name"
+  ]
+ }
+]

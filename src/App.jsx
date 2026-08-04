@@ -9,6 +9,8 @@ import Settings from './pages/Settings'
 import Leads from './pages/Leads'
 import Clients from './pages/Clients'
 import Contact from './pages/Contact'
+import Templates from './pages/Templates'
+import Generator from './pages/Generator'
 import Placeholder from './pages/Placeholder'
 
 function Loading() {
@@ -69,7 +71,8 @@ export default function App() {
         <Route path="/contacts/:id" element={<Contact />} />
         <Route path="/projects" element={<Placeholder titleKey="nav.projects" />} />
         <Route path="/tasks" element={<Placeholder titleKey="nav.tasks" />} />
-        <Route path="/templates" element={<Placeholder titleKey="nav.templates" />} />
+        <Route path="/templates" element={<Templates />} />
+        <Route path="/generate/:key/:contactId" element={<Generator />} />
         <Route path="/booking-setup" element={<Placeholder titleKey="nav.bookingSetup" />} />
         <Route path="/suppliers" element={<Placeholder titleKey="nav.suppliers" />} />
         <Route path="/reports" element={<Placeholder titleKey="nav.reports" />} />

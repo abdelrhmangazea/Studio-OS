@@ -1,0 +1,54 @@
+import registry from './seed/merge-fields.json'
+
+/**
+ * The merge-field registry.
+ *
+ * merge-fields.json is the single source of truth — this module only
+ * indexes it. Two kinds of field, and the distinction matters:
+ *
+ *   source: "auto"   resolved from the database
+ *   source: "prompt" has NO database source. The generator asks the
+ *                    designer for it before generating, using the
+ *                    field's own `ask_user` text as the label. These
+ *                    are never auto-filled and never left blank.
+ */
+
+export const MERGE_FIELDS = registry
+
+export const FIELD_BY_NAME = Object.fromEntries(registry.map((f) => [f.field, f]))
+
+export const AUTO_FIELDS = registry.filter((f) => f.source === 'auto').map((f) => f.field)
+
+export const PROMPT_FIELDS = registry.filter((f) => f.source === 'prompt')
+
+export const PROMPT_FIELD_NAMES = new Set(PROMPT_FIELDS.map((f) => f.field))
+
+export function isKnownField(name) {
+  return Object.hasOwn(FIELD_BY_NAME, name)
+}
+
+export function isPromptField(name) {
+  return PROMPT_FIELD_NAMES.has(name)
+}
+
+/**
+ * Fields whose data lives in tables that do not exist yet (projects,
+ * bookings, portal links). They resolve to nothing until those buckets
+ * are built, and will show as [[field]] with a warning. That is the
+ * specified behaviour, not a bug — but the Templates screen uses this
+ * list to say so plainly rather than letting it look broken.
+ */
+export const NOT_YET_AVAILABLE = new Set([
+  'project_name',
+  'project_code',
+  'project_description',
+  'project_type',
+  'property_address',
+  'consultation_date',
+  'consultation_time',
+  'consultation_mode',
+  'consultation_duration',
+  'consultation_type',
+  'booking_link',
+  'portal_link',
+])

@@ -1,0 +1,894 @@
+{
+ "key": "client_questionnaire",
+ "type": "questionnaire",
+ "sections": [
+  {
+   "number": "01",
+   "title_en": "General Information",
+   "title_ar": "معلومات عامة",
+   "desc_en": null,
+   "desc_ar": null,
+   "show_if_project_has": null,
+   "questions": [
+    {
+     "key": "s01_q1",
+     "type": "text",
+     "label_en": "Name:",
+     "label_ar": "الاسم:",
+     "text_en": null,
+     "text_ar": null,
+     "options": []
+    },
+    {
+     "key": "s01_q2",
+     "type": "text",
+     "label_en": "Address:",
+     "label_ar": "العنوان:",
+     "text_en": null,
+     "text_ar": null,
+     "options": []
+    },
+    {
+     "key": "s01_q3",
+     "type": "text",
+     "label_en": "Phone:",
+     "label_ar": "رقم الهاتف:",
+     "text_en": null,
+     "text_ar": null,
+     "options": []
+    },
+    {
+     "key": "s01_q4",
+     "type": "text",
+     "label_en": "Email:",
+     "label_ar": "البريد الإلكتروني:",
+     "text_en": null,
+     "text_ar": null,
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "02",
+   "title_en": "Project Overview",
+   "title_ar": "نظرة عامة على المشروع",
+   "desc_en": null,
+   "desc_ar": null,
+   "show_if_project_has": null,
+   "questions": [
+    {
+     "key": "s02_q1",
+     "type": "text",
+     "label_en": "Budget",
+     "label_ar": "الميزانية",
+     "text_en": "What is your approximate total budget for this project (including furniture and design fees)?",
+     "text_ar": "ما الميزانية التقريبية الإجمالية للمشروع، شاملةً الأثاث وأتعاب التصميم؟",
+     "options": []
+    },
+    {
+     "key": "s02_q2",
+     "type": "text",
+     "label_en": "Timeline",
+     "label_ar": "التوقيت",
+     "text_en": "What is your ideal start date, and your timeline for completion?",
+     "text_ar": "ما التاريخ المفضّل للبدء، والمدة المتوقّعة حتى الانتهاء؟",
+     "options": []
+    },
+    {
+     "key": "s02_q3",
+     "type": "text",
+     "label_en": "Lifestyle",
+     "label_ar": "نمط الحياة",
+     "text_en": "How would you describe your lifestyle? (e.g. homebodies, active, entertain often, pets or young children)",
+     "text_ar": "كيف تصف نمط حياتك اليومي؟ (مثل: البقاء في المنزل غالبًا، حياة نشطة، استقبال ضيوف بكثرة، وجود حيوانات أليفة أو أطفال صغار)",
+     "options": []
+    },
+    {
+     "key": "s02_q4",
+     "type": "text",
+     "label_en": "Household",
+     "label_ar": "أفراد المنزل",
+     "text_en": "Who lives in your home, and what are their ages?",
+     "text_ar": "من يقيم في المنزل، وما أعمارهم؟",
+     "options": []
+    },
+    {
+     "key": "s02_q5",
+     "type": "text",
+     "label_en": "Accessibility",
+     "label_ar": "احتياجات الوصول",
+     "text_en": "Do you have any accessibility needs we should be aware of?",
+     "text_ar": "هل هناك احتياجات خاصة بسهولة الحركة أو الوصول ينبغي مراعاتها؟",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "03",
+   "title_en": "Personal Preferences",
+   "title_ar": "التفضيلات الشخصية",
+   "desc_en": null,
+   "desc_ar": null,
+   "show_if_project_has": null,
+   "questions": [
+    {
+     "key": "s03_q1",
+     "type": "text",
+     "label_en": "Aesthetic",
+     "label_ar": "الطراز",
+     "text_en": "How would you describe your design style? (e.g. modern, traditional, Hamptons, coastal, relaxed)",
+     "text_ar": "كيف تصف الطراز الذي تفضّله؟ (مثل: مودرن، كلاسيك، ساحلي، بسيط ومريح)",
+     "options": []
+    },
+    {
+     "key": "s03_q2",
+     "type": "text",
+     "label_en": "Colors",
+     "label_ar": "الألوان",
+     "text_en": "Are there any colors that you love or dislike?",
+     "text_ar": "هل هناك ألوان تحبها أو ألوان تفضّل تجنّبها؟",
+     "options": []
+    },
+    {
+     "key": "s03_q3",
+     "type": "text",
+     "label_en": "Materials",
+     "label_ar": "الخامات",
+     "text_en": "Do you have preferred materials or finishes — or any you would rather avoid?",
+     "text_ar": "هل لديك خامات أو تشطيبات مفضّلة — أو أخرى تفضّل تجنّبها؟",
+     "options": []
+    },
+    {
+     "key": "s03_q4",
+     "type": "text",
+     "label_en": "Existing pieces",
+     "label_ar": "القطع الحالية",
+     "text_en": "Do you have existing furniture or decor you would like incorporated into the design? If the list is long, simply write \"yes\" and we can discuss it in person.",
+     "text_ar": "هل لديك أثاث أو قطع ديكور ترغب في دمجها ضمن التصميم؟ إن كانت القائمة طويلة، اكتب «نعم» فقط ونناقشها معًا.",
+     "options": []
+    },
+    {
+     "key": "s03_q5",
+     "type": "text",
+     "label_en": "Functionality",
+     "label_ar": "الأداء الوظيفي",
+     "text_en": "Describe the ideal functionality of your new home. (e.g. plenty of storage, workspaces for two people, entertaining space, media room — how does your family live?)",
+     "text_ar": "صف الأداء الوظيفي المثالي لمنزلك الجديد. (مثل: تخزين وفير، أماكن عمل لشخصين، مساحة لاستقبال الضيوف، غرفة وسائط — كيف تعيش الأسرة داخل المنزل؟)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "04",
+   "title_en": "Kitchen",
+   "title_ar": "المطبخ",
+   "desc_en": "These questions relate to your kitchen design and preferences.",
+   "desc_ar": "أسئلة تتعلق بتصميم المطبخ وتفضيلاته.",
+   "show_if_project_has": "kitchen",
+   "questions": [
+    {
+     "key": "s04_q1",
+     "type": "text",
+     "label_en": "Appliances",
+     "label_ar": "الأجهزة",
+     "text_en": "Do you have preferred appliance brands? (e.g. Sub-Zero, Liebherr, Smeg, Fisher & Paykel)",
+     "text_ar": "هل لديك ماركات مفضّلة للأجهزة؟ (مثل: Sub-Zero، Liebherr، Smeg، Fisher & Paykel)",
+     "options": []
+    },
+    {
+     "key": "s04_q2",
+     "type": "checkbox",
+     "label_en": "Features",
+     "label_ar": "المواصفات",
+     "text_en": "Select any features you would ideally like included in your kitchen:",
+     "text_ar": "اختر ما ترغب في توفّره داخل المطبخ:",
+     "options": [
+      {
+       "en": "Walk-in pantry",
+       "ar": "غرفة مؤن منفصلة"
+      },
+      {
+       "en": "Plenty of storage",
+       "ar": "تخزين وفير"
+      },
+      {
+       "en": "Insinkerator",
+       "ar": "مفرمة نفايات بالحوض"
+      },
+      {
+       "en": "Zip tap (or similar)",
+       "ar": "صنبور ماء فوري (أو ما يعادله)"
+      },
+      {
+       "en": "Integrated fridge / freezer",
+       "ar": "ثلاجة/فريزر مدمجة"
+      },
+      {
+       "en": "Integrated coffee machine",
+       "ar": "ماكينة قهوة مدمجة"
+      },
+      {
+       "en": "Wine fridge",
+       "ar": "ثلاجة نبيذ"
+      },
+      {
+       "en": "Integrated dishwasher",
+       "ar": "غسالة أطباق مدمجة"
+      },
+      {
+       "en": "Second dishwasher",
+       "ar": "غسالة أطباق ثانية"
+      },
+      {
+       "en": "Multi-sort waste bin",
+       "ar": "سلة نفايات بفواصل للفرز"
+      },
+      {
+       "en": "Second fridge",
+       "ar": "ثلاجة إضافية"
+      },
+      {
+       "en": "Study nook",
+       "ar": "ركن مكتبي صغير"
+      },
+      {
+       "en": "Integrated microwave",
+       "ar": "ميكروويف مدمج"
+      },
+      {
+       "en": "Gas cooktop",
+       "ar": "بوتاجاز غاز"
+      },
+      {
+       "en": "Induction cooktop",
+       "ar": "سطح طهي بالحث (إندكشن)"
+      },
+      {
+       "en": "Double oven",
+       "ar": "فرن مزدوج"
+      },
+      {
+       "en": "Steam oven",
+       "ar": "فرن بخاري"
+      },
+      {
+       "en": "Warming drawer",
+       "ar": "درج تسخين"
+      },
+      {
+       "en": "Bar / bar nook",
+       "ar": "ركن بار"
+      },
+      {
+       "en": "iPad or phone charging station",
+       "ar": "محطة شحن للهاتف أو التابلت"
+      },
+      {
+       "en": "No sink in the island bench",
+       "ar": "بدون حوض في الجزيرة الوسطى"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      }
+     ]
+    },
+    {
+     "key": "s04_q3",
+     "type": "text",
+     "label_en": "Preferences",
+     "label_ar": "تفضيلات",
+     "text_en": "Do you have any specific preferences for your kitchen? (e.g. marble countertop, all white, plenty of storage)",
+     "text_ar": "هل لديك تفضيلات محددة للمطبخ؟ (مثل: سطح رخامي، أبيض بالكامل، تخزين وفير)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "05",
+   "title_en": "Laundry",
+   "title_ar": "غرفة الغسيل",
+   "desc_en": "These questions relate to your laundry design and preferences.",
+   "desc_ar": "أسئلة تتعلق بتصميم غرفة الغسيل وتفضيلاتها.",
+   "show_if_project_has": "laundry",
+   "questions": [
+    {
+     "key": "s05_q1",
+     "type": "text",
+     "label_en": "Functionality",
+     "label_ar": "الأداء الوظيفي",
+     "text_en": "Do you have specific functionality needs for your laundry? (e.g. plenty of storage, mudroom, pull-out ironing board)",
+     "text_ar": "هل لديك احتياجات وظيفية محددة لغرفة الغسيل؟ (مثل: تخزين وفير، مدخل خدمي، طاولة كي قابلة للسحب)",
+     "options": []
+    },
+    {
+     "key": "s05_q2",
+     "type": "checkbox",
+     "label_en": "Features",
+     "label_ar": "المواصفات",
+     "text_en": "Select any features you would ideally like included in your laundry:",
+     "text_ar": "اختر ما ترغب في توفّره داخل غرفة الغسيل:",
+     "options": [
+      {
+       "en": "New washing machine",
+       "ar": "غسالة جديدة"
+      },
+      {
+       "en": "Existing washing machine",
+       "ar": "غسالة حالية"
+      },
+      {
+       "en": "New dryer",
+       "ar": "مجفف جديد"
+      },
+      {
+       "en": "Existing dryer",
+       "ar": "مجفف حالي"
+      },
+      {
+       "en": "Plumbing for dryer",
+       "ar": "تمديدات صرف للمجفف"
+      },
+      {
+       "en": "Storage for linen",
+       "ar": "تخزين للمفروشات"
+      },
+      {
+       "en": "Storage for pet food",
+       "ar": "تخزين لطعام الحيوانات الأليفة"
+      },
+      {
+       "en": "Built-in pet crate",
+       "ar": "قفص مدمج للحيوان الأليف"
+      },
+      {
+       "en": "Built-in pet feeding station",
+       "ar": "ركن مدمج لإطعام الحيوان الأليف"
+      },
+      {
+       "en": "School bag storage",
+       "ar": "تخزين لحقائب المدرسة"
+      },
+      {
+       "en": "Standard sink mixer",
+       "ar": "خلاط حوض عادي"
+      },
+      {
+       "en": "Pull-out sink mixer",
+       "ar": "خلاط حوض قابل للسحب"
+      },
+      {
+       "en": "Laundry sorting bins",
+       "ar": "سلال لفرز الغسيل"
+      },
+      {
+       "en": "Wall-mounted drying rack",
+       "ar": "حبل أو رف تنشيف مثبّت بالحائط"
+      },
+      {
+       "en": "Storage for buckets",
+       "ar": "تخزين لأدوات التنظيف"
+      },
+      {
+       "en": "Storage for sporting equipment",
+       "ar": "تخزين لمعدات رياضية"
+      },
+      {
+       "en": "Laundry chute",
+       "ar": "منزلق غسيل بين الأدوار"
+      },
+      {
+       "en": "Pull-out ironing board",
+       "ar": "طاولة كي قابلة للسحب"
+      },
+      {
+       "en": "Tall storage for ironing board",
+       "ar": "خزانة طولية لطاولة الكي"
+      },
+      {
+       "en": "Stick vacuum charging station",
+       "ar": "محطة شحن للمكنسة العمودية"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      }
+     ]
+    },
+    {
+     "key": "s05_q3",
+     "type": "text",
+     "label_en": "Preferences",
+     "label_ar": "تفضيلات",
+     "text_en": "Do you have specific design requests? (e.g. colors you like, preferred tile or countertop surface)",
+     "text_ar": "هل لديك طلبات تصميمية محددة؟ (مثل: ألوان تفضّلها، نوع البلاط أو سطح العمل)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "06",
+   "title_en": "Ensuite",
+   "title_ar": "حمام الغرفة الرئيسية",
+   "desc_en": "These questions relate to your ensuite design and preferences.",
+   "desc_ar": "أسئلة تتعلق بتصميم حمام الغرفة الرئيسية وتفضيلاته.",
+   "show_if_project_has": "ensuite",
+   "questions": [
+    {
+     "key": "s06_q1",
+     "type": "text",
+     "label_en": "Functionality",
+     "label_ar": "الأداء الوظيفي",
+     "text_en": "Do you have specific functionality needs for your ensuite? (e.g. particular storage requests, walk-in shower)",
+     "text_ar": "هل لديك احتياجات وظيفية محددة لحمام الغرفة الرئيسية؟ (مثل: طلبات تخزين معينة، كابينة استحمام بلا حاجز)",
+     "options": []
+    },
+    {
+     "key": "s06_q2",
+     "type": "checkbox",
+     "label_en": "Features",
+     "label_ar": "المواصفات",
+     "text_en": "Select any features you would ideally like included in your ensuite:",
+     "text_ar": "اختر ما ترغب في توفّره داخل الحمام:",
+     "options": [
+      {
+       "en": "Single basin",
+       "ar": "حوض غسيل مفرد"
+      },
+      {
+       "en": "Double basins",
+       "ar": "حوضا غسيل"
+      },
+      {
+       "en": "Free-standing toilet",
+       "ar": "مرحاض قائم"
+      },
+      {
+       "en": "Concealed cistern toilet",
+       "ar": "مرحاض بخزان مخفي"
+      },
+      {
+       "en": "No preference on toilet type",
+       "ar": "لا تفضيل لنوع المرحاض"
+      },
+      {
+       "en": "Overhead storage",
+       "ar": "خزائن علوية"
+      },
+      {
+       "en": "Under-sink / drawer storage",
+       "ar": "تخزين أسفل الحوض أو أدراج"
+      },
+      {
+       "en": "Linen cupboard or tall storage",
+       "ar": "دولاب طولي للمفروشات"
+      },
+      {
+       "en": "Underfloor heating",
+       "ar": "تدفئة أرضية"
+      },
+      {
+       "en": "Heated towel rail",
+       "ar": "حامل مناشف مُدفّأ"
+      },
+      {
+       "en": "Full-length mirror",
+       "ar": "مرآة بطول كامل"
+      },
+      {
+       "en": "Robe hooks",
+       "ar": "علاقات للأرواب"
+      },
+      {
+       "en": "Free-standing bath",
+       "ar": "بانيو قائم"
+      },
+      {
+       "en": "Integrated bath",
+       "ar": "بانيو مدمج"
+      },
+      {
+       "en": "No bath",
+       "ar": "بدون بانيو"
+      },
+      {
+       "en": "Niche in shower",
+       "ar": "رف غائر داخل الاستحمام"
+      },
+      {
+       "en": "Handheld shower",
+       "ar": "دش يدوي"
+      },
+      {
+       "en": "Single shower",
+       "ar": "كابينة استحمام مفردة"
+      },
+      {
+       "en": "Double shower",
+       "ar": "كابينة استحمام مزدوجة"
+      },
+      {
+       "en": "Overhead heat lamps",
+       "ar": "مصابيح تدفئة علوية"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      }
+     ]
+    },
+    {
+     "key": "s06_q3",
+     "type": "text",
+     "label_en": "Preferences",
+     "label_ar": "تفضيلات",
+     "text_en": "Do you have specific design requests? (e.g. colors you like, preferred tiles or fixtures)",
+     "text_ar": "هل لديك طلبات تصميمية محددة؟ (مثل: ألوان تفضّلها، البلاط أو الأطقم الصحية)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "07",
+   "title_en": "Bathrooms",
+   "title_ar": "باقي الحمامات",
+   "desc_en": "These questions relate to the design and preferences for your other bathrooms.",
+   "desc_ar": "أسئلة تتعلق بتصميم باقي حمامات المنزل وتفضيلاتها.",
+   "show_if_project_has": "bathrooms",
+   "questions": [
+    {
+     "key": "s07_q1",
+     "type": "text",
+     "label_en": "Functionality",
+     "label_ar": "الأداء الوظيفي",
+     "text_en": "Do you have specific functionality needs for the bathrooms? (e.g. particular storage requests)",
+     "text_ar": "هل لديك احتياجات وظيفية محددة لباقي الحمامات؟ (مثل: طلبات تخزين معينة)",
+     "options": []
+    },
+    {
+     "key": "s07_q2",
+     "type": "checkbox",
+     "label_en": "Features",
+     "label_ar": "المواصفات",
+     "text_en": "Select any features you would ideally like included in your bathrooms:",
+     "text_ar": "اختر ما ترغب في توفّره داخل الحمامات:",
+     "options": [
+      {
+       "en": "Single basin",
+       "ar": "حوض غسيل مفرد"
+      },
+      {
+       "en": "Double basins",
+       "ar": "حوضا غسيل"
+      },
+      {
+       "en": "Free-standing toilet",
+       "ar": "مرحاض قائم"
+      },
+      {
+       "en": "Concealed cistern toilet",
+       "ar": "مرحاض بخزان مخفي"
+      },
+      {
+       "en": "No preference on toilet type",
+       "ar": "لا تفضيل لنوع المرحاض"
+      },
+      {
+       "en": "Overhead storage",
+       "ar": "خزائن علوية"
+      },
+      {
+       "en": "Under-sink / drawer storage",
+       "ar": "تخزين أسفل الحوض أو أدراج"
+      },
+      {
+       "en": "Linen cupboard or tall storage",
+       "ar": "دولاب طولي للمفروشات"
+      },
+      {
+       "en": "Underfloor heating",
+       "ar": "تدفئة أرضية"
+      },
+      {
+       "en": "Heated towel rail",
+       "ar": "حامل مناشف مُدفّأ"
+      },
+      {
+       "en": "Full-length mirror",
+       "ar": "مرآة بطول كامل"
+      },
+      {
+       "en": "Robe hooks",
+       "ar": "علاقات للأرواب"
+      },
+      {
+       "en": "Free-standing bath",
+       "ar": "بانيو قائم"
+      },
+      {
+       "en": "Integrated bath",
+       "ar": "بانيو مدمج"
+      },
+      {
+       "en": "No bath",
+       "ar": "بدون بانيو"
+      },
+      {
+       "en": "Niche in shower",
+       "ar": "رف غائر داخل الاستحمام"
+      },
+      {
+       "en": "Handheld shower",
+       "ar": "دش يدوي"
+      },
+      {
+       "en": "Single shower",
+       "ar": "كابينة استحمام مفردة"
+      },
+      {
+       "en": "Double shower",
+       "ar": "كابينة استحمام مزدوجة"
+      },
+      {
+       "en": "Overhead heat lamps",
+       "ar": "مصابيح تدفئة علوية"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      }
+     ]
+    },
+    {
+     "key": "s07_q3",
+     "type": "text",
+     "label_en": "Preferences",
+     "label_ar": "تفضيلات",
+     "text_en": "Do you have specific design requests? (e.g. colors you like, preferred tiles or fixtures)",
+     "text_ar": "هل لديك طلبات تصميمية محددة؟ (مثل: ألوان تفضّلها، البلاط أو الأطقم الصحية)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "08",
+   "title_en": "Other Areas",
+   "title_ar": "باقي المساحات",
+   "desc_en": "These questions relate to the design and preferences for the other areas of your home.",
+   "desc_ar": "أسئلة تتعلق بتصميم باقي مساحات المنزل وتفضيلاتها.",
+   "show_if_project_has": null,
+   "questions": [
+    {
+     "key": "s08_q1",
+     "type": "text",
+     "label_en": "Functionality",
+     "label_ar": "الأداء الوظيفي",
+     "text_en": "Do you have specific functionality needs for the home? (e.g. toy storage, visibility to the pool, size of the dining table)",
+     "text_ar": "هل لديك احتياجات وظيفية محددة للمنزل؟ (مثل: تخزين ألعاب الأطفال، إطلالة على حمام السباحة، حجم طاولة الطعام)",
+     "options": []
+    },
+    {
+     "key": "s08_q2",
+     "type": "checkbox",
+     "label_en": "Features",
+     "label_ar": "المواصفات",
+     "text_en": "Select any features you would ideally like included in your home:",
+     "text_ar": "اختر ما ترغب في توفّره داخل المنزل:",
+     "options": [
+      {
+       "en": "Ceiling fans",
+       "ar": "مراوح سقف"
+      },
+      {
+       "en": "Video security system",
+       "ar": "نظام مراقبة بالفيديو"
+      },
+      {
+       "en": "Skylights",
+       "ar": "فتحات إضاءة سقفية"
+      },
+      {
+       "en": "Built-in safe for valuables",
+       "ar": "خزنة مدمجة للمقتنيات الثمينة"
+      },
+      {
+       "en": "Fireplace",
+       "ar": "مدفأة"
+      },
+      {
+       "en": "Smart home features",
+       "ar": "أنظمة المنزل الذكي"
+      },
+      {
+       "en": "Home office for one",
+       "ar": "مكتب منزلي لشخص واحد"
+      },
+      {
+       "en": "Home office for two",
+       "ar": "مكتب منزلي لشخصين"
+      },
+      {
+       "en": "Pet-friendly features",
+       "ar": "عناصر مناسبة للحيوانات الأليفة"
+      },
+      {
+       "en": "Artwork lighting / display",
+       "ar": "إضاءة لعرض الأعمال الفنية"
+      },
+      {
+       "en": "Plantation shutters",
+       "ar": "شيش خارجي (بلانتيشن)"
+      },
+      {
+       "en": "Carpet in bedrooms",
+       "ar": "موكيت في غرف النوم"
+      },
+      {
+       "en": "No carpet in bedrooms",
+       "ar": "بدون موكيت في غرف النوم"
+      },
+      {
+       "en": "Gym / exercise area",
+       "ar": "مساحة رياضية أو صالة تمارين"
+      },
+      {
+       "en": "Playroom",
+       "ar": "غرفة لعب للأطفال"
+      },
+      {
+       "en": "Media / movie room",
+       "ar": "غرفة وسائط أو سينما منزلية"
+      },
+      {
+       "en": "Recreation room",
+       "ar": "غرفة ترفيه"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      },
+      {
+       "en": "Other: ______________________",
+       "ar": "أخرى: ______________________"
+      }
+     ]
+    },
+    {
+     "key": "s08_q3",
+     "type": "text",
+     "label_en": "Preferences",
+     "label_ar": "تفضيلات",
+     "text_en": "Do you have specific design requests? (e.g. colors you like, flooring preferences, paint colors)",
+     "text_ar": "هل لديك طلبات تصميمية محددة؟ (مثل: ألوان تفضّلها، نوع الأرضيات، ألوان الدهانات)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "09",
+   "title_en": "Room Details",
+   "title_ar": "تفاصيل الغرف",
+   "desc_en": "Leave blank anything that is not relevant to your project.",
+   "desc_ar": "اترك ما لا ينطبق على مشروعك دون إجابة.",
+   "show_if_project_has": null,
+   "questions": [
+    {
+     "key": "s09_q1",
+     "type": "text",
+     "label_en": "Master bedroom",
+     "label_ar": "غرفة النوم الرئيسية",
+     "text_en": "What size bed do you prefer in the master bedroom? (king, queen, etc.)",
+     "text_ar": "ما مقاس السرير الذي تفضّله في الغرفة الرئيسية؟ (كينج، كوين، إلخ)",
+     "options": []
+    },
+    {
+     "key": "s09_q2",
+     "type": "text",
+     "label_en": "Dining",
+     "label_ar": "الطعام",
+     "text_en": "How many people should your dining table comfortably seat?",
+     "text_ar": "كم شخصًا ينبغي أن تتّسع له طاولة الطعام بشكل مريح؟",
+     "options": []
+    },
+    {
+     "key": "s09_q3",
+     "type": "text",
+     "label_en": "Workspaces",
+     "label_ar": "أماكن العمل",
+     "text_en": "Do you want dedicated workspaces in any of the bedrooms?",
+     "text_ar": "هل ترغب في مساحة عمل مخصصة داخل أي من غرف النوم؟",
+     "options": []
+    },
+    {
+     "key": "s09_q4",
+     "type": "text",
+     "label_en": "Living room",
+     "label_ar": "غرفة المعيشة",
+     "text_en": "How much seating do you want in the living room?",
+     "text_ar": "كم عدد أماكن الجلوس التي ترغب بها في غرفة المعيشة؟",
+     "options": []
+    },
+    {
+     "key": "s09_q5",
+     "type": "text",
+     "label_en": "Storage",
+     "label_ar": "التخزين",
+     "text_en": "Do you need built-in storage? If so, what for? (e.g. a book collection)",
+     "text_ar": "هل تحتاج إلى تخزين مدمج؟ ولأي غرض؟ (مثل: مكتبة كتب)",
+     "options": []
+    },
+    {
+     "key": "s09_q6",
+     "type": "text",
+     "label_en": "Lighting",
+     "label_ar": "الإضاءة",
+     "text_en": "Do you have specific lighting preferences? (e.g. dimmers)",
+     "text_ar": "هل لديك تفضيلات محددة للإضاءة؟ (مثل: مفاتيح تعتيم)",
+     "options": []
+    },
+    {
+     "key": "s09_q7",
+     "type": "text",
+     "label_en": "Technology",
+     "label_ar": "التقنية",
+     "text_en": "Do you have any specific technology requests? (e.g. a gaming setup)",
+     "text_ar": "هل لديك طلبات تقنية محددة؟ (مثل: ركن ألعاب إلكترونية)",
+     "options": []
+    },
+    {
+     "key": "s09_q8",
+     "type": "text",
+     "label_en": "Flooring",
+     "label_ar": "الأرضيات",
+     "text_en": "What type of flooring do you prefer?",
+     "text_ar": "ما نوع الأرضيات الذي تفضّله؟",
+     "options": []
+    },
+    {
+     "key": "s09_q9",
+     "type": "text",
+     "label_en": "Special pieces",
+     "label_ar": "قطع خاصة",
+     "text_en": "Are there specific pieces that need to be accommodated? (e.g. family heirlooms, collections, artwork)",
+     "text_ar": "هل هناك قطع بعينها يجب استيعابها في التصميم؟ (مثل: مقتنيات عائلية، مجموعات، أعمال فنية)",
+     "options": []
+    }
+   ]
+  },
+  {
+   "number": "10",
+   "title_en": "Anything Else",
+   "title_ar": "ملاحظات إضافية",
+   "desc_en": "Use this page for any other details or requests not yet covered.",
+   "desc_ar": "استخدم هذه الصفحة لأي تفاصيل أو طلبات لم تُذكر سابقًا.",
+   "show_if_project_has": null,
+   "questions": [
+    {
+     "key": "s10_q1",
+     "type": "text",
+     "label_en": "Additional notes",
+     "label_ar": "ملاحظات",
+     "text_en": "List any other requests or information not yet covered.",
+     "text_ar": "اذكر أي طلبات أو معلومات أخرى لم تُغطَّ في الاستمارة.",
+     "options": []
+    }
+   ]
+  }
+ ]
+}

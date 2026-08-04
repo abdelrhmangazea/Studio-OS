@@ -1,6 +1,7 @@
 {
-  "app": { "name": "Studio OS" },
-
+  "app": {
+    "name": "Studio OS"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "leads": "Leads",
@@ -13,7 +14,6 @@
     "reports": "Reports",
     "settings": "Settings"
   },
-
   "common": {
     "save": "Save",
     "saving": "Saving…",
@@ -38,10 +38,16 @@
     "clear": "Clear",
     "required": "Required"
   },
-
-  "theme": { "dark": "Dark", "light": "Light", "toggle": "Switch theme" },
-  "language": { "ar": "العربية", "en": "English", "toggle": "Switch language" },
-
+  "theme": {
+    "dark": "Dark",
+    "light": "Light",
+    "toggle": "Switch theme"
+  },
+  "language": {
+    "ar": "العربية",
+    "en": "English",
+    "toggle": "Switch language"
+  },
   "auth": {
     "signInTitle": "Sign in",
     "signInSubtitle": "Welcome back.",
@@ -57,7 +63,6 @@
     "haveAccount": "Already have an account?",
     "passwordHint": "At least 6 characters."
   },
-
   "onboarding": {
     "title": "Set up your studio",
     "subtitle": "One pass. You can change any of this later in Settings.",
@@ -76,7 +81,6 @@
     "prefixHelp": "Project codes look like {example}.",
     "done": "Finish setup"
   },
-
   "settings": {
     "title": "Settings",
     "studioProfile": "Studio Profile",
@@ -91,9 +95,10 @@
     "contactEmail": "Contact email",
     "contactPhone": "Contact phone",
     "website": "Website",
-    "ownerOnly": "Only the studio owner can change these."
+    "ownerOnly": "Only the studio owner can change these.",
+    "yourTitle": "Your title",
+    "yourTitleHelp": "Merged into documents as {{designer_title}}."
   },
-
   "lists": {
     "title": "Lists",
     "help": "The lead statuses and sources used across your pipeline. Rename them to match how your studio actually works.",
@@ -116,7 +121,6 @@
     "deleteBlocked": "This status is used by {count} contacts, so it cannot be deleted. Deactivate it instead — it stays on the records that already use it, but stops appearing in dropdowns.",
     "deleteConfirm": "Delete this permanently? Nothing is using it."
   },
-
   "leads": {
     "title": "Leads",
     "tableView": "Table",
@@ -133,7 +137,6 @@
     "convertedNotice": "{name} booked a consultation and is now a client.",
     "openClient": "Open"
   },
-
   "clients": {
     "title": "Clients",
     "empty": "No clients yet. Convert a lead to create your first one.",
@@ -141,7 +144,6 @@
     "count": "{count} clients",
     "convertedOn": "Client since {date}"
   },
-
   "columns": {
     "name": "Name",
     "phone": "Phone",
@@ -154,7 +156,6 @@
     "country": "Country",
     "converted": "Converted"
   },
-
   "fields": {
     "firstName": "First name",
     "lastName": "Last name",
@@ -171,7 +172,6 @@
     "nextAction": "Next action",
     "notSet": "Not set"
   },
-
   "contact": {
     "tabDetails": "Details",
     "tabLog": "Communication Log",
@@ -195,7 +195,6 @@
     "addedOn": "Added {date}",
     "notFound": "That contact does not exist, or is not in your workspace."
   },
-
   "validation": {
     "firstNameRequired": "First name is required.",
     "phoneCodeMissing": "Select a country code.",
@@ -205,7 +204,6 @@
     "emailInvalid": "That email address is not valid.",
     "duplicateEmail": "Heads up: {name} already uses this email. Saving anyway is fine."
   },
-
   "search": {
     "placeholder": "Search name, email, phone…",
     "noResults": "Nothing found.",
@@ -213,7 +211,6 @@
     "clientsGroup": "Clients",
     "hint": "Type at least 2 characters."
   },
-
   "csv": {
     "title": "Import leads from CSV",
     "step1": "Choose a file",
@@ -236,5 +233,82 @@
     "reason": "Reason",
     "noFile": "No file chosen yet.",
     "emptyFile": "That file has no data rows."
+  },
+  "templates": {
+    "title": "Templates",
+    "subtitle": "{count} templates. Each one exists in Arabic and English, paired together.",
+    "checklists": "Checklists",
+    "documents": "Documents",
+    "messages": "Messages",
+    "questionnaire": "Questionnaire",
+    "checklistsEmpty": "Stage checklists are seeded in Bucket 4.",
+    "documentsEmpty": "No document templates yet.",
+    "messagesEmpty": "No message templates yet.",
+    "stage": "Stage",
+    "arabic": "Arabic",
+    "english": "English",
+    "missingLanguage": "Missing",
+    "preview": "Preview",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
+    "generate": "Generate for a client",
+    "newTemplate": "New template",
+    "system": "Seeded",
+    "custom": "Mine",
+    "inactive": "Inactive",
+    "fieldsUsed": "Merge fields used",
+    "unknownFields": "Unknown fields: {fields}",
+    "notYetAvailable": "{count} of these need projects or bookings, which arrive in a later bucket. They will show as [[markers]] until then.",
+    "editorTitle": "Edit template",
+    "insertField": "Insert a merge field",
+    "insertFieldHelp": "Pick a field — never type the braces by hand.",
+    "titleLabel": "Title",
+    "subjectLabel": "Subject",
+    "bodyLabel": "Body",
+    "questionnaireSections": "{sections} sections · {questions} questions · {options} options",
+    "questionnaireHelp": "Sections tied to a room (kitchen, laundry, ensuite, bathrooms) will be shown or hidden per project once projects exist. For now every section is generated.",
+    "resetTitle": "Reset templates to defaults",
+    "resetHelp": "Restores the seeded templates to how they shipped. Templates you created yourself are not touched.",
+    "resetButton": "Reset to defaults",
+    "resetConfirm": "Restore all seeded templates? Any edits you made to them will be lost. Templates you created yourself are kept.",
+    "resetDone": "{count} templates restored."
+  },
+  "generator": {
+    "title": "Generate document",
+    "pickContact": "Choose a client",
+    "pickContactHelp": "The document is filled with this person's real data.",
+    "searchContact": "Search by name, email or phone",
+    "promptTitle": "A few details first",
+    "promptHelp": "These are not stored anywhere — they are specific to this document, so I need them from you.",
+    "continue": "Continue",
+    "valuesTitle": "Field values",
+    "valuesHelp": "Edit any value before generating.",
+    "previewTitle": "Preview",
+    "previewHelp": "Click into the document to edit it. What you export is what you see.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "exportPdf": "Export PDF",
+    "exportWord": "Export Word",
+    "whatsapp": "WhatsApp text",
+    "whatsappTitle": "WhatsApp version",
+    "whatsappHelp": "Plain text, no formatting, line breaks kept.",
+    "save": "Save to client",
+    "saved": "Saved to this client's Documents",
+    "unresolvedTitle": "{count} fields have no value",
+    "unresolvedBody": "These appear as [[markers]] in the document. Fill them on the left, or edit them out before you send.",
+    "promptField": "asked",
+    "autoField": "from your data",
+    "notAvailableYet": "not available until a later bucket",
+    "pdfHint": "Your browser's print dialog opens — choose “Save as PDF”.",
+    "noContact": "Pick a client first."
+  },
+  "documents": {
+    "empty": "Nothing generated for this client yet.",
+    "generatedOn": "Generated {date}",
+    "view": "View",
+    "copyBody": "Copy",
+    "language": "Language"
   }
 }

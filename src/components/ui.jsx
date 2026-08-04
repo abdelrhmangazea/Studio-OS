@@ -1,3 +1,5 @@
+import { forwardRef } from 'react'
+
 /**
  * The shared building blocks. Flat by design — no shadows, no gradients.
  * Every colour here is a theme variable, so these adapt to dark/light
@@ -205,9 +207,11 @@ export function Tabs({ tabs, active, onChange }) {
   )
 }
 
-export function Textarea({ className = '', ...props }) {
+// forwardRef so the template editor can insert a merge field at the caret.
+export const Textarea = forwardRef(function Textarea({ className = '', ...props }, ref) {
   return (
     <textarea
+      ref={ref}
       className={
         'w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
         'placeholder:text-text-secondary focus:border-accent focus:outline-none ' +
@@ -216,7 +220,7 @@ export function Textarea({ className = '', ...props }) {
       {...props}
     />
   )
-}
+})
 
 export function EmptyState({ children }) {
   return (

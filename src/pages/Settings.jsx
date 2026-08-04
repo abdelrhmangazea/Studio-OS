@@ -5,6 +5,7 @@ import { useAuth } from '../lib/AuthContext'
 import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
 import ListsSettings from '../components/ListsSettings'
+import ResetTemplates from '../components/ResetTemplates'
 import {
   Button,
   Card,
@@ -22,7 +23,7 @@ import {
  */
 
 export default function Settings() {
-  const { workspace, settings, isOwner, refresh } = useAuth()
+  const { workspace, settings, profile, isOwner, refresh } = useAuth()
   const { theme, language, setTheme, setLanguage } = usePrefs()
   const { t } = useI18n()
 
@@ -187,6 +188,23 @@ export default function Settings() {
         </SectionTitle>
 
         <h3 className="mb-3 text-sm font-medium text-text">{t('settings.yourPreferences')}</h3>
+
+        {/* designer_title merges into documents, so it lives with the
+            other per-user settings rather than on the studio profile. */}
+        <div className="mb-4">
+          <Field label={t('settings.yourTitle')} hint={t('settings.yourTitleHelp')}>
+            <Input
+              defaultValue={profile?.title ?? ''}
+              onBlur={async (event) => {
+                const next = event.target.value.trim() || null
+                if (next === (profile?.title ?? null)) return
+                await supabase.from('profiles').update({ title: next }).eq('id', profile.id)
+                await refresh()
+              }}
+            />
+          </Field>
+        </div>
+
         <div className="mb-6 grid grid-cols-2 gap-4">
           <Field label={t('onboarding.themeLabel')}>
             <Select value={theme} onChange={(e) => setTheme(e.target.value)}>
@@ -268,6 +286,9 @@ export default function Settings() {
 
       {/* ---------- Lists ---------- */}
       <ListsSettings />
+
+      {/* ---------- Templates ---------- */}
+      <ResetTemplates />
 
       {/* ---------- Later buckets ---------- */}
       <Card className="mb-4">

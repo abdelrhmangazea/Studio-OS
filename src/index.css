@@ -43,3 +43,32 @@ body {
   color: var(--text);
   /* Flat by design: no shadows, no gradients anywhere in this app. */
 }
+
+/* -------------------------------------------------------------
+   The document preview.
+
+   This is paper, not app chrome: always dark text on white in both
+   themes, because that is what will actually be exported. Mirrors
+   the print styles in src/lib/documentHtml.js.
+   ------------------------------------------------------------- */
+
+.studio-doc {
+  color: #1d191a;
+  font-size: 14px;
+  line-height: 1.9;
+}
+.studio-doc p { margin: 0 0 8px; }
+.studio-doc h1 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
+.studio-doc h2 { font-size: 16px; font-weight: 700; margin: 16px 0 8px; }
+.studio-doc ul,
+.studio-doc ol { margin: 0 0 10px; padding-inline-start: 22px; }
+.studio-doc .nowrap { white-space: nowrap; }
+
+/* An unresolved merge field. Deliberately loud — a document must never
+   go out with one of these still in it. */
+.studio-doc .unresolved {
+  background: #ffe8ea;
+  color: #e11d3c;
+  padding: 0 3px;
+  border-radius: 2px;
+}

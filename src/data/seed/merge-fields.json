@@ -1,0 +1,182 @@
+[
+ {
+  "field": "client_first_name",
+  "source": "auto",
+  "resolves_from": "contacts.first_name"
+ },
+ {
+  "field": "client_full_name",
+  "source": "auto",
+  "resolves_from": "contacts full name"
+ },
+ {
+  "field": "client_email",
+  "source": "auto",
+  "resolves_from": "contacts.email"
+ },
+ {
+  "field": "client_phone",
+  "source": "auto",
+  "resolves_from": "contacts phone (code + number)"
+ },
+ {
+  "field": "client_country",
+  "source": "auto",
+  "resolves_from": "contacts.country"
+ },
+ {
+  "field": "project_name",
+  "source": "auto",
+  "resolves_from": "projects.name"
+ },
+ {
+  "field": "project_code",
+  "source": "auto",
+  "resolves_from": "projects.code"
+ },
+ {
+  "field": "project_description",
+  "source": "auto",
+  "resolves_from": "projects.requirements"
+ },
+ {
+  "field": "project_type",
+  "source": "auto",
+  "resolves_from": "projects.type"
+ },
+ {
+  "field": "property_address",
+  "source": "auto",
+  "resolves_from": "projects.address"
+ },
+ {
+  "field": "consultation_date",
+  "source": "auto",
+  "resolves_from": "bookings.slot (date)"
+ },
+ {
+  "field": "consultation_time",
+  "source": "auto",
+  "resolves_from": "bookings.slot (time)"
+ },
+ {
+  "field": "consultation_mode",
+  "source": "auto",
+  "resolves_from": "bookings.session_type"
+ },
+ {
+  "field": "consultation_duration",
+  "source": "auto",
+  "resolves_from": "booking_settings.duration"
+ },
+ {
+  "field": "consultation_type",
+  "source": "auto",
+  "resolves_from": "booking_settings.session_type label"
+ },
+ {
+  "field": "booking_link",
+  "source": "auto",
+  "resolves_from": "booking_settings public link"
+ },
+ {
+  "field": "portal_link",
+  "source": "auto",
+  "resolves_from": "portal_links.token URL"
+ },
+ {
+  "field": "contract_sent_date",
+  "source": "auto",
+  "resolves_from": "generated_documents (contract) created_at"
+ },
+ {
+  "field": "today_date",
+  "source": "auto",
+  "resolves_from": "system date"
+ },
+ {
+  "field": "week_ending_date",
+  "source": "auto",
+  "resolves_from": "system: end of current week"
+ },
+ {
+  "field": "currency",
+  "source": "auto",
+  "resolves_from": "studio_settings.currency"
+ },
+ {
+  "field": "designer_name",
+  "source": "auto",
+  "resolves_from": "profiles.name"
+ },
+ {
+  "field": "designer_title",
+  "source": "auto",
+  "resolves_from": "profiles.title"
+ },
+ {
+  "field": "designer_phone",
+  "source": "auto",
+  "resolves_from": "studio_settings.contact_phone"
+ },
+ {
+  "field": "designer_email",
+  "source": "auto",
+  "resolves_from": "studio_settings.contact_email"
+ },
+ {
+  "field": "designer_website",
+  "source": "auto",
+  "resolves_from": "studio_settings.website"
+ },
+ {
+  "field": "studio_name",
+  "source": "auto",
+  "resolves_from": "studio_settings.studio_name"
+ },
+ {
+  "field": "overall_status",
+  "source": "prompt",
+  "ask_user": "Short status line for the weekly update"
+ },
+ {
+  "field": "delivery_stage",
+  "source": "prompt",
+  "ask_user": "Current delivery stage in plain words"
+ },
+ {
+  "field": "next_milestone",
+  "source": "prompt",
+  "ask_user": "What happens next"
+ },
+ {
+  "field": "milestone_date",
+  "source": "prompt",
+  "ask_user": "Date of the next milestone"
+ },
+ {
+  "field": "requested_start_date",
+  "source": "prompt",
+  "ask_user": "Start date requested by the client"
+ },
+ {
+  "field": "signing_deadline",
+  "source": "prompt",
+  "ask_user": "Deadline for returning the signed contract"
+ },
+ {
+  "field": "payment_method",
+  "source": "prompt",
+  "ask_user": "Payment method / bank details for this invoice"
+ },
+ {
+  "field": "form_duration",
+  "source": "prompt",
+  "ask_user": "How long the questionnaire takes to complete"
+ },
+ {
+  "field": "invoice_amount",
+  "source": "prompt",
+  "ask_user": "Invoice amount for this stage"
+ }
+]
