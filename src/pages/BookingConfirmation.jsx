@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchBookingStatus, uploadReceipt } from '../lib/publicBooking'
+import { fetchBookingStatus, uploadAnswerFile, uploadReceipt } from '../lib/publicBooking'
 
 /**
  * The confirmation page the client lands on, and where they upload the
@@ -18,6 +18,8 @@ export default function BookingConfirmation() {
   const [uploading, setUploading] = useState(false)
   const [uploaded, setUploaded] = useState(false)
   const [error, setError] = useState('')
+  const [answerBusy, setAnswerBusy] = useState(null)
+  const [answerError, setAnswerError] = useState('')
   const fileRef = useRef(null)
 
   async function load() {
@@ -78,6 +80,22 @@ export default function BookingConfirmation() {
     setUploading(false)
   }
 
+  /** Retry for a question file that did not make it up at booking time. */
+  async function handleAnswerFile(question, event) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setAnswerBusy(question.id)
+    setAnswerError('')
+    try {
+      await uploadAnswerFile(token, booking.upload_prefix, question.id, file)
+      await load()
+    } catch (failure) {
+      setAnswerError(failure.message)
+    }
+    setAnswerBusy(null)
+  }
+
   return (
     <div className="public-page" dir="ltr" style={{ '--pub-accent': accent }}>
       <div className="mx-auto max-w-xl px-5 py-10">
@@ -107,6 +125,38 @@ export default function BookingConfirmation() {
             </div>
           </dl>
         </div>
+
+        {/* ---------- Files the booking form asked for but never got ---------- */}
+        {(booking.pending_files ?? []).length > 0 && (
+          <div className="pub-card mt-4 p-5">
+            <h3 className="text-sm font-semibold">Still needed</h3>
+            <p className="pub-muted mt-1 text-xs">
+              These files did not upload with your booking. Your booking is safe — please attach
+              them here.
+            </p>
+
+            <div className="mt-4 space-y-4">
+              {booking.pending_files.map((question) => (
+                <div key={question.id}>
+                  <p className="mb-1 text-sm">{question.label_en || question.label_ar}</p>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"
+                    disabled={answerBusy === question.id}
+                    onChange={(event) => handleAnswerFile(question, event)}
+                  />
+                  {answerBusy === question.id && <p className="mt-1 text-xs">Uploading…</p>}
+                </div>
+              ))}
+            </div>
+
+            {answerError && (
+              <p className="mt-2 text-xs" style={{ color: '#e11d3c' }}>
+                {answerError}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* ---------- Invoice and receipt: no gateway anywhere ---------- */}
         {booking.invoice ? (

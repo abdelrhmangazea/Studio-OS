@@ -125,6 +125,17 @@ export async function listInvoices(bookingId) {
   return data ?? []
 }
 
+export async function getInvoice(id) {
+  const { data, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data
+}
+
 export async function issueInvoice(row) {
   const { data, error } = await supabase
     .from('invoices')
@@ -155,6 +166,13 @@ export async function confirmReceipt(receipt, profileId, bookingId) {
 /** A private bucket, so the designer views receipts through signed URLs. */
 export async function receiptUrl(path) {
   const { data, error } = await supabase.storage.from('receipts').createSignedUrl(path, 300)
+  if (error) return null
+  return data.signedUrl
+}
+
+/** Same, for files a client attached to a booking question. */
+export async function answerFileUrl(path) {
+  const { data, error } = await supabase.storage.from('booking-files').createSignedUrl(path, 300)
   if (error) return null
   return data.signedUrl
 }

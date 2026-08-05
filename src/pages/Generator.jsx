@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { getContact, fullName } from '../lib/contacts'
 import { getProject } from '../lib/projects'
-import { getBooking } from '../lib/booking'
+import { getBooking, getInvoice } from '../lib/booking'
 import {
   getQuestionnaire,
   listTemplates,
@@ -11,6 +11,7 @@ import {
 } from '../lib/templates'
 import {
   extractFields,
+  invoiceSuppliedFields,
   renderTemplate,
   resolveAutoFields,
   splitFields,
@@ -48,6 +49,7 @@ export default function Generator() {
   const [searchParams] = useSearchParams()
   const projectId = searchParams.get('project')
   const bookingId = searchParams.get('booking')
+  const invoiceId = searchParams.get('invoice')
   const { t, language: appLanguage } = useI18n()
   const { settings, profile } = useAuth()
   const navigate = useNavigate()
@@ -55,6 +57,7 @@ export default function Generator() {
   const [contact, setContact] = useState(null)
   const [project, setProject] = useState(null)
   const [booking, setBooking] = useState(null)
+  const [invoice, setInvoice] = useState(null)
   const [pair, setPair] = useState(null)
   const [questionnaire, setQuestionnaire] = useState(null)
   const [language, setLanguage] = useState(appLanguage)
@@ -80,11 +83,13 @@ export default function Generator() {
         projectId ? getProject(projectId) : Promise.resolve(null),
       ])
       const loadedBooking = bookingId ? await getBooking(bookingId) : null
+      const loadedInvoice = invoiceId ? await getInvoice(invoiceId) : null
       if (cancelled) return
 
       setContact(loadedContact)
       setProject(loadedProject)
       setBooking(loadedBooking)
+      setInvoice(loadedInvoice)
       setQuestionnaire(q)
       setPair(pairByKey(allTemplates).find((p) => p.key === key) ?? null)
       setLoading(false)
@@ -92,7 +97,7 @@ export default function Generator() {
     return () => {
       cancelled = true
     }
-  }, [key, contactId, projectId, bookingId])
+  }, [key, contactId, projectId, bookingId, invoiceId])
 
   const isQuestionnaire = !pair && questionnaire?.key === key
   const row = pair?.[language] ?? pair?.ar ?? pair?.en ?? null
@@ -111,7 +116,12 @@ export default function Generator() {
     () => extractFields(sourceBody, row?.subject),
     [sourceBody, row?.subject]
   )
-  const { prompt: promptNames } = splitFields(fields)
+  // Generated from a real invoice, the amount is not a question — the
+  // figure entered when it was issued is the only one that can be right.
+  const suppliedByInvoice = invoiceSuppliedFields(invoice)
+  const promptNames = splitFields(fields).prompt.filter(
+    (name) => !suppliedByInvoice.includes(name)
+  )
 
   // ---------- resolve ----------
   useEffect(() => {
@@ -120,14 +130,22 @@ export default function Generator() {
 
     let cancelled = false
     ;(async () => {
-      const auto = await resolveAutoFields({ contact, settings, profile, project, booking, language })
+      const auto = await resolveAutoFields({
+        contact,
+        settings,
+        profile,
+        project,
+        booking,
+        invoice,
+        language,
+      })
       if (cancelled) return
       setValues({ ...auto, ...(promptValues ?? {}) })
     })()
     return () => {
       cancelled = true
     }
-  }, [loading, contact, settings, profile, project, booking, language, promptValues, promptNames.length])
+  }, [loading, contact, settings, profile, project, booking, invoice, language, promptValues, promptNames.length])
 
   // Re-render the body whenever the values or the language change.
   useEffect(() => {
@@ -278,11 +296,15 @@ export default function Generator() {
                 key={name}
                 label={name}
                 hint={
-                  FIELD_BY_NAME[name]?.source === 'prompt'
-                    ? t('generator.promptField')
-                    : NOT_YET_AVAILABLE.has(name)
-                      ? t('generator.notAvailableYet')
-                      : t('generator.autoField')
+                  // An invoice answers its own amount, so it reads as
+                  // resolved here rather than as a question.
+                  suppliedByInvoice.includes(name)
+                    ? t('generator.autoField')
+                    : FIELD_BY_NAME[name]?.source === 'prompt'
+                      ? t('generator.promptField')
+                      : NOT_YET_AVAILABLE.has(name)
+                        ? t('generator.notAvailableYet')
+                        : t('generator.autoField')
                 }
               >
                 <Input

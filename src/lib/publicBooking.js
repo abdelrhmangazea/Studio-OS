@@ -80,3 +80,31 @@ export async function uploadReceipt(token, uploadPrefix, file) {
 
   return path
 }
+
+/**
+ * Uploads a file answered against a booking question.
+ *
+ * Runs AFTER the booking exists, never before: the storage policy only
+ * accepts a path that resolves to a real booking, which is exactly what
+ * stops this being an open drop-box on the designer's storage.
+ */
+export async function uploadAnswerFile(token, uploadPrefix, questionId, file) {
+  const extension = file.name.split('.').pop().toLowerCase()
+  const path = `${uploadPrefix}/answers/${questionId}-${Date.now()}.${extension}`
+
+  const { error: uploadError } = await publicClient.storage
+    .from('booking-files')
+    .upload(path, file, { contentType: file.type })
+
+  if (uploadError) throw uploadError
+
+  const { error } = await publicClient.rpc('public_attach_answer_file', {
+    p_token: token,
+    p_question: questionId,
+    p_path: path,
+    p_name: file.name,
+  })
+  if (error) throw error
+
+  return path
+}

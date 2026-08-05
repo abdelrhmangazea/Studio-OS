@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
+  answerFileUrl,
   confirmReceipt,
   getBooking,
   issueInvoice,
@@ -10,6 +11,7 @@ import {
   receiptUrl,
   setBookingStatus,
 } from '../lib/booking'
+import { generateBookingDocuments } from '../lib/bookingIntake'
 import { fullName } from '../lib/contacts'
 import { formatPhone } from '../lib/phone'
 import { formatDateTime } from '../lib/format'
@@ -45,6 +47,8 @@ export default function Bookings() {
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
   const [receiptLinks, setReceiptLinks] = useState({})
+  const [answerLinks, setAnswerLinks] = useState({})
+  const [filed, setFiled] = useState([])
 
   async function load() {
     setBookings(await listBookings())
@@ -60,6 +64,21 @@ export default function Bookings() {
     setSelected(full)
     setInvoices(await listInvoices(booking.id))
     setAmount(full.session_type?.fee ?? '')
+    setFiled([])
+
+    // Steps 6 and 7 of the intake. Idempotent, so opening a booking
+    // twice never files a second copy — see lib/bookingIntake.js.
+    try {
+      const { created } = await generateBookingDocuments({
+        booking: full,
+        settings,
+        profile,
+        language,
+      })
+      setFiled(created)
+    } catch (failure) {
+      setError(failure.message)
+    }
 
     if (!full.seen_at) {
       await markBookingSeen(full.id)
@@ -79,6 +98,17 @@ export default function Bookings() {
       setReceiptLinks(links)
     })()
   }, [invoices])
+
+  useEffect(() => {
+    // Same again for files the client attached to a question.
+    ;(async () => {
+      const links = {}
+      for (const [questionId, file] of Object.entries(selected?.answer_files ?? {})) {
+        links[questionId] = await answerFileUrl(file.path)
+      }
+      setAnswerLinks(links)
+    })()
+  }, [selected])
 
   if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
 
@@ -202,10 +232,18 @@ export default function Bookings() {
                       </Button>
                     )}
                   </div>
+
+                  {filed.length > 0 && (
+                    <p className="mt-3 text-xs text-success">
+                      {t('booking.autoFiled', { count: filed.length })}
+                    </p>
+                  )}
                 </Card>
 
                 {/* ---------- Brief and answers ---------- */}
-                {(selected.project_brief || Object.keys(selected.answers ?? {}).length > 0) && (
+                {(selected.project_brief ||
+                  Object.keys(selected.answers ?? {}).length > 0 ||
+                  Object.keys(selected.answer_files ?? {}).length > 0) && (
                   <Card className="mb-4">
                     <h3 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
                       {t('booking.brief')}
@@ -223,6 +261,34 @@ export default function Bookings() {
                         </div>
                       ))}
                     </dl>
+
+                    {Object.keys(selected.answer_files ?? {}).length > 0 && (
+                      <div className="mt-4 border-t border-border pt-3">
+                        <h4 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+                          {t('booking.attachedFiles')}
+                        </h4>
+                        <ul className="space-y-1">
+                          {Object.entries(selected.answer_files).map(([questionId, file]) => (
+                            <li key={questionId}>
+                              {answerLinks[questionId] ? (
+                                <a
+                                  href={answerLinks[questionId]}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-sm text-accent hover:underline"
+                                >
+                                  {file.name || file.path}
+                                </a>
+                              ) : (
+                                <span className="text-sm text-text-secondary">
+                                  {file.name || file.path}
+                                </span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </Card>
                 )}
 
@@ -278,6 +344,22 @@ export default function Bookings() {
                             {t(`booking.invoice_${invoice.status}`)}
                           </Badge>
                         </div>
+
+                        {/* The covering message. The amount comes from the
+                            invoice itself, so it is never re-typed. */}
+                        <Button
+                          variant="secondary"
+                          className="mt-3 px-2 py-1"
+                          onClick={() =>
+                            navigate(
+                              `/generate/invoice_send/${selected.contact_id}` +
+                                `?project=${selected.project_id}&booking=${selected.id}` +
+                                `&invoice=${invoice.id}`
+                            )
+                          }
+                        >
+                          {t('booking.generateInvoiceMessage')}
+                        </Button>
 
                         {(invoice.receipts ?? []).length === 0 ? (
                           <p className="mt-2 text-xs text-text-secondary">

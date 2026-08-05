@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchBookingPage, fetchSlots, submitBooking } from '../lib/publicBooking'
+import { fetchBookingPage, fetchSlots, submitBooking, uploadAnswerFile } from '../lib/publicBooking'
 import { COUNTRIES } from '../data/countries'
 
 /**
@@ -32,6 +32,8 @@ export default function PublicBooking() {
     brief: '',
   })
   const [answers, setAnswers] = useState({})
+  // Chosen files wait here until the booking exists — see handleSubmit.
+  const [files, setFiles] = useState({})
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -132,6 +134,17 @@ export default function PublicBooking() {
         brief: form.brief,
         answers,
       })
+      // The booking is committed. Files go up now, against its token.
+      // A failed upload is not a failed booking — the confirmation page
+      // knows which files are still missing and asks for them again.
+      for (const [questionId, file] of Object.entries(files)) {
+        try {
+          await uploadAnswerFile(result.token, result.upload_prefix, questionId, file)
+        } catch {
+          // Deliberately swallowed. Reported on the confirmation page.
+        }
+      }
+
       navigate(`/booking/${result.token}`)
     } catch (failure) {
       // A clash here means someone took the slot first — refresh what is left.
@@ -336,6 +349,25 @@ export default function PublicBooking() {
                             </label>
                           )
                         })}
+                      </div>
+                    ) : question.field_type === 'file' ? (
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"
+                          onChange={(e) => {
+                            const chosen = e.target.files?.[0]
+                            setFiles({ ...files, [question.id]: chosen ?? undefined })
+                            // The answer itself records the file's name, so
+                            // the brief and the note read as sentences.
+                            set(chosen ? chosen.name : '')
+                          }}
+                        />
+                        <p className="mt-1 text-xs opacity-70">
+                          {rtl
+                            ? 'صورة أو PDF، بحد أقصى ١٠ ميجابايت. يُرفع بعد تأكيد الحجز.'
+                            : 'Image or PDF, up to 10MB. Uploaded once the booking is confirmed.'}
+                        </p>
                       </div>
                     ) : (
                       <input value={value} onChange={(e) => set(e.target.value)} />

@@ -467,6 +467,9 @@
     "awaitingReceipt": "Waiting for the client to upload a transfer receipt.",
     "receiptUploaded": "Receipt uploaded {date}",
     "confirmReceipt": "Confirm payment received",
-    "receiptConfirmed": "Payment confirmed. The booking is confirmed."
+    "receiptConfirmed": "Payment confirmed. The booking is confirmed.",
+    "generateInvoiceMessage": "Invoice message",
+    "attachedFiles": "Attached files",
+    "autoFiled": "{count} documents were prepared from this booking automatically — the confirmation script and the prep sheet, filed under the client's documents."
   }
 }

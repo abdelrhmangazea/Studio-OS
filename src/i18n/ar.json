@@ -467,6 +467,9 @@
     "awaitingReceipt": "في انتظار رفع العميل لإيصال التحويل.",
     "receiptUploaded": "تم رفع الإيصال في {date}",
     "confirmReceipt": "تأكيد استلام الدفعة",
-    "receiptConfirmed": "تم تأكيد الدفعة. الحجز مؤكد."
+    "receiptConfirmed": "تم تأكيد الدفعة. الحجز مؤكد.",
+    "generateInvoiceMessage": "رسالة الفاتورة",
+    "attachedFiles": "ملفات مرفقة",
+    "autoFiled": "تم تجهيز {count} مستند من هذا الحجز تلقائياً — رسالة التأكيد وورقة التحضير، محفوظتان في مستندات العميل."
   }
 }

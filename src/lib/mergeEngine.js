@@ -52,7 +52,15 @@ function endOfWeek() {
  * written in Arabic formats its dates in Arabic even if the app is in
  * English.
  */
-export async function resolveAutoFields({ contact, settings, profile, project, booking, language }) {
+export async function resolveAutoFields({
+  contact,
+  settings,
+  profile,
+  project,
+  booking,
+  invoice,
+  language,
+}) {
   const contractSentAt = contact ? await findContractSentDate(contact.id) : null
   const bookingLink = await findBookingLink()
 
@@ -68,7 +76,9 @@ export async function resolveAutoFields({ contact, settings, profile, project, b
 
     // studio_settings
     studio_name: settings?.studio_name ?? null,
-    currency: settings?.currency ?? null,
+    // An issued invoice carries its own currency; the studio default is
+    // only the fallback for documents generated without one.
+    currency: invoice?.currency ?? settings?.currency ?? null,
     designer_phone: settings?.contact_phone ?? null,
     designer_email: settings?.contact_email ?? null,
     designer_website: settings?.website ?? null,
@@ -105,11 +115,27 @@ export async function resolveAutoFields({ contact, settings, profile, project, b
       : null,
     booking_link: bookingLink,
 
+    // invoices — the amount stops being a question once a real invoice
+    // exists. The figure entered when it was issued is the only one that
+    // can be right, so it is never re-typed.
+    invoice_amount: invoice?.amount ?? null,
+
     // Still waiting on the client portal, Bucket 6.
     portal_link: null,
   }
 
   return values
+}
+
+/**
+ * Prompt fields an issued invoice answers on its own.
+ *
+ * The generator subtracts these from the questions it asks, so
+ * generating from a real invoice never asks for an amount it already
+ * knows. Generated without an invoice, they stay questions.
+ */
+export function invoiceSuppliedFields(invoice) {
+  return invoice ? ['invoice_amount'] : []
 }
 
 /** The consultation time, in the STUDIO's timezone — never the reader's. */
