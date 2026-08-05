@@ -35,13 +35,14 @@ export async function listStageDefinitions() {
   return data ?? []
 }
 
+/** Active (false), delivered (true), or — with no argument — all of them. */
 export async function listProjects(isArchived) {
-  const { data, error } = await supabase
+  let query = supabase
     .from('projects')
     .select('*, contact:contacts(id, first_name, last_name, country)')
-    .eq('is_archived', isArchived)
-    .order('created_at', { ascending: false })
+  if (isArchived !== undefined) query = query.eq('is_archived', isArchived)
 
+  const { data, error } = await query.order('created_at', { ascending: false })
   if (error) throw error
   return data ?? []
 }

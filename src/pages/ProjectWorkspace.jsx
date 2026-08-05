@@ -77,6 +77,7 @@ export default function ProjectWorkspace() {
       address: loaded.address ?? '',
       area_sqm: loaded.area_sqm ?? '',
       project_type: loaded.project_type ?? '',
+      value: loaded.value ?? '',
       requirements: loaded.requirements ?? '',
     })
     setOpenKey((current) => current ?? loaded.current_stage)
@@ -124,6 +125,9 @@ export default function ProjectWorkspace() {
       address: details.address || null,
       area_sqm: details.area_sqm === '' ? null : Number(details.area_sqm),
       project_type: details.project_type || null,
+      // Blank means "not set", never zero — the average must not be
+      // dragged down by a project the designer simply never priced.
+      value: details.value === '' ? null : Number(details.value),
       requirements: details.requirements || null,
     })
     setProject(updated)
@@ -254,6 +258,17 @@ export default function ProjectWorkspace() {
                 <Input
                   value={details.project_type}
                   onChange={(e) => setDetails({ ...details, project_type: e.target.value })}
+                />
+              </Field>
+              {/* Optional everywhere. Left blank, the average project
+                  value falls back to this project's invoices, and if
+                  there are none it is left out of the average rather
+                  than counted as zero. */}
+              <Field label={t('project.value')} hint={t('project.valueHelp')}>
+                <Input
+                  type="number"
+                  value={details.value}
+                  onChange={(e) => setDetails({ ...details, value: e.target.value })}
                 />
               </Field>
               <div className="sm:col-span-2">

@@ -397,7 +397,9 @@
     "blockFiles": "الملفات",
     "eventApproved": "وافق العميل على مرحلة {stage}",
     "eventApprovedFile": "وافق العميل على ملف في مرحلة {stage}",
-    "eventChangesRequested": "طلب العميل تعديلاً في مرحلة {stage}"
+    "eventChangesRequested": "طلب العميل تعديلاً في مرحلة {stage}",
+    "value": "قيمة المشروع",
+    "valueHelp": "اختياري. لو سيبته فاضي، المتوسط بيرجع لمجموع فواتير المشروع."
   },
   "booking": {
     "setupTab": "الإعدادات",
@@ -500,5 +502,75 @@
     "openChangeRequests": "{count} طلب تعديل في انتظارك.",
     "defaultAllowance": "التعديلات المجانية الافتراضية",
     "defaultAllowanceHelp": "العدد الذي يبدأ به كل مشروع جديد."
+  },
+  "tasks": {
+    "subtitle": "{count} مهمة مفتوحة",
+    "add": "مهمة جديدة",
+    "title": "المهمة",
+    "due": "تاريخ الاستحقاق",
+    "client": "العميل",
+    "project": "المشروع",
+    "empty": "لا توجد مهام مفتوحة.",
+    "markDone": "تحديد كمنجزة",
+    "overdue": "متأخر",
+    "today": "اليوم",
+    "upcoming": "قادم",
+    "source_stage_rule": "تلقائية",
+    "source_followup": "متابعة",
+    "source_portal": "من البوابة"
+  },
+  "dashboard": {
+    "today": "اليوم",
+    "todayEmpty": "لا يوجد شيء مستحق اليوم.",
+    "needsAttention": "يحتاج انتباهك",
+    "upcoming": "الأيام السبعة القادمة",
+    "upcomingEmpty": "لا يوجد شيء في الأيام السبعة القادمة.",
+    "activeClients": "العملاء النشطون",
+    "activeClientsEmpty": "لا توجد مشاريع نشطة.",
+    "daysSince": "{days} يوم منذ آخر تواصل",
+    "markDone": "تم",
+    "consultationWith": "استشارة مع {name}",
+    "occasionsMissing": "تواريخ {count} مناسبات لسنة {year} غير مُدخلة، فتذكيراتها بلا تاريخ.",
+    "occasionsEnter": "أدخل التواريخ الآن"
+  },
+  "insights": {
+    "leadsThisMonth": "عملاء محتملون هذا الشهر",
+    "toConsultation": "التحويل للاستشارة",
+    "toContract": "التحويل للعقد",
+    "activeProjects": "مشاريع نشطة",
+    "averageValue": "متوسط قيمة المشروع",
+    "ratio": "{a} من {b} هذا الشهر",
+    "showList": "عرض الـ{count}",
+    "hideList": "إخفاء",
+    "valueCoverage": "محسوب من {covering} مشروع — {entered} بقيمة أدخلتها، و{invoices} من الفواتير",
+    "basis_entered": "قيمة أدخلتها",
+    "basis_invoices": "من الفواتير",
+    "ratioClients": "{a} من {b} عميل"
+  },
+  "reminders": {
+    "kind_followup_6m": "متابعة بعد ٦ شهور",
+    "kind_followup_1y": "متابعة بعد سنة",
+    "kind_followup_2y": "متابعة بعد سنتين",
+    "kind_birthday": "عيد ميلاد",
+    "kind_hijri_new_year": "رأس السنة الهجرية",
+    "kind_ramadan": "رمضان",
+    "kind_eid_fitr": "عيد الفطر",
+    "kind_eid_adha": "عيد الأضحى",
+    "kind_new_year": "رأس السنة الميلادية",
+    "kind_custom": "تذكير",
+    "recurring": "يتكرر سنوياً",
+    "showScript": "اعرض الرسالة"
+  },
+  "occasions": {
+    "title": "تواريخ المناسبات",
+    "year": "السنة",
+    "help": "أربع مناسبات تتغيّر بالتقويم الهجري. أدخلها بنفسك — لا يحسبها النظام، لأن تاريخاً خاطئاً بيوم أسوأ من لا تاريخ.",
+    "hijri_new_year": "رأس السنة الهجرية",
+    "ramadan": "رمضان",
+    "eid_fitr": "عيد الفطر",
+    "eid_adha": "عيد الأضحى",
+    "new_year": "رأس السنة الميلادية",
+    "newYearFixed": "ثابت في ١ يناير، ولا يُسأل عنه.",
+    "saved": "تم الحفظ، وتحدّثت التذكيرات."
   }
 }

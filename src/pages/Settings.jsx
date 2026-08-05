@@ -6,6 +6,7 @@ import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
 import ListsSettings from '../components/ListsSettings'
 import ResetTemplates from '../components/ResetTemplates'
+import OccasionDates from './OccasionDates'
 import {
   Button,
   Card,
@@ -297,6 +298,11 @@ export default function Settings() {
         </Button>
         {saved && <span className="text-sm text-success">{t('common.saved')}</span>}
         <ErrorText>{error}</ErrorText>
+      </div>
+
+      {/* ---------- Occasion dates ---------- */}
+      <div id="occasions" className="mb-4">
+        <OccasionDates />
       </div>
 
       {/* ---------- Lists ---------- */}

@@ -11,13 +11,12 @@ import { digitsOnly } from './phone'
 
 const CONTACT_COLUMNS = '*'
 
+/** Leads (false), clients (true), or — with no argument — everybody. */
 export async function listContacts(isClient) {
-  const { data, error } = await supabase
-    .from('contacts')
-    .select(CONTACT_COLUMNS)
-    .eq('is_client', isClient)
-    .order('created_at', { ascending: false })
+  let query = supabase.from('contacts').select(CONTACT_COLUMNS)
+  if (isClient !== undefined) query = query.eq('is_client', isClient)
 
+  const { data, error } = await query.order('created_at', { ascending: false })
   if (error) throw error
   return data ?? []
 }

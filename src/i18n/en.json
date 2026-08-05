@@ -397,7 +397,9 @@
     "blockFiles": "Files",
     "eventApproved": "Client approved {stage}",
     "eventApprovedFile": "Client approved a file in {stage}",
-    "eventChangesRequested": "Client requested a change in {stage}"
+    "eventChangesRequested": "Client requested a change in {stage}",
+    "value": "Project value",
+    "valueHelp": "Optional. Left blank, the average falls back to this project’s invoices."
   },
   "booking": {
     "setupTab": "Setup",
@@ -500,5 +502,75 @@
     "openChangeRequests": "{count} change requests waiting on you.",
     "defaultAllowance": "Default free revisions",
     "defaultAllowanceHelp": "What every new project starts with."
+  },
+  "tasks": {
+    "subtitle": "{count} open",
+    "add": "New task",
+    "title": "Task",
+    "due": "Due date",
+    "client": "Client",
+    "project": "Project",
+    "empty": "No open tasks.",
+    "markDone": "Mark done",
+    "overdue": "Overdue",
+    "today": "Today",
+    "upcoming": "Upcoming",
+    "source_stage_rule": "automatic",
+    "source_followup": "follow-up",
+    "source_portal": "from the portal"
+  },
+  "dashboard": {
+    "today": "Today",
+    "todayEmpty": "Nothing is due today.",
+    "needsAttention": "Needs attention",
+    "upcoming": "The next 7 days",
+    "upcomingEmpty": "Nothing in the next 7 days.",
+    "activeClients": "Active clients",
+    "activeClientsEmpty": "No active projects.",
+    "daysSince": "{days} days since last contact",
+    "markDone": "Done",
+    "consultationWith": "Consultation with {name}",
+    "occasionsMissing": "{count} occasion dates for {year} have not been entered, so their reminders have no date.",
+    "occasionsEnter": "Enter the dates now"
+  },
+  "insights": {
+    "leadsThisMonth": "Leads this month",
+    "toConsultation": "Conversion to consultation",
+    "toContract": "Conversion to contract",
+    "activeProjects": "Active projects",
+    "averageValue": "Average project value",
+    "ratio": "{a} of {b} this month",
+    "showList": "Show the {count}",
+    "hideList": "Hide",
+    "valueCoverage": "Covering {covering} projects — {entered} from a value you entered, {invoices} from invoices",
+    "basis_entered": "value you entered",
+    "basis_invoices": "from invoices",
+    "ratioClients": "{a} of {b} clients"
+  },
+  "reminders": {
+    "kind_followup_6m": "6-month follow-up",
+    "kind_followup_1y": "1-year follow-up",
+    "kind_followup_2y": "2-year follow-up",
+    "kind_birthday": "Birthday",
+    "kind_hijri_new_year": "Hijri New Year",
+    "kind_ramadan": "Ramadan",
+    "kind_eid_fitr": "Eid al-Fitr",
+    "kind_eid_adha": "Eid al-Adha",
+    "kind_new_year": "New Year",
+    "kind_custom": "Reminder",
+    "recurring": "repeats annually",
+    "showScript": "Show the message"
+  },
+  "occasions": {
+    "title": "Occasion dates",
+    "year": "Year",
+    "help": "Four occasions move with the Hijri calendar. Enter them yourself — nothing is computed here, because a date that is a day out is worse than no date.",
+    "hijri_new_year": "Hijri New Year",
+    "ramadan": "Ramadan",
+    "eid_fitr": "Eid al-Fitr",
+    "eid_adha": "Eid al-Adha",
+    "new_year": "New Year",
+    "newYearFixed": "Fixed on 1 January. Not asked for.",
+    "saved": "Saved, and the reminders are updated."
   }
 }

@@ -17,6 +17,8 @@ import BookingHome from './pages/BookingHome'
 import PublicBooking from './pages/PublicBooking'
 import BookingConfirmation from './pages/BookingConfirmation'
 import Portal from './pages/Portal'
+import Dashboard from './pages/Dashboard'
+import Tasks from './pages/Tasks'
 import Placeholder from './pages/Placeholder'
 
 function Loading() {
@@ -76,13 +78,13 @@ export default function App() {
         }
       >
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/dashboard" element={<Placeholder titleKey="nav.dashboard" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leads" element={<Leads />} />
         <Route path="/clients" element={<Clients />} />
         <Route path="/contacts/:id" element={<Contact />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:id" element={<ProjectWorkspace />} />
-        <Route path="/tasks" element={<Placeholder titleKey="nav.tasks" />} />
+        <Route path="/tasks" element={<Tasks />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="/generate/:key/:contactId" element={<Generator />} />
         <Route path="/booking-setup" element={<BookingHome />} />
