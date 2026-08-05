@@ -12,12 +12,14 @@ import {
   updateProject,
 } from '../lib/projects'
 import { getQuestionnaire, listGeneratedDocuments, listTemplates, pairByKey } from '../lib/templates'
+import { listApprovals, openChangeRequests } from '../lib/portal'
 import { fullName } from '../lib/contacts'
 import { formatDate, formatDateTime } from '../lib/format'
 import { useI18n } from '../i18n'
 import StageRail from '../components/project/StageRail'
 import StageView from '../components/project/StageView'
 import ProgressRing from '../components/project/ProgressRing'
+import PortalLinkCard from '../components/project/PortalLinkCard'
 import { Badge, Button, Card, EmptyState, Field, Input, Select, Textarea } from '../components/ui'
 
 /**
@@ -43,6 +45,7 @@ export default function ProjectWorkspace() {
   const [loading, setLoading] = useState(true)
   const [details, setDetails] = useState(null)
   const [savedDetails, setSavedDetails] = useState(false)
+  const [approvals, setApprovals] = useState([])
 
   const load = useCallback(async () => {
     const loaded = await getProject(id)
@@ -52,13 +55,14 @@ export default function ProjectWorkspace() {
       return
     }
 
-    const [defs, stageRows, itemRows, templateRows, q, docs] = await Promise.all([
+    const [defs, stageRows, itemRows, templateRows, q, docs, approvalRows] = await Promise.all([
       listStageDefinitions(),
       listProjectStages(id),
       listChecklistItems(id),
       listTemplates(),
       getQuestionnaire(),
       listGeneratedDocuments(loaded.contact_id),
+      listApprovals(id),
     ])
 
     setProject(loaded)
@@ -67,6 +71,7 @@ export default function ProjectWorkspace() {
     setItems(itemRows)
     setTemplates(templateRows)
     setQuestionnaire(q)
+    setApprovals(approvalRows)
     setDocuments(docs.filter((d) => d.project_id === id || d.project_id === null))
     setDetails({
       address: loaded.address ?? '',
@@ -95,8 +100,8 @@ export default function ProjectWorkspace() {
   const pairs = useMemo(() => pairByKey(templates), [templates])
 
   const timeline = useMemo(
-    () => buildTimeline(stages, definitions, documents, language),
-    [stages, definitions, documents, language]
+    () => buildTimeline(stages, definitions, documents, approvals, language),
+    [stages, definitions, documents, approvals, language]
   )
 
   if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
@@ -214,8 +219,17 @@ export default function ProjectWorkspace() {
                 setItems(items.map((i) => next.find((n) => n.id === i.id) ?? i))
               }
               onStageChanged={load}
+              onFilesChanged={load}
             />
           )}
+
+          {/* ---------- The client portal ---------- */}
+          <div className="mt-6">
+            <PortalLinkCard
+              project={project}
+              changeRequests={openChangeRequests(approvals).length}
+            />
+          </div>
 
           {/* ---------- Project details ---------- */}
           <Card className="mt-6">
@@ -287,6 +301,24 @@ export default function ProjectWorkspace() {
                       )}
                       {event.kind === 'document' &&
                         t('project.eventDocument', { title: event.title })}
+                      {event.kind === 'approved' && (
+                        <span className="text-success">
+                          {t(
+                            event.onFile ? 'project.eventApprovedFile' : 'project.eventApproved',
+                            { stage: event.stage }
+                          )}
+                        </span>
+                      )}
+                      {event.kind === 'changes_requested' && (
+                        <span className="text-warning">
+                          {t('project.eventChangesRequested', { stage: event.stage })}
+                          {event.comment && (
+                            <span className="block text-xs text-text-secondary">
+                              “{event.comment}”
+                            </span>
+                          )}
+                        </span>
+                      )}
                     </span>
                   </li>
                 ))}

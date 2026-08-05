@@ -37,7 +37,9 @@
     "never": "لم يحدث",
     "search": "بحث",
     "clear": "مسح",
-    "required": "مطلوب"
+    "required": "مطلوب",
+    "copy": "نسخ",
+    "copied": "تم النسخ"
   },
   "theme": {
     "dark": "داكن",
@@ -391,7 +393,11 @@
     "eventOverride": "تم تجاوز بوابة {stage}",
     "eventDocument": "تم إنشاء «{title}»",
     "startedOn": "بدأ في {date}",
-    "deliveredOn": "سُلّم في {date}"
+    "deliveredOn": "سُلّم في {date}",
+    "blockFiles": "الملفات",
+    "eventApproved": "وافق العميل على مرحلة {stage}",
+    "eventApprovedFile": "وافق العميل على ملف في مرحلة {stage}",
+    "eventChangesRequested": "طلب العميل تعديلاً في مرحلة {stage}"
   },
   "booking": {
     "setupTab": "الإعدادات",
@@ -471,5 +477,28 @@
     "generateInvoiceMessage": "رسالة الفاتورة",
     "attachedFiles": "ملفات مرفقة",
     "autoFiled": "تم تجهيز {count} مستند من هذا الحجز تلقائياً — رسالة التأكيد وورقة التحضير، محفوظتان في مستندات العميل."
+  },
+  "files": {
+    "upload": "رفع ملف",
+    "uploading": "جارٍ الرفع…",
+    "uploadHint": "الملف لا يصل للعميل إلا لو نشرته بنفسك.",
+    "empty": "لا توجد ملفات في هذه المرحلة بعد.",
+    "publish": "منشور في البوابة"
+  },
+  "portal": {
+    "title": "بوابة العميل",
+    "help": "رابط سري واحد لهذا المشروع، بلا كلمة مرور. العميل يشوف مشروعه هو بس، ولا يشوف أي حاجة تانية.",
+    "create": "إنشاء رابط البوابة",
+    "preview": "معاينة",
+    "regenerate": "رابط جديد",
+    "regenerateWarning": "الرابط الحالي هيبطّل يشتغل فوراً.",
+    "regenerateConfirm": "تأكيد",
+    "revoke": "إلغاء الرابط",
+    "freeAllowance": "التعديلات المجانية",
+    "used": "المستخدم: {used}",
+    "billable": "تجاوز العدد المجاني",
+    "openChangeRequests": "{count} طلب تعديل في انتظارك.",
+    "defaultAllowance": "التعديلات المجانية الافتراضية",
+    "defaultAllowanceHelp": "العدد الذي يبدأ به كل مشروع جديد."
   }
 }

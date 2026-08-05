@@ -37,7 +37,9 @@
     "never": "Never",
     "search": "Search",
     "clear": "Clear",
-    "required": "Required"
+    "required": "Required",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "theme": {
     "dark": "Dark",
@@ -391,7 +393,11 @@
     "eventOverride": "Gate overridden on {stage}",
     "eventDocument": "Generated “{title}”",
     "startedOn": "Started {date}",
-    "deliveredOn": "delivered {date}"
+    "deliveredOn": "delivered {date}",
+    "blockFiles": "Files",
+    "eventApproved": "Client approved {stage}",
+    "eventApprovedFile": "Client approved a file in {stage}",
+    "eventChangesRequested": "Client requested a change in {stage}"
   },
   "booking": {
     "setupTab": "Setup",
@@ -471,5 +477,28 @@
     "generateInvoiceMessage": "Invoice message",
     "attachedFiles": "Attached files",
     "autoFiled": "{count} documents were prepared from this booking automatically — the confirmation script and the prep sheet, filed under the client's documents."
+  },
+  "files": {
+    "upload": "Upload file",
+    "uploading": "Uploading…",
+    "uploadHint": "A file reaches the client only if you publish it.",
+    "empty": "No files in this stage yet.",
+    "publish": "Published to portal"
+  },
+  "portal": {
+    "title": "Client portal",
+    "help": "One secret link for this project, no password. The client sees their own project and nothing else.",
+    "create": "Create portal link",
+    "preview": "Preview",
+    "regenerate": "New link",
+    "regenerateWarning": "The current link stops working immediately.",
+    "regenerateConfirm": "Confirm",
+    "revoke": "Revoke link",
+    "freeAllowance": "Free revisions",
+    "used": "Used: {used}",
+    "billable": "over the free allowance",
+    "openChangeRequests": "{count} change requests waiting on you.",
+    "defaultAllowance": "Default free revisions",
+    "defaultAllowanceHelp": "What every new project starts with."
   }
 }

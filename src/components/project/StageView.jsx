@@ -1,6 +1,7 @@
 import { useI18n } from '../../i18n'
 import ChecklistBlock from './ChecklistBlock'
 import DocumentsBlock from './DocumentsBlock'
+import FilesBlock from './FilesBlock'
 import MessagesBlock from './MessagesBlock'
 import GateBlock from './GateBlock'
 import { Card } from '../ui'
@@ -8,9 +9,13 @@ import { Card } from '../ui'
 /**
  * The open stage — built ONCE and reused for all ten.
  *
- * Every stage shows the same four blocks in the same order, and every
+ * Every stage shows the same five blocks in the same order, and every
  * block is rendered even when it has nothing in it, so the pattern reads
  * identically whichever stage you are looking at.
+ *
+ * Files joined as the fifth in Bucket 6. The rule was never the number
+ * four — it is that every stage shows the SAME blocks in the SAME
+ * order, which five keeps intact.
  *
  * The only per-stage input is the row from stage_definitions.
  */
@@ -24,6 +29,7 @@ export default function StageView({
   project,
   onItemsChanged,
   onStageChanged,
+  onFilesChanged,
 }) {
   const { t, language } = useI18n()
 
@@ -42,6 +48,17 @@ export default function StageView({
           templates={documentPairs}
           questionnaire={questionnaire}
           project={project}
+        />
+      ),
+    },
+    {
+      key: 'files',
+      title: t('project.blockFiles'),
+      body: (
+        <FilesBlock
+          project={project}
+          stageKey={definition.stage_key}
+          onChanged={onFilesChanged}
         />
       ),
     },

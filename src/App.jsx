@@ -16,6 +16,7 @@ import Generator from './pages/Generator'
 import BookingHome from './pages/BookingHome'
 import PublicBooking from './pages/PublicBooking'
 import BookingConfirmation from './pages/BookingConfirmation'
+import Portal from './pages/Portal'
 import Placeholder from './pages/Placeholder'
 
 function Loading() {
@@ -53,6 +54,7 @@ export default function App() {
       {/* Public, no login, outside the app shell entirely. */}
       <Route path="/book/:slug" element={<PublicBooking />} />
       <Route path="/booking/:token" element={<BookingConfirmation />} />
+      <Route path="/portal/:token" element={<Portal />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />

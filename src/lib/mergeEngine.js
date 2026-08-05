@@ -120,8 +120,10 @@ export async function resolveAutoFields({
     // can be right, so it is never re-typed.
     invoice_amount: invoice?.amount ?? null,
 
-    // Still waiting on the client portal, Bucket 6.
-    portal_link: null,
+    // The project's live portal link. Empty until one is issued, and
+    // empty again the moment it is revoked — a revoked token must never
+    // be merged into a message.
+    portal_link: project ? await findPortalLink(project.id) : null,
   }
 
   return values
@@ -158,6 +160,19 @@ async function findBookingLink() {
 
   if (!data?.is_active || !data.public_slug) return null
   return `${window.location.origin}/book/${data.public_slug}`
+}
+
+/** This project's live portal URL, if it has one turned on. */
+async function findPortalLink(projectId) {
+  const { data } = await supabase
+    .from('portal_links')
+    .select('token')
+    .eq('project_id', projectId)
+    .eq('is_active', true)
+    .maybeSingle()
+
+  if (!data?.token) return null
+  return `${window.location.origin}/portal/${data.token}`
 }
 
 /** When the contract message was last generated for this contact. */

@@ -189,7 +189,7 @@ export function projectProgress(stages, items) {
 }
 
 /** Builds the timeline from what already exists — no separate event log. */
-export function buildTimeline(stages, definitions, documents, language) {
+export function buildTimeline(stages, definitions, documents, approvals, language) {
   const label = (key) => {
     const d = definitions.find((x) => x.stage_key === key)
     return (language === 'ar' ? d?.title_ar : d?.title_en) ?? key
@@ -218,6 +218,18 @@ export function buildTimeline(stages, definitions, documents, language) {
 
   for (const doc of documents) {
     events.push({ at: doc.created_at, kind: 'document', title: doc.title, id: doc.id })
+  }
+
+  // Every portal decision lands here — both the approvals and the
+  // change requests, each against the stage it was made on.
+  for (const approval of approvals ?? []) {
+    events.push({
+      at: approval.decided_at,
+      kind: approval.decision === 'approved' ? 'approved' : 'changes_requested',
+      stage: label(approval.stage_key),
+      comment: approval.comment,
+      onFile: Boolean(approval.item_ref),
+    })
   }
 
   return events.sort((a, b) => new Date(b.at) - new Date(a.at))

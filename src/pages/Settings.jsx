@@ -46,6 +46,7 @@ export default function Settings() {
       project_code_prefix: settings.project_code_prefix || 'IZ',
       default_language: settings.default_language || 'ar',
       default_theme: settings.default_theme || 'dark',
+      default_revision_allowance: settings.default_revision_allowance ?? 2,
     })
   }, [settings])
 
@@ -77,7 +78,11 @@ export default function Settings() {
 
     const { error: saveError } = await supabase
       .from('studio_settings')
-      .update(form)
+      .update({
+        ...form,
+        // The input hands back a string; the column is an integer.
+        default_revision_allowance: Number(form.default_revision_allowance) || 0,
+      })
       .eq('workspace_id', workspace.id)
 
     if (saveError) {
@@ -270,6 +275,16 @@ export default function Settings() {
               value={form.project_code_prefix}
               onChange={(e) => update('project_code_prefix', e.target.value.toUpperCase())}
               maxLength={6}
+              disabled={!isOwner}
+            />
+          </Field>
+
+          <Field label={t('portal.defaultAllowance')} hint={t('portal.defaultAllowanceHelp')}>
+            <Input
+              type="number"
+              min="0"
+              value={form.default_revision_allowance}
+              onChange={(e) => update('default_revision_allowance', e.target.value)}
               disabled={!isOwner}
             />
           </Field>
