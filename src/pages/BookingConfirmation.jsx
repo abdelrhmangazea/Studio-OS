@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchBookingStatus, uploadAnswerFile, uploadReceipt } from '../lib/publicBooking'
+import { usePageTitle } from '../lib/usePageTitle'
 
 /**
  * The confirmation page the client lands on, and where they upload the
@@ -34,6 +35,9 @@ export default function BookingConfirmation() {
   useEffect(() => {
     load()
   }, [token])
+
+  // White-label reaches the tab too, not just the page.
+  usePageTitle(booking?.studio?.name)
 
   const rtl = false
   const tz = booking?.timezone ?? 'Africa/Cairo'

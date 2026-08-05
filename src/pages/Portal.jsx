@@ -6,6 +6,7 @@ import {
   submitDecision,
   uploadPortalReceipt,
 } from '../lib/publicPortal'
+import { usePageTitle } from '../lib/usePageTitle'
 
 /**
  * The client portal. One secret link, one project, no login.
@@ -41,6 +42,9 @@ export default function Portal() {
   useEffect(() => {
     load()
   }, [token])
+
+  // White-label reaches the tab too, not just the page.
+  usePageTitle(data?.studio?.name)
 
   const language = data?.studio?.language === 'ar' ? 'ar' : 'en'
   const rtl = language === 'ar'

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchBookingPage, fetchSlots, submitBooking, uploadAnswerFile } from '../lib/publicBooking'
 import { COUNTRIES } from '../data/countries'
+import { usePageTitle } from '../lib/usePageTitle'
 
 /**
  * The public booking page. No login, white-label.
@@ -36,6 +37,9 @@ export default function PublicBooking() {
   const [files, setFiles] = useState({})
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+
+  // White-label reaches the tab too, not just the page.
+  usePageTitle(page?.studio?.name)
 
   const language = page?.studio?.language === 'ar' ? 'ar' : 'en'
   const rtl = language === 'ar'
