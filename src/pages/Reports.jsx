@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { loadInsights } from '../lib/insights'
+import { loadBusinessReports } from '../lib/businessReports'
 import { fullName } from '../lib/contacts'
+import { listLabel } from '../lib/useLists'
+import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import { Button, Card, Field, Input, PageTitle, Select } from '../components/ui'
 
 /**
  * Reports.
  *
- * The same five numbers as the dashboard, over a range you choose,
- * with the rows behind each one and a CSV of whichever you are looking
- * at. Deliberately nothing more: the spec allowed no reports beyond
- * these five, and inventing a sixth would be inventing a metric nobody
- * asked to be measured by.
+ * Four sections, each drilling into the rows behind it and each
+ * exporting them. Nothing here is a headline figure with no way to
+ * check it.
  */
 
-const RANGES = ['this_month', 'last_month', 'last_90', 'this_year', 'all', 'custom']
+const RANGES = ['this_month', 'last_90', 'this_year', 'all', 'custom']
 
 function rangeBounds(key, custom) {
   const now = new Date()
@@ -24,11 +24,6 @@ function rangeBounds(key, custom) {
   switch (key) {
     case 'this_month':
       return { from: iso(new Date(now.getFullYear(), now.getMonth(), 1)), to: null }
-    case 'last_month':
-      return {
-        from: iso(new Date(now.getFullYear(), now.getMonth() - 1, 1)),
-        to: iso(new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59)),
-      }
     case 'last_90': {
       const d = new Date(now)
       d.setDate(d.getDate() - 90)
@@ -37,10 +32,10 @@ function rangeBounds(key, custom) {
     case 'this_year':
       return { from: iso(new Date(now.getFullYear(), 0, 1)), to: null }
     case 'all':
-      return { from: '1970-01-01T00:00:00.000Z', to: null }
+      return { from: null, to: null }
     case 'custom':
       return {
-        from: custom.from ? new Date(custom.from).toISOString() : '1970-01-01T00:00:00.000Z',
+        from: custom.from ? new Date(custom.from).toISOString() : null,
         to: custom.to ? new Date(custom.to + 'T23:59:59').toISOString() : null,
       }
     default:
@@ -48,114 +43,52 @@ function rangeBounds(key, custom) {
   }
 }
 
+function csvCell(value) {
+  const s = String(value ?? '')
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+}
+
+function download(name, rows) {
+  // The BOM keeps Arabic readable when Excel opens the file.
+  const csv = '﻿' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n')
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }))
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${name}-${new Date().toISOString().slice(0, 10)}.csv`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}
+
 export default function Reports() {
-  const { t } = useI18n()
-  const [range, setRange] = useState('this_month')
+  const { t, language } = useI18n()
+  const { settings } = useAuth()
+
+  const [range, setRange] = useState('this_year')
   const [custom, setCustom] = useState({ from: '', to: '' })
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [open, setOpen] = useState(null)
 
   useEffect(() => {
-    // Changing the range fires a fresh query while the previous one is
-    // still in flight. Without this guard the slower of the two lands
-    // last and wins, and the screen shows a number for a range you are
-    // no longer looking at.
     let cancelled = false
-
     setLoading(true)
-    loadInsights(rangeBounds(range, custom)).then((d) => {
+    loadBusinessReports(rangeBounds(range, custom)).then((d) => {
       if (cancelled) return
       setData(d)
       setLoading(false)
     })
-
     return () => {
       cancelled = true
     }
   }, [range, custom.from, custom.to])
 
-  function download(name, rows) {
-    // Excel opens CSV as the local encoding unless told otherwise, and
-    // Arabic names turn to mojibake. The BOM is what stops that.
-    const csv = '﻿' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n')
-    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }))
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${name}-${new Date().toISOString().slice(0, 10)}.csv`
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
-  }
-
   if (loading || !data) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
 
-  const sections = [
-    {
-      key: 'leads',
-      label: t('reports.newLeads'),
-      value: data.leadsThisMonth.count,
-      rows: data.leadsThisMonth.rows,
-      head: [t('columns.name'), t('columns.email'), t('columns.converted')],
-      line: (c) => [fullName(c), c.email ?? '', c.converted_at ?? ''],
-      href: (c) => `/contacts/${c.id}`,
-      text: (c) => fullName(c),
-    },
-    {
-      key: 'to-consultation',
-      label: t('insights.toConsultation'),
-      value:
-        data.toConsultation.percent === null ? '—' : `${data.toConsultation.percent}%`,
-      note: t('reports.ratioInRange', {
-        a: data.toConsultation.numerator,
-        b: data.toConsultation.denominator,
-      }),
-      rows: data.toConsultation.rows,
-      head: [t('columns.name'), t('columns.email'), t('columns.converted')],
-      line: (c) => [fullName(c), c.email ?? '', c.converted_at ?? ''],
-      href: (c) => `/contacts/${c.id}`,
-      text: (c) => fullName(c),
-    },
-    {
-      key: 'to-contract',
-      label: t('insights.toContract'),
-      value: data.toContract.percent === null ? '—' : `${data.toContract.percent}%`,
-      note: t('insights.ratioClients', {
-        a: data.toContract.numerator,
-        b: data.toContract.denominator,
-      }),
-      rows: data.toContract.rows,
-      head: [t('reports.code'), t('reports.project')],
-      line: (p) => [p.code, p.name],
-      href: (p) => `/projects/${p.id}`,
-      text: (p) => `${p.code} · ${p.name}`,
-    },
-    {
-      key: 'active-projects',
-      label: t('insights.activeProjects'),
-      value: data.activeProjects.count,
-      rows: data.activeProjects.rows,
-      head: [t('reports.code'), t('reports.project'), t('columns.status')],
-      line: (p) => [p.code, p.name, p.state],
-      href: (p) => `/projects/${p.id}`,
-      text: (p) => `${p.code} · ${p.name}`,
-    },
-    {
-      key: 'average-value',
-      label: t('insights.averageValue'),
-      value: data.value.average === null ? '—' : data.value.average.toLocaleString(),
-      note: t('insights.valueCoverage', {
-        covering: data.value.covering,
-        entered: data.value.fromEntered,
-        invoices: data.value.fromInvoices,
-      }),
-      rows: data.value.rows,
-      head: [t('reports.code'), t('reports.project'), t('reports.value'), t('reports.basis')],
-      line: (p) => [p.code, p.name, p.resolved, p.basis],
-      href: (p) => `/projects/${p.id}`,
-      text: (p) => `${p.code} · ${p.resolved.toLocaleString()}`,
-    },
-  ]
+  const currency = settings?.currency ?? ''
+  const money = (n) => `${Number(n ?? 0).toLocaleString()} ${currency}`
+  const toggle = (id) => setOpen(open === id ? null : id)
 
   return (
     <div>
@@ -167,89 +100,233 @@ export default function Reports() {
             <Field label={t('reports.range')}>
               <Select value={range} onChange={(e) => setRange(e.target.value)}>
                 {RANGES.map((r) => (
-                  <option key={r} value={r}>
-                    {t(`reports.range_${r}`)}
-                  </option>
+                  <option key={r} value={r}>{t(`reports.range_${r}`)}</option>
                 ))}
               </Select>
             </Field>
           </div>
-
           {range === 'custom' && (
             <>
               <div className="w-40">
                 <Field label={t('reports.from')}>
-                  <Input
-                    type="date"
-                    value={custom.from}
-                    onChange={(e) => setCustom({ ...custom, from: e.target.value })}
-                  />
+                  <Input type="date" value={custom.from} onChange={(e) => setCustom({ ...custom, from: e.target.value })} />
                 </Field>
               </div>
               <div className="w-40">
                 <Field label={t('reports.to')}>
-                  <Input
-                    type="date"
-                    value={custom.to}
-                    onChange={(e) => setCustom({ ...custom, to: e.target.value })}
-                  />
+                  <Input type="date" value={custom.to} onChange={(e) => setCustom({ ...custom, to: e.target.value })} />
                 </Field>
               </div>
             </>
           )}
         </div>
-        <p className="mt-3 text-xs text-text-secondary">{t('reports.rangeNote')}</p>
       </Card>
 
-      <div className="space-y-4">
-        {sections.map((section) => (
-          <Card key={section.key}>
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-text-secondary">
-                  {section.label}
-                </p>
-                <p className="mt-1 text-2xl font-semibold text-text">{section.value}</p>
-                {section.note && (
-                  <p className="mt-1 text-xs text-text-secondary">{section.note}</p>
-                )}
-              </div>
-              {section.rows.length > 0 && (
-                <Button
-                  variant="secondary"
-                  onClick={() =>
-                    download(section.key, [section.head, ...section.rows.map(section.line)])
-                  }
-                >
-                  {t('reports.exportCsv')}
-                </Button>
+      {/* ---------- 1. FUNNEL ---------- */}
+      <Card className="mb-4">
+        <Header
+          title={t('reports.funnel')}
+          onExport={() =>
+            download('funnel', [
+              [t('reports.step'), t('reports.count'), t('reports.conversion')],
+              ...data.funnel.map((s) => [t(`reports.funnel_${s.key}`), s.count, s.percent ?? '']),
+            ])
+          }
+        />
+
+        <div className="space-y-2">
+          {data.funnel.map((step) => (
+            <div key={step.key}>
+              <button
+                onClick={() => step.count > 0 && toggle(`funnel-${step.key}`)}
+                disabled={step.count === 0}
+                className="flex w-full flex-wrap items-baseline justify-between gap-3 rounded border border-border p-3 text-start disabled:cursor-default hover:bg-bg"
+              >
+                <span className="text-sm text-text">{t(`reports.funnel_${step.key}`)}</span>
+                <span className="flex items-baseline gap-3">
+                  {step.percent !== null && (
+                    <span className="text-xs text-text-secondary">
+                      {t('reports.fromPrevious', { percent: step.percent })}
+                    </span>
+                  )}
+                  <span className={'text-xl font-semibold ' + (step.count ? 'text-accent' : 'text-text-secondary')}>
+                    {step.count}
+                  </span>
+                </span>
+              </button>
+
+              {open === `funnel-${step.key}` && (
+                <ul className="mt-1 space-y-1 rounded border border-border p-3">
+                  {step.rows.slice(0, 60).map((row) => (
+                    <li key={row.id} className="text-sm">
+                      <Link
+                        to={row.code ? `/projects/${row.id}` : `/contacts/${row.id}`}
+                        className="text-accent hover:underline"
+                      >
+                        {row.code ? `${row.code} · ${row.name}` : fullName(row)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
+          ))}
+        </div>
+      </Card>
 
-            {section.rows.length > 0 && (
-              <ul className="mt-3 space-y-1 border-t border-border pt-3">
-                {section.rows.slice(0, 50).map((row, index) => (
-                  <li key={index} className="text-sm">
-                    <Link to={section.href(row)} className="text-accent hover:underline">
-                      {section.text(row)}
-                    </Link>
-                  </li>
-                ))}
-                {section.rows.length > 50 && (
-                  <li className="text-xs text-text-secondary">
-                    {t('reports.andMore', { count: section.rows.length - 50 })}
-                  </li>
-                )}
-              </ul>
-            )}
-          </Card>
-        ))}
-      </div>
+      {/* ---------- 2. REVENUE ---------- */}
+      <Card className="mb-4">
+        <Header
+          title={t('reports.revenue')}
+          onExport={() =>
+            download('revenue', [
+              [t('reports.month'), t('reports.invoiced')],
+              ...data.revenue.months.map((m) => [m.month, m.total]),
+              [],
+              [t('reports.projectType'), t('reports.invoiced'), t('reports.count')],
+              ...data.revenue.byType.map((r) => [r.type, r.total, r.count]),
+            ])
+          }
+        />
+
+        <div className="mb-4 grid gap-4 sm:grid-cols-2">
+          <Figure label={t('reports.totalInvoiced')} value={money(data.revenue.total)} />
+          <Figure
+            label={t('reports.averageValue')}
+            value={data.revenue.averageValue === null ? '—' : money(data.revenue.averageValue)}
+            note={t('reports.averageOver', { count: data.revenue.valuedCount })}
+          />
+        </div>
+
+        {data.revenue.months.length > 0 && (
+          <ul className="mb-4 space-y-1">
+            {data.revenue.months.map((m) => (
+              <li key={m.month} className="flex justify-between text-sm">
+                <span className="text-text-secondary" dir="ltr">{m.month}</span>
+                <span className="font-mono text-text" dir="ltr">{Number(m.total).toLocaleString()}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {data.revenue.byType.length > 0 && (
+          <div className="border-t border-border pt-3">
+            <p className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+              {t('reports.byType')}
+            </p>
+            <ul className="space-y-1">
+              {data.revenue.byType.map((r) => (
+                <li key={r.type} className="flex justify-between text-sm">
+                  <span className="text-text">{r.type} · {r.count}</span>
+                  <span className="font-mono text-text-secondary" dir="ltr">
+                    {Number(r.total).toLocaleString()}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Card>
+
+      {/* ---------- 3. PROFITABILITY ---------- */}
+      <Card className="mb-4">
+        <Header
+          title={t('reports.profitability')}
+          onExport={() =>
+            download('profitability', [
+              [t('reports.code'), t('reports.project'), t('reports.value'), t('time.hours'), t('reports.effectiveRate')],
+              ...data.profitability.map((p) => [p.code, p.name, p.value, p.hours, p.rate]),
+            ])
+          }
+        />
+
+        <p className="mb-3 text-xs text-text-secondary">{t('reports.profitabilityHelp')}</p>
+
+        {data.profitability.length === 0 ? (
+          <p className="text-sm text-text-secondary">{t('reports.noLoggedTime')}</p>
+        ) : (
+          <ul className="space-y-2">
+            {data.profitability.map((p) => (
+              <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3">
+                <Link to={`/projects/${p.id}`} className="text-sm text-accent hover:underline">
+                  <span className="font-mono" dir="ltr">{p.code}</span> {p.name}
+                </Link>
+                <span className="flex items-baseline gap-4 text-sm">
+                  <span className="text-text-secondary">{money(p.value)}</span>
+                  <span className="text-text-secondary">{p.hours} {t('time.hoursShort')}</span>
+                  <span className="font-semibold text-accent" dir="ltr">{money(p.rate)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {data.withoutTime > 0 && (
+          <p className="mt-3 text-xs text-text-secondary">
+            {t('reports.excludedNoTime', { count: data.withoutTime })}
+          </p>
+        )}
+      </Card>
+
+      {/* ---------- 4. SOURCE PERFORMANCE ---------- */}
+      <Card>
+        <Header
+          title={t('reports.sourcePerformance')}
+          onExport={() =>
+            download('sources', [
+              [t('reports.source'), t('reports.funnel_leads'), t('reports.funnel_consultations'), t('reports.funnel_contracts'), t('reports.invoiced')],
+              ...data.sources.map((s) => [listLabel(s, language), s.leads, s.consultations, s.contracts, s.invoiced]),
+            ])
+          }
+        />
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm">
+            <thead>
+              <tr className="text-start text-xs uppercase tracking-wide text-text-secondary">
+                <th className="p-2 text-start">{t('reports.source')}</th>
+                <th className="p-2 text-start">{t('reports.funnel_leads')}</th>
+                <th className="p-2 text-start">{t('reports.funnel_consultations')}</th>
+                <th className="p-2 text-start">{t('reports.funnel_contracts')}</th>
+                <th className="p-2 text-start">{t('reports.invoiced')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.sources.map((s) => (
+                <tr key={s.id} className="border-t border-border">
+                  <td className="p-2 text-text">{listLabel(s, language)}</td>
+                  <td className="p-2 text-text-secondary">{s.leads}</td>
+                  <td className="p-2 text-text-secondary">{s.consultations}</td>
+                  <td className="p-2 text-text-secondary">{s.contracts}</td>
+                  <td className="p-2 font-mono text-text" dir="ltr">{Number(s.invoiced).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </div>
   )
 }
 
-function csvCell(value) {
-  const s = String(value ?? '')
-  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+function Header({ title, onExport }) {
+  const { t } = useI18n()
+  return (
+    <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+      <h2 className="text-xs uppercase tracking-wide text-text-secondary">{title}</h2>
+      <Button variant="secondary" className="px-2 py-1" onClick={onExport}>
+        {t('reports.exportCsv')}
+      </Button>
+    </div>
+  )
+}
+
+function Figure({ label, value, note }) {
+  return (
+    <div>
+      <p className="text-xs text-text-secondary">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-text">{value}</p>
+      {note && <p className="mt-1 text-xs text-text-secondary">{note}</p>}
+    </div>
+  )
 }

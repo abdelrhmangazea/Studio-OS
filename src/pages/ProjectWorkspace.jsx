@@ -21,6 +21,9 @@ import StageView from '../components/project/StageView'
 import ProgressRing from '../components/project/ProgressRing'
 import PortalLinkCard from '../components/project/PortalLinkCard'
 import SuppliersCard from '../components/project/SuppliersCard'
+import FeeCalculator from '../components/project/FeeCalculator'
+import QuotationsCard from '../components/project/QuotationsCard'
+import TimeLogCard from '../components/project/TimeLogCard'
 import { Badge, Button, Card, EmptyState, Field, Input, Select, Textarea } from '../components/ui'
 
 /**
@@ -236,9 +239,24 @@ export default function ProjectWorkspace() {
             />
           </div>
 
+          {/* ---------- What it should cost ---------- */}
+          <div className="mt-6">
+            <FeeCalculator project={project} onApplied={load} />
+          </div>
+
+          {/* ---------- Hours on it ---------- */}
+          <div className="mt-6">
+            <TimeLogCard project={project} definitions={definitions} />
+          </div>
+
           {/* ---------- Who worked on it ---------- */}
           <div className="mt-6">
             <SuppliersCard project={project} />
+          </div>
+
+          {/* ---------- What they quoted ---------- */}
+          <div className="mt-6">
+            <QuotationsCard project={project} />
           </div>
 
           {/* ---------- Project details ---------- */}

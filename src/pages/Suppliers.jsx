@@ -8,6 +8,8 @@ import {
   updateSupplier,
 } from '../lib/suppliers'
 import { COUNTRIES } from '../data/countries'
+import { listSupplierCategories } from '../lib/quotations'
+import { listLabel } from '../lib/useLists'
 import { formatPhone } from '../lib/phone'
 import { useI18n } from '../i18n'
 import {
@@ -26,7 +28,9 @@ import {
 
 const BLANK = {
   name: '',
-  specialty: '',
+  category: '',
+  address: '',
+  website: '',
   phone_country_code: '+20',
   phone_number: '',
   email: '',
@@ -55,9 +59,12 @@ export default function Suppliers() {
   const [form, setForm] = useState(BLANK)
   const [jobs, setJobs] = useState([])
   const [error, setError] = useState('')
+  const [categories, setCategories] = useState([])
+  const [filter, setFilter] = useState('')
 
   async function load() {
     setSuppliers(await listSuppliers())
+    setCategories(await listSupplierCategories())
     setLoading(false)
   }
 
@@ -69,13 +76,14 @@ export default function Suppliers() {
     const needle = search.trim().toLowerCase()
     return suppliers
       .filter((s) => (showInactive ? true : s.active))
+      .filter((s) => (filter ? s.category === filter : true))
       .filter((s) =>
         !needle
           ? true
-          : [s.name, s.specialty, s.email, s.phone_number]
+          : [s.name, s.category, s.email, s.phone_number]
               .some((v) => (v ?? '').toLowerCase().includes(needle))
       )
-  }, [suppliers, search, showInactive])
+  }, [suppliers, search, showInactive, filter])
 
   function open(supplier) {
     setError('')
@@ -84,7 +92,9 @@ export default function Suppliers() {
       supplier
         ? {
             name: supplier.name ?? '',
-            specialty: supplier.specialty ?? '',
+            category: supplier.category ?? '',
+            address: supplier.address ?? '',
+            website: supplier.website ?? '',
             phone_country_code: supplier.phone_country_code ?? '+20',
             phone_number: supplier.phone_number ?? '',
             email: supplier.email ?? '',
@@ -103,7 +113,7 @@ export default function Suppliers() {
     const payload = {
       ...form,
       rating: form.rating === '' ? null : Number(form.rating),
-      specialty: form.specialty || null,
+      category: form.category || null,
       email: form.email || null,
       phone_number: form.phone_number || null,
       notes: form.notes || null,
@@ -136,6 +146,17 @@ export default function Suppliers() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <div className="w-52">
+          <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="">{t('suppliers.allCategories')}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={listLabel(c, language)}>
+                {listLabel(c, language)}
+              </option>
+            ))}
+          </Select>
+        </div>
+
         <label className="flex items-center gap-2 pb-2 text-sm text-text-secondary">
           <input
             type="checkbox"
@@ -167,7 +188,7 @@ export default function Suppliers() {
                   )}
                 </p>
                 <p className="flex flex-wrap gap-x-2 text-xs text-text-secondary">
-                  {supplier.specialty && <span>{supplier.specialty}</span>}
+                  {supplier.category && <span>{supplier.category}</span>}
                   {supplier.phone_number && (
                     <span dir="ltr">
                       {formatPhone(supplier.phone_country_code, supplier.phone_number)}
@@ -217,11 +238,26 @@ export default function Suppliers() {
             <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </Field>
 
-          <Field label={t('suppliers.specialty')} hint={t('suppliers.specialtyHint')}>
-            <Input
-              value={form.specialty}
-              onChange={(e) => setForm({ ...form, specialty: e.target.value })}
-            />
+          <Field label={t('suppliers.category')} hint={t('suppliers.categoryHint')}>
+            <Select
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            >
+              <option value="">—</option>
+              {categories.map((c) => (
+                <option key={c.id} value={listLabel(c, language)}>
+                  {listLabel(c, language)}
+                </option>
+              ))}
+            </Select>
+          </Field>
+
+          <Field label={t('suppliers.address')}>
+            <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+          </Field>
+
+          <Field label={t('suppliers.website')}>
+            <Input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} dir="ltr" />
           </Field>
 
           <Field label={t('fields.phone')}>

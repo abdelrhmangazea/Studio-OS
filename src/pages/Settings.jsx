@@ -9,6 +9,8 @@ import ResetTemplates from '../components/ResetTemplates'
 import OccasionDates from './OccasionDates'
 import TeamSettings from '../components/TeamSettings'
 import LegalSettings from '../components/settings/LegalSettings'
+import PricingSettings from '../components/settings/PricingSettings'
+import SupplierCategories from '../components/settings/SupplierCategories'
 import {
   Button,
   Card,
@@ -303,6 +305,12 @@ export default function Settings() {
         {saved && <span className="text-sm text-success">{t('common.saved')}</span>}
         <ErrorText>{error}</ErrorText>
       </div>
+
+      {/* ---------- Pricing ---------- */}
+      <PricingSettings />
+
+      {/* ---------- Supplier categories ---------- */}
+      <SupplierCategories />
 
       {/* ---------- Legal & Contract ---------- */}
       <LegalSettings />
