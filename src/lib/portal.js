@@ -59,16 +59,19 @@ export async function listFiles(projectId) {
  *
  * Nothing reaches the client here: is_published_to_portal defaults to
  * false, and publishing is a separate, deliberate act.
+ *
+ * The storage path is deliberately OPAQUE — a random uuid and the
+ * filename, encoding neither the workspace nor the project. The portal
+ * hands this path to the client so they can download, and a path that
+ * spelled out internal ids would be handing those over too.
+ *
+ * The row is written BEFORE the object, because the storage policy
+ * authorises by looking the path up in this table. If the upload then
+ * fails, the row is removed rather than left pointing at nothing.
  */
-export async function uploadFile({ projectId, workspaceId, stageKey, file }) {
+export async function uploadFile({ projectId, stageKey, file }) {
   const safeName = file.name.replace(/[^\w.\-]+/g, '_')
-  const path = `${workspaceId}/${projectId}/${crypto.randomUUID()}-${safeName}`
-
-  const { error: uploadError } = await supabase.storage
-    .from('project-files')
-    .upload(path, file, { contentType: file.type })
-
-  if (uploadError) throw uploadError
+  const path = `${crypto.randomUUID()}/${safeName}`
 
   const { data, error } = await supabase
     .from('files')
@@ -82,6 +85,16 @@ export async function uploadFile({ projectId, workspaceId, stageKey, file }) {
     .single()
 
   if (error) throw error
+
+  const { error: uploadError } = await supabase.storage
+    .from('project-files')
+    .upload(path, file, { contentType: file.type })
+
+  if (uploadError) {
+    await supabase.from('files').delete().eq('id', data.id)
+    throw uploadError
+  }
+
   return data
 }
 

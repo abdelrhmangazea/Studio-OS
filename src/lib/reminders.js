@@ -61,14 +61,29 @@ export async function syncOccasionReminders(year) {
 }
 
 /**
- * Whether this year's Hijri dates are all in.
+ * Which occasions are waiting on a date, and for which year.
  *
- * The dashboard says so out loud when they are not, rather than
- * skipping the reminders in silence.
+ * Driven by the reminders that actually exist rather than by the
+ * calendar: enrolment reaches into next year once this year's date has
+ * passed, so "is 2026 filled in?" is the wrong question by August. A
+ * reminder with no due_date is the real signal, and it is what the
+ * dashboard reports.
  */
-export function missingOccasionDates(dates) {
-  const entered = new Set(dates.map((d) => d.occasion_key))
-  return HIJRI_OCCASIONS.filter((key) => !entered.has(key))
+export function datelessOccasions(reminders) {
+  const waiting = new Map()
+
+  for (const reminder of reminders) {
+    if (reminder.due_date || reminder.is_done) continue
+    if (!HIJRI_OCCASIONS.includes(reminder.kind)) continue
+
+    const year = reminder.year ?? new Date().getFullYear()
+    if (!waiting.has(year)) waiting.set(year, new Set())
+    waiting.get(year).add(reminder.kind)
+  }
+
+  return [...waiting.entries()]
+    .map(([year, kinds]) => ({ year, kinds: [...kinds] }))
+    .sort((a, b) => a.year - b.year)
 }
 
 /**

@@ -12,7 +12,18 @@ import { supabase } from './supabase'
  */
 export async function uploadLogo(workspaceId, file) {
   const extension = file.name.split('.').pop().toLowerCase()
-  const path = `${workspaceId}/logo-${Date.now()}.${extension}`
+
+  // The logo bucket is public, so its URL is world-readable. The
+  // folder is therefore an OPAQUE id kept on studio_settings, not the
+  // workspace id — a public URL must not spell out who the studio is
+  // internally. The write policies anchor on the same column.
+  const { data: settings } = await supabase
+    .from('studio_settings')
+    .select('logo_folder')
+    .eq('workspace_id', workspaceId)
+    .single()
+
+  const path = `${settings.logo_folder}/logo-${Date.now()}.${extension}`
 
   const { error } = await supabase.storage.from('studio-logos').upload(path, file, {
     upsert: true,

@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listTasks, setTaskDone, today, withinDays } from '../lib/tasks'
-import {
-  listOccasionDates,
-  listReminders,
-  missingOccasionDates,
-  setReminderDone,
-  templateFor,
-} from '../lib/reminders'
+import { datelessOccasions, listReminders } from '../lib/reminders'
 import { listBookings, setBookingStatus } from '../lib/booking'
 import { listProjects, listStageDefinitions, listChecklistItems, projectProgress } from '../lib/projects'
 import { listProjectStages } from '../lib/projects'
@@ -45,10 +39,9 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
 
   async function load() {
-    const year = new Date().getFullYear()
     const [
       taskRows, reminderRows, bookingRows, projectRows,
-      contactRows, templateRows, insightData, occasionRows,
+      contactRows, templateRows, insightData,
     ] = await Promise.all([
       listTasks(),
       listReminders(),
@@ -57,7 +50,6 @@ export default function Dashboard() {
       listContacts(),
       listTemplates(),
       loadInsights(),
-      listOccasionDates(year),
     ])
 
     // Progress rings need each active project's stages and checklist.
@@ -76,7 +68,7 @@ export default function Dashboard() {
     setContacts(contactRows)
     setPairs(pairByKey(templateRows))
     setInsights(insightData)
-    setOccasionGaps(missingOccasionDates(occasionRows))
+    setOccasionGaps(datelessOccasions(reminderRows))
     setLoading(false)
   }
 
@@ -153,15 +145,16 @@ export default function Dashboard() {
       {/* Occasion dates missing — said out loud, never skipped quietly. */}
       {occasionGaps.length > 0 && (
         <Card className="mb-6 border-warning">
-          <p className="text-sm text-warning">
-            {t('dashboard.occasionsMissing', {
-              count: occasionGaps.length,
-              year: new Date().getFullYear(),
-            })}
-          </p>
-          <p className="mt-1 text-xs text-text-secondary">
-            {occasionGaps.map((key) => t(`occasions.${key}`)).join(' · ')}
-          </p>
+          {occasionGaps.map(({ year, kinds }) => (
+            <div key={year} className="mb-2">
+              <p className="text-sm text-warning">
+                {t('dashboard.occasionsMissing', { count: kinds.length, year })}
+              </p>
+              <p className="mt-1 text-xs text-text-secondary">
+                {kinds.map((key) => t(`occasions.${key}`)).join(' · ')}
+              </p>
+            </div>
+          ))}
           <Link
             to="/settings?tab=occasions"
             className="mt-2 inline-block text-sm text-accent hover:underline"

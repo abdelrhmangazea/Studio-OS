@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { deleteFile, fileUrl, listFiles, setFilePublished, uploadFile } from '../../lib/portal'
 import { formatDate } from '../../lib/format'
-import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button } from '../ui'
 
@@ -17,7 +16,6 @@ import { Button } from '../ui'
  */
 export default function FilesBlock({ project, stageKey, onChanged }) {
   const { t, language } = useI18n()
-  const { profile } = useAuth()
   const [files, setFiles] = useState([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -48,12 +46,7 @@ export default function FilesBlock({ project, stageKey, onChanged }) {
     setBusy(true)
     setError('')
     try {
-      await uploadFile({
-        projectId: project.id,
-        workspaceId: profile.workspace_id,
-        stageKey,
-        file,
-      })
+      await uploadFile({ projectId: project.id, stageKey, file })
       await load()
       onChanged?.()
     } catch (failure) {
