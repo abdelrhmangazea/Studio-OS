@@ -1,0 +1,323 @@
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  createSupplier,
+  deleteSupplier,
+  listSupplierProjects,
+  listSuppliers,
+  updateSupplier,
+} from '../lib/suppliers'
+import { COUNTRIES } from '../data/countries'
+import { formatPhone } from '../lib/phone'
+import { useI18n } from '../i18n'
+import {
+  Badge,
+  Button,
+  Card,
+  EmptyState,
+  ErrorText,
+  Field,
+  Input,
+  PageTitle,
+  Select,
+  SidePanel,
+  Textarea,
+} from '../components/ui'
+
+const BLANK = {
+  name: '',
+  specialty: '',
+  phone_country_code: '+20',
+  phone_number: '',
+  email: '',
+  notes: '',
+  rating: '',
+  active: true,
+}
+
+/**
+ * The studio's supplier book.
+ *
+ * A supplier belongs to the studio, not to one job — so the useful
+ * thing on each row is which projects they have actually been used on,
+ * which is what the panel shows.
+ *
+ * Rating is deliberately nullable. An unrated supplier is not a
+ * one-star supplier, and the list never sorts them as though it were.
+ */
+export default function Suppliers() {
+  const { t, language } = useI18n()
+  const [suppliers, setSuppliers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [showInactive, setShowInactive] = useState(false)
+  const [editing, setEditing] = useState(null)
+  const [form, setForm] = useState(BLANK)
+  const [jobs, setJobs] = useState([])
+  const [error, setError] = useState('')
+
+  async function load() {
+    setSuppliers(await listSuppliers())
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
+  const visible = useMemo(() => {
+    const needle = search.trim().toLowerCase()
+    return suppliers
+      .filter((s) => (showInactive ? true : s.active))
+      .filter((s) =>
+        !needle
+          ? true
+          : [s.name, s.specialty, s.email, s.phone_number]
+              .some((v) => (v ?? '').toLowerCase().includes(needle))
+      )
+  }, [suppliers, search, showInactive])
+
+  function open(supplier) {
+    setError('')
+    setEditing(supplier ?? 'new')
+    setForm(
+      supplier
+        ? {
+            name: supplier.name ?? '',
+            specialty: supplier.specialty ?? '',
+            phone_country_code: supplier.phone_country_code ?? '+20',
+            phone_number: supplier.phone_number ?? '',
+            email: supplier.email ?? '',
+            notes: supplier.notes ?? '',
+            rating: supplier.rating ?? '',
+            active: supplier.active,
+          }
+        : BLANK
+    )
+    setJobs([])
+    if (supplier) listSupplierProjects(supplier.id).then(setJobs)
+  }
+
+  async function save() {
+    setError('')
+    const payload = {
+      ...form,
+      rating: form.rating === '' ? null : Number(form.rating),
+      specialty: form.specialty || null,
+      email: form.email || null,
+      phone_number: form.phone_number || null,
+      notes: form.notes || null,
+    }
+
+    try {
+      if (editing === 'new') await createSupplier(payload)
+      else await updateSupplier(editing.id, payload)
+      setEditing(null)
+      load()
+    } catch (failure) {
+      setError(failure.message)
+    }
+  }
+
+  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+
+  return (
+    <div>
+      <PageTitle subtitle={t('suppliers.subtitle', { count: visible.length })}>
+        {t('nav.suppliers')}
+      </PageTitle>
+
+      <div className="mb-6 flex flex-wrap items-end gap-3">
+        <Button onClick={() => open(null)}>{t('suppliers.add')}</Button>
+        <div className="w-64">
+          <Input
+            placeholder={t('suppliers.search')}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <label className="flex items-center gap-2 pb-2 text-sm text-text-secondary">
+          <input
+            type="checkbox"
+            className="h-4 w-4 accent-[var(--accent)]"
+            checked={showInactive}
+            onChange={(e) => setShowInactive(e.target.checked)}
+          />
+          {t('suppliers.showInactive')}
+        </label>
+      </div>
+
+      {visible.length === 0 ? (
+        <EmptyState>{t('suppliers.empty')}</EmptyState>
+      ) : (
+        <div className="space-y-2">
+          {visible.map((supplier) => (
+            <button
+              key={supplier.id}
+              onClick={() => open(supplier)}
+              className="flex w-full flex-wrap items-center justify-between gap-3 rounded border border-border p-3 text-start hover:bg-surface"
+            >
+              <div className="min-w-0">
+                <p className="text-sm text-text">
+                  {supplier.name}
+                  {!supplier.active && (
+                    <span className="ms-2 text-xs text-text-secondary">
+                      · {t('suppliers.inactive')}
+                    </span>
+                  )}
+                </p>
+                <p className="flex flex-wrap gap-x-2 text-xs text-text-secondary">
+                  {supplier.specialty && <span>{supplier.specialty}</span>}
+                  {supplier.phone_number && (
+                    <span dir="ltr">
+                      {formatPhone(supplier.phone_country_code, supplier.phone_number)}
+                    </span>
+                  )}
+                  {supplier.email && <span>{supplier.email}</span>}
+                </p>
+              </div>
+
+              {supplier.rating ? (
+                <Badge color="var(--accent)">
+                  {'★'.repeat(supplier.rating)}
+                  <span className="opacity-40">{'★'.repeat(5 - supplier.rating)}</span>
+                </Badge>
+              ) : (
+                <span className="text-xs text-text-secondary">{t('suppliers.unrated')}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <SidePanel
+        open={Boolean(editing)}
+        title={editing === 'new' ? t('suppliers.add') : form.name}
+        onClose={() => setEditing(null)}
+        footer={
+          <>
+            <Button onClick={save}>{t('common.save')}</Button>
+            {editing !== 'new' && (
+              <Button
+                variant="ghost"
+                onClick={async () => {
+                  await deleteSupplier(editing.id)
+                  setEditing(null)
+                  load()
+                }}
+              >
+                {t('common.delete')}
+              </Button>
+            )}
+          </>
+        }
+      >
+        <div className="space-y-4">
+          <Field label={t('suppliers.name')}>
+            <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          </Field>
+
+          <Field label={t('suppliers.specialty')} hint={t('suppliers.specialtyHint')}>
+            <Input
+              value={form.specialty}
+              onChange={(e) => setForm({ ...form, specialty: e.target.value })}
+            />
+          </Field>
+
+          <Field label={t('fields.phone')}>
+            <div className="flex gap-2" dir="ltr">
+              <Select
+                className="w-32"
+                value={form.phone_country_code}
+                onChange={(e) => setForm({ ...form, phone_country_code: e.target.value })}
+              >
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.dial}>
+                    {c.flag} {c.dial}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                value={form.phone_number}
+                onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
+              />
+            </div>
+          </Field>
+
+          <Field label={t('fields.email')}>
+            <Input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+          </Field>
+
+          <Field label={t('suppliers.rating')} hint={t('suppliers.ratingHint')}>
+            <Select
+              value={form.rating}
+              onChange={(e) => setForm({ ...form, rating: e.target.value })}
+            >
+              <option value="">{t('suppliers.unrated')}</option>
+              {[1, 2, 3, 4, 5].map((n) => (
+                <option key={n} value={n}>
+                  {'★'.repeat(n)}
+                </option>
+              ))}
+            </Select>
+          </Field>
+
+          <Field label={t('suppliers.notes')}>
+            <Textarea
+              rows={4}
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            />
+          </Field>
+
+          <label className="flex items-center gap-2 text-sm text-text">
+            <input
+              type="checkbox"
+              className="h-4 w-4 accent-[var(--accent)]"
+              checked={form.active}
+              onChange={(e) => setForm({ ...form, active: e.target.checked })}
+            />
+            {t('suppliers.active')}
+          </label>
+
+          <ErrorText>{error}</ErrorText>
+
+          {/* Their actual track record with this studio. */}
+          {editing !== 'new' && (
+            <div className="border-t border-border pt-4">
+              <h3 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+                {t('suppliers.usedOn')}
+              </h3>
+              {jobs.length === 0 ? (
+                <p className="text-sm text-text-secondary">{t('suppliers.notUsedYet')}</p>
+              ) : (
+                <ul className="space-y-1">
+                  {jobs.map((job) => (
+                    <li key={job.id} className="text-sm">
+                      <Link
+                        to={`/projects/${job.project.id}`}
+                        className="text-accent hover:underline"
+                      >
+                        <span className="font-mono" dir="ltr">
+                          {job.project.code}
+                        </span>{' '}
+                        {job.project.name}
+                      </Link>
+                      {job.role && (
+                        <span className="text-xs text-text-secondary"> · {job.role}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
+      </SidePanel>
+    </div>
+  )
+}

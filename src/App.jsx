@@ -19,7 +19,8 @@ import BookingConfirmation from './pages/BookingConfirmation'
 import Portal from './pages/Portal'
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
-import Placeholder from './pages/Placeholder'
+import Suppliers from './pages/Suppliers'
+import Reports from './pages/Reports'
 
 function Loading() {
   const { t } = useI18n()
@@ -88,8 +89,8 @@ export default function App() {
         <Route path="/templates" element={<Templates />} />
         <Route path="/generate/:key/:contactId" element={<Generator />} />
         <Route path="/booking-setup" element={<BookingHome />} />
-        <Route path="/suppliers" element={<Placeholder titleKey="nav.suppliers" />} />
-        <Route path="/reports" element={<Placeholder titleKey="nav.reports" />} />
+        <Route path="/suppliers" element={<Suppliers />} />
+        <Route path="/reports" element={<Reports />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
 

@@ -7,6 +7,7 @@ import { useI18n } from '../i18n'
 import ListsSettings from '../components/ListsSettings'
 import ResetTemplates from '../components/ResetTemplates'
 import OccasionDates from './OccasionDates'
+import TeamSettings from '../components/TeamSettings'
 import {
   Button,
   Card,
@@ -19,8 +20,10 @@ import {
 } from '../components/ui'
 
 /**
- * Bucket 1 builds Studio Profile and Preferences only.
- * Team and Subscription are placeholders for a later bucket.
+ * Studio profile, preferences, occasion dates, lists, templates, team.
+ *
+ * There is no Subscription section: no billing exists anywhere in this
+ * product, so a page about a plan would have nothing true to say.
  */
 
 export default function Settings() {
@@ -311,16 +314,11 @@ export default function Settings() {
       {/* ---------- Templates ---------- */}
       <ResetTemplates />
 
-      {/* ---------- Later buckets ---------- */}
-      <Card className="mb-4">
-        <SectionTitle>{t('settings.team')}</SectionTitle>
-        <p className="text-sm text-text-secondary">{t('common.comingSoon')}</p>
-      </Card>
-
-      <Card>
-        <SectionTitle>{t('settings.subscription')}</SectionTitle>
-        <p className="text-sm text-text-secondary">{t('common.comingSoon')}</p>
-      </Card>
+      {/* ---------- Team ----------
+          No Subscription section: there is no billing anywhere in this
+          product, so a page about a plan would have nothing true to
+          say. Removed rather than left as a promise. */}
+      <TeamSettings />
     </div>
   )
 }

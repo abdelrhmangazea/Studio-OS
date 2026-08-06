@@ -13,8 +13,20 @@ function startOfMonth() {
   return new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
 }
 
-export async function loadInsights() {
-  const monthStart = startOfMonth()
+/**
+ * The same five numbers over an arbitrary window.
+ *
+ * The dashboard asks for this month, because a figure you glance at
+ * daily has to mean "now". Reports asks for whatever range you picked.
+ * Both go through one implementation so the two screens can never
+ * disagree about what a conversion is.
+ */
+export async function loadInsights({ from, to } = {}) {
+  const monthStart = from ?? startOfMonth()
+  const windowEnd = to ?? null
+
+  const inWindow = (stamp) =>
+    Boolean(stamp) && stamp >= monthStart && (!windowEnd || stamp <= windowEnd)
 
   const [contacts, projects, stages, invoices] = await Promise.all([
     supabase.from('contacts').select('id, first_name, last_name, created_at, is_client, converted_at'),
@@ -28,16 +40,14 @@ export async function loadInsights() {
   const allStages = stages.data ?? []
   const allInvoices = invoices.data ?? []
 
-  // ---------- 1. Leads this month ----------
-  const leadsThisMonth = allContacts.filter((c) => c.created_at >= monthStart)
+  // ---------- 1. Leads in the window ----------
+  const leadsThisMonth = allContacts.filter((c) => inWindow(c.created_at))
 
   // ---------- 2. Conversion to consultation ----------
-  // Time-bounded on purpose: converted THIS MONTH over created THIS
-  // MONTH. A lifetime ratio only ever drifts downward and stops
+  // Time-bounded on purpose: converted IN THE WINDOW over created IN
+  // THE WINDOW. A lifetime ratio only ever drifts downward and stops
   // meaning anything.
-  const convertedThisMonth = allContacts.filter(
-    (c) => c.converted_at && c.converted_at >= monthStart
-  )
+  const convertedThisMonth = allContacts.filter((c) => inWindow(c.converted_at))
   const toConsultation = {
     percent: leadsThisMonth.length
       ? Math.round((convertedThisMonth.length / leadsThisMonth.length) * 100)

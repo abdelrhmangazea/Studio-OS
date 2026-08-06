@@ -20,6 +20,7 @@ import StageRail from '../components/project/StageRail'
 import StageView from '../components/project/StageView'
 import ProgressRing from '../components/project/ProgressRing'
 import PortalLinkCard from '../components/project/PortalLinkCard'
+import SuppliersCard from '../components/project/SuppliersCard'
 import { Badge, Button, Card, EmptyState, Field, Input, Select, Textarea } from '../components/ui'
 
 /**
@@ -233,6 +234,11 @@ export default function ProjectWorkspace() {
               project={project}
               changeRequests={openChangeRequests(approvals).length}
             />
+          </div>
+
+          {/* ---------- Who worked on it ---------- */}
+          <div className="mt-6">
+            <SuppliersCard project={project} />
           </div>
 
           {/* ---------- Project details ---------- */}
