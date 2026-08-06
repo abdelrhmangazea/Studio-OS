@@ -21,6 +21,35 @@ export const AUTO_FIELDS = registry.filter((f) => f.source === 'auto').map((f) =
 
 export const PROMPT_FIELDS = registry.filter((f) => f.source === 'prompt')
 
+/**
+ * Fields the generator works out for itself, from other fields.
+ *
+ * A computed field is never asked for and never editable — asking for
+ * a total you can add up is how a document ends up disagreeing with
+ * itself. It recalculates as its inputs are typed.
+ */
+export const COMPUTED_FIELDS = Object.fromEntries(
+  registry
+    .filter((f) => f.source === 'computed')
+    .map((f) => [f.field, f.resolves_from])
+)
+
+export function isComputed(name) {
+  return Object.hasOwn(COMPUTED_FIELDS, name)
+}
+
+/** fee_total = fee_phase_1 + … + fee_phase_5, live as each is typed. */
+export function computeField(name, values) {
+  if (name !== 'fee_total') return null
+
+  const phases = [1, 2, 3, 4, 5]
+    .map((n) => Number(String(values[`fee_phase_${n}`] ?? '').replace(/[^\d.-]/g, '')))
+    .filter((n) => Number.isFinite(n))
+
+  const total = phases.reduce((sum, n) => sum + n, 0)
+  return total > 0 ? String(total) : ''
+}
+
 export const PROMPT_FIELD_NAMES = new Set(PROMPT_FIELDS.map((f) => f.field))
 
 export function isKnownField(name) {

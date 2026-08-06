@@ -93,6 +93,27 @@ export default function ContactFields({ form, errors, onChange, statuses, source
         <Textarea rows={2} value={form.address} onChange={set('address')} />
       </Field>
 
+      {/* Identity — all optional. Only the contract reads these, and it
+          prints a [[marker]] rather than blocking when they are blank. */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Field label={t('fields.idType')}>
+          <Select value={form.id_type ?? ''} onChange={set('id_type')}>
+            <option value="">{t('fields.notSet')}</option>
+            {['national_id', 'passport', 'residency', 'commercial_registration'].map((k) => (
+              <option key={k} value={k}>
+                {t(`idType.${k}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('fields.idNumber')}>
+          <Input value={form.id_number ?? ''} onChange={set('id_number')} />
+        </Field>
+        <Field label={t('fields.idIssuer')}>
+          <Input value={form.id_issuer ?? ''} onChange={set('id_issuer')} />
+        </Field>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <Field label={t('fields.source')}>
           <Select value={form.source_id} onChange={set('source_id')}>

@@ -173,7 +173,10 @@
     "source": "Source",
     "status": "Status",
     "nextAction": "Next action",
-    "notSet": "Not set"
+    "notSet": "Not set",
+    "idType": "ID type",
+    "idNumber": "ID number",
+    "idIssuer": "Issuing authority"
   },
   "contact": {
     "tabDetails": "Details",
@@ -321,7 +324,9 @@
     "autoField": "from your data",
     "notAvailableYet": "not available until a later bucket",
     "pdfHint": "Your browser's print dialog opens — choose “Save as PDF”.",
-    "noContact": "Pick a client first."
+    "noContact": "Pick a client first.",
+    "computedField": "calculated",
+    "divertedLanguage": "The English version of this document is not legally approved yet, so the Arabic version was generated. The Arabic text is the governing text."
   },
   "documents": {
     "empty": "Nothing generated for this client yet.",
@@ -638,5 +643,50 @@
     "role_member": "Member",
     "role_viewer": "Viewer",
     "addHelp": "There are no email invites, because this product does not send email. Ask your colleague to create an account, then set their role here."
+  },
+  "idType": {
+    "national_id": "National ID",
+    "passport": "Passport",
+    "residency": "Residency",
+    "commercial_registration": "Commercial registration"
+  },
+  "legal": {
+    "title": "Legal & Contract",
+    "help": "The entity details the contract reads. All optional — anything left blank prints as a [[marker]] and blocks nothing.",
+    "entity": "The entity",
+    "legalName": "Legal name",
+    "legalNameHint": "The name on the register, not the trading name.",
+    "registrationNumber": "Registration number",
+    "registeredAddress": "Registered address",
+    "country": "Country",
+    "representative": "Legal representative",
+    "repName": "Representative name",
+    "repIdType": "ID type",
+    "repId": "ID number",
+    "repIssuer": "Issuing authority",
+    "law": "Law",
+    "governingLaw": "Governing law",
+    "governingLawHint": "e.g. Kingdom of Saudi Arabia",
+    "disputeVenue": "Dispute venue",
+    "disputeVenueHint": "The competent courts or arbitration body.",
+    "money": "Tax and thresholds",
+    "vatRate": "VAT rate",
+    "vatRateHint": "Number only, e.g. 15",
+    "vatTreatment": "VAT treatment",
+    "vatInclusive": "Prices include VAT",
+    "vatExclusive": "Prices exclude VAT",
+    "minimumValue": "Minimum project value",
+    "minimumValueHint": "Used by the payment terms clause.",
+    "rates": "Hourly rates",
+    "rate_lead_designer": "Lead designer",
+    "rate_senior_assistant": "Senior assistant",
+    "rate_design_manager": "Design manager",
+    "rate_office_designer": "Office designer",
+    "rate_office_admin": "Office admin",
+    "derived": "What the contract reads from elsewhere",
+    "derivedHelp": "These two are deliberately not fields here — the contract reads them from their own source so it can never disagree with it.",
+    "workingDays": "Working days (from booking setup)",
+    "freeRevisions": "Free revisions (from portal settings)",
+    "noAvailability": "not set up yet in booking setup"
   }
 }

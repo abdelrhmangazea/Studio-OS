@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FIELD_BY_NAME } from '../../data/mergeFields'
+import { FIELD_BY_NAME, computeField, isComputed } from '../../data/mergeFields'
 import { useI18n } from '../../i18n'
 import { Button, Field, Input, Modal } from '../ui'
 
@@ -11,7 +11,13 @@ import { Button, Field, Input, Modal } from '../ui'
  * These are never auto-filled and never left blank — Continue stays
  * disabled until every one has a value.
  */
-export default function PromptFieldsForm({ open, fields, onCancel, onDone }) {
+/**
+ * `computed` lists the fields the document works out for itself. They
+ * are shown here, live, as their inputs are typed — a fee total that
+ * only appears after you close the form is a total you have to take on
+ * trust while entering the numbers that make it.
+ */
+export default function PromptFieldsForm({ open, fields, computed = [], onCancel, onDone }) {
   const { t } = useI18n()
   const [values, setValues] = useState({})
 
@@ -34,6 +40,19 @@ export default function PromptFieldsForm({ open, fields, onCancel, onDone }) {
       }
     >
       <p className="mb-4 text-sm text-text-secondary">{t('generator.promptHelp')}</p>
+
+      {computed.length > 0 && (
+        <div className="mb-4 rounded border border-border bg-bg p-3">
+          {computed.map((name) => (
+            <div key={name} className="flex items-baseline justify-between gap-3">
+              <span className="text-xs text-text-secondary">{name}</span>
+              <span className="text-lg font-semibold text-accent">
+                {computeField(name, values) || '—'}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="space-y-4">
         {fields.map((name) => (

@@ -178,5 +178,180 @@
   "field": "invoice_amount",
   "source": "prompt",
   "ask_user": "Invoice amount for this stage"
+ },
+ {
+  "field": "studio_legal_name",
+  "source": "auto",
+  "resolves_from": "studio_settings.legal_name (NEW)"
+ },
+ {
+  "field": "studio_registration_number",
+  "source": "auto",
+  "resolves_from": "studio_settings.registration_number (NEW)"
+ },
+ {
+  "field": "studio_registered_address",
+  "source": "auto",
+  "resolves_from": "studio_settings.registered_address (NEW)"
+ },
+ {
+  "field": "studio_representative_name",
+  "source": "auto",
+  "resolves_from": "studio_settings.representative_name (NEW)"
+ },
+ {
+  "field": "studio_representative_id",
+  "source": "auto",
+  "resolves_from": "studio_settings.representative_id (NEW)"
+ },
+ {
+  "field": "studio_representative_issuer",
+  "source": "auto",
+  "resolves_from": "studio_settings.representative_issuer (NEW)"
+ },
+ {
+  "field": "client_id_issuer",
+  "source": "auto",
+  "resolves_from": "contacts.id_issuer (NEW)"
+ },
+ {
+  "field": "client_address",
+  "source": "auto",
+  "resolves_from": "contacts.address"
+ },
+ {
+  "field": "contract_date",
+  "source": "prompt",
+  "ask_user": "Contract date"
+ },
+ {
+  "field": "contract_day_name",
+  "source": "prompt",
+  "ask_user": "Day of the week on the contract"
+ },
+ {
+  "field": "project_understanding",
+  "source": "prompt",
+  "ask_user": "Your understanding of the brief, in your own words — this is what makes the proposal personal"
+ },
+ {
+  "field": "fee_phase_1",
+  "source": "prompt",
+  "ask_user": "Phase 1 fee — Concept Design"
+ },
+ {
+  "field": "fee_phase_2",
+  "source": "prompt",
+  "ask_user": "Phase 2 fee — Design Development"
+ },
+ {
+  "field": "fee_phase_3",
+  "source": "prompt",
+  "ask_user": "Phase 3 fee — FF&E"
+ },
+ {
+  "field": "fee_phase_4",
+  "source": "prompt",
+  "ask_user": "Phase 4 fee — Tendering"
+ },
+ {
+  "field": "fee_phase_5",
+  "source": "prompt",
+  "ask_user": "Phase 5 fee — Site Supervision"
+ },
+ {
+  "field": "fee_total",
+  "source": "computed",
+  "resolves_from": "sum of fee_phase_1..5"
+ },
+ {
+  "field": "start_lead_time",
+  "source": "prompt",
+  "ask_user": "How long after the first payment work begins (e.g. 7 days)"
+ },
+ {
+  "field": "rate_lead_designer",
+  "source": "auto",
+  "resolves_from": "studio_settings.hourly_rates.lead_designer (NEW)"
+ },
+ {
+  "field": "rate_senior_assistant",
+  "source": "auto",
+  "resolves_from": "studio_settings.hourly_rates.senior_assistant (NEW)"
+ },
+ {
+  "field": "rate_design_manager",
+  "source": "auto",
+  "resolves_from": "studio_settings.hourly_rates.design_manager (NEW)"
+ },
+ {
+  "field": "rate_office_designer",
+  "source": "auto",
+  "resolves_from": "studio_settings.hourly_rates.office_designer (NEW)"
+ },
+ {
+  "field": "rate_office_admin",
+  "source": "auto",
+  "resolves_from": "studio_settings.hourly_rates.office_admin (NEW)"
+ },
+ {
+  "field": "client_id_number",
+  "source": "auto",
+  "resolves_from": "contacts.id_number (NEW)"
+ },
+ {
+  "field": "client_id_type",
+  "source": "auto",
+  "resolves_from": "contacts.id_type (NEW) — national ID / passport / residency / commercial registration"
+ },
+ {
+  "field": "studio_representative_id_type",
+  "source": "auto",
+  "resolves_from": "studio_settings.representative_id_type (NEW)"
+ },
+ {
+  "field": "studio_country",
+  "source": "auto",
+  "resolves_from": "studio_settings.country (NEW)"
+ },
+ {
+  "field": "governing_law",
+  "source": "auto",
+  "resolves_from": "studio_settings.governing_law (NEW) — free text, e.g. 'المملكة العربية السعودية'"
+ },
+ {
+  "field": "dispute_venue",
+  "source": "auto",
+  "resolves_from": "studio_settings.dispute_venue (NEW) — courts or arbitration body"
+ },
+ {
+  "field": "vat_rate",
+  "source": "auto",
+  "resolves_from": "studio_settings.vat_rate (NEW) — e.g. 15%, 5%, 14%, 0%"
+ },
+ {
+  "field": "vat_treatment",
+  "source": "auto",
+  "resolves_from": "studio_settings.vat_treatment (NEW) — 'تشمل' or 'لا تشمل'"
+ },
+ {
+  "field": "working_days",
+  "source": "auto",
+  "resolves_from": "studio_settings.working_days (NEW) — from booking_settings availability"
+ },
+ {
+  "field": "working_hours",
+  "source": "auto",
+  "resolves_from": "studio_settings.working_hours (NEW) — from booking_settings availability"
+ },
+ {
+  "field": "minimum_project_value",
+  "source": "auto",
+  "resolves_from": "studio_settings.minimum_project_value (NEW)"
+ },
+ {
+  "field": "revision_allowance",
+  "source": "auto",
+  "resolves_from": "studio_settings.default_revision_allowance (EXISTING from B6)"
  }
 ]

@@ -21,7 +21,7 @@ import { buildDocumentHtml, textToHtml, highlightUnresolved } from '../lib/docum
 import { exportPdf } from '../lib/exportPdf'
 import { exportDocx } from '../lib/exportDocx'
 import { copyToClipboard, htmlToWhatsappText } from '../lib/exportWhatsapp'
-import { FIELD_BY_NAME, NOT_YET_AVAILABLE } from '../data/mergeFields'
+import { FIELD_BY_NAME, NOT_YET_AVAILABLE, computeField, isComputed } from '../data/mergeFields'
 import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import PromptFieldsForm from '../components/templates/PromptFieldsForm'
@@ -100,14 +100,25 @@ export default function Generator() {
   }, [key, contactId, projectId, bookingId, invoiceId])
 
   const isQuestionnaire = !pair && questionnaire?.key === key
-  const row = pair?.[language] ?? pair?.ar ?? pair?.en ?? null
+
+  // A version flagged for legal review must never reach a client, so the
+  // generator quietly falls back to the paired language that is safe and
+  // says so. The flag is a column, not a hard-coded key — any future
+  // document inherits the behaviour.
+  const requested = pair?.[language] ?? null
+  const fallback = language === 'ar' ? pair?.en : pair?.ar
+  const divertedFrom = requested?.needs_legal_review && fallback && !fallback.needs_legal_review
+    ? language
+    : null
+  const row = divertedFrom ? fallback : (requested ?? pair?.ar ?? pair?.en ?? null)
+  const documentLanguage = divertedFrom ? (language === 'ar' ? 'en' : 'ar') : language
 
   // The raw text this document is built from.
   const sourceBody = isQuestionnaire
-    ? questionnaireToText(questionnaire.structure, language)
+    ? questionnaireToText(questionnaire.structure, documentLanguage)
     : (row?.body ?? '')
   const sourceTitle = isQuestionnaire
-    ? language === 'ar'
+    ? documentLanguage === 'ar'
       ? 'استمارة معلومات العميل'
       : 'Client Questionnaire'
     : (row?.title ?? '')
@@ -123,6 +134,16 @@ export default function Generator() {
     (name) => !suppliedByInvoice.includes(name)
   )
 
+  // Computed fields are recalculated on every keystroke rather than
+  // asked for. fee_total can only ever be the sum of its phases.
+  const withComputed = (next) => {
+    const out = { ...next }
+    for (const name of fields) {
+      if (isComputed(name)) out[name] = computeField(name, out)
+    }
+    return out
+  }
+
   // ---------- resolve ----------
   useEffect(() => {
     if (loading || !contact) return
@@ -137,23 +158,23 @@ export default function Generator() {
         project,
         booking,
         invoice,
-        language,
+        language: documentLanguage,
       })
       if (cancelled) return
-      setValues({ ...auto, ...(promptValues ?? {}) })
+      setValues(withComputed({ ...auto, ...(promptValues ?? {}) }))
     })()
     return () => {
       cancelled = true
     }
-  }, [loading, contact, settings, profile, project, booking, invoice, language, promptValues, promptNames.length])
+  }, [loading, contact, settings, profile, project, booking, invoice, documentLanguage, promptValues, promptNames.length])
 
   // Re-render the body whenever the values or the language change.
   useEffect(() => {
     if (!sourceBody || Object.keys(values).length === 0) return
     // Highlight once, here, so the preview and the export agree.
-    setBodyHtml(highlightUnresolved(textToHtml(renderTemplate(sourceBody, values), language)))
+    setBodyHtml(highlightUnresolved(textToHtml(renderTemplate(sourceBody, values), documentLanguage)))
     setSaved(false)
-  }, [sourceBody, values, language])
+  }, [sourceBody, values, documentLanguage])
 
   const missing = unresolvedFields(fields, values)
 
@@ -170,7 +191,7 @@ export default function Generator() {
     return buildDocumentHtml({
       title: sourceTitle,
       bodyHtml: currentBody(),
-      language,
+      language: documentLanguage,
       settings,
       meta: fullName(contact),
     })
@@ -190,7 +211,7 @@ export default function Generator() {
         project_id: project?.id ?? null,
         template_key: key,
         type: isQuestionnaire ? 'questionnaire' : row.type,
-        language,
+        language: documentLanguage,
         title: sourceTitle,
         final_body: currentBody(),
         field_values: values,
@@ -207,6 +228,7 @@ export default function Generator() {
       <PromptFieldsForm
         open={promptNames.length > 0 && promptValues === null}
         fields={promptNames}
+        computed={fields.filter(isComputed)}
         onCancel={() => navigate(project ? `/projects/${project.id}` : '/templates')}
         onDone={setPromptValues}
       />
@@ -255,7 +277,7 @@ export default function Generator() {
           <Button
             variant="secondary"
             onClick={() =>
-              exportDocx({ title: sourceTitle, bodyHtml: currentBody(), language, settings })
+              exportDocx({ title: sourceTitle, bodyHtml: currentBody(), documentLanguage, settings })
             }
           >
             {t('generator.exportWord')}
@@ -263,6 +285,17 @@ export default function Generator() {
           <Button onClick={handleSave}>{t('generator.save')}</Button>
         </div>
       </div>
+
+      {(divertedFrom || row?.legal_notice) && (
+        <Card className="mb-4 border-warning">
+          {divertedFrom && (
+            <p className="text-sm text-warning">{t('generator.divertedLanguage')}</p>
+          )}
+          {row?.legal_notice && (
+            <p className="mt-1 text-xs text-text-secondary">{row.legal_notice}</p>
+          )}
+        </Card>
+      )}
 
       {saved && <p className="mb-4 text-sm text-success">{t('generator.saved')}</p>}
       <ErrorText>{error}</ErrorText>
@@ -296,9 +329,11 @@ export default function Generator() {
                 key={name}
                 label={name}
                 hint={
+                  isComputed(name)
+                    ? t('generator.computedField')
                   // An invoice answers its own amount, so it reads as
                   // resolved here rather than as a question.
-                  suppliedByInvoice.includes(name)
+                  : suppliedByInvoice.includes(name)
                     ? t('generator.autoField')
                     : FIELD_BY_NAME[name]?.source === 'prompt'
                       ? t('generator.promptField')
@@ -310,9 +345,15 @@ export default function Generator() {
                 <Input
                   value={values[name] ?? ''}
                   onChange={(e) =>
-                    setValues((current) => ({ ...current, [name]: e.target.value }))
+                    setValues((current) =>
+                      withComputed({ ...current, [name]: e.target.value })
+                    )
                   }
-                  className={values[name] ? '' : 'border-warning'}
+                  readOnly={isComputed(name)}
+                  className={
+                    (values[name] ? '' : 'border-warning') +
+                    (isComputed(name) ? ' opacity-70' : '')
+                  }
                 />
               </Field>
             ))}
@@ -335,8 +376,8 @@ export default function Generator() {
               ref={previewRef}
               contentEditable
               suppressContentEditableWarning
-              dir={language === 'ar' ? 'rtl' : 'ltr'}
-              lang={language}
+              dir={documentLanguage === 'ar' ? 'rtl' : 'ltr'}
+              lang={documentLanguage}
               className="studio-doc min-h-64 outline-none"
               dangerouslySetInnerHTML={{ __html: bodyHtml }}
             />
@@ -364,7 +405,7 @@ export default function Generator() {
       >
         <p className="mb-2 text-xs text-text-secondary">{t('generator.whatsappHelp')}</p>
         <pre
-          dir={language === 'ar' ? 'rtl' : 'ltr'}
+          dir={documentLanguage === 'ar' ? 'rtl' : 'ltr'}
           className="whitespace-pre-wrap rounded border border-border bg-bg p-3 font-sans text-sm text-text"
         >
           {htmlToWhatsappText(bodyHtml)}
