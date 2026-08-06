@@ -64,7 +64,24 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "passwordHint": "At least 6 characters.",
-    "confirmPending": "The account was created, but Supabase is holding it until the email is confirmed. If this is your studio, turn off \"Confirm email\" in the Supabase settings — this product never sends email."
+    "confirmPending": "The account was created, but Supabase is holding it until the email is confirmed. If this is your studio, turn off \"Confirm email\" in the Supabase settings — this product never sends email.",
+    "confirmSent": "We sent a confirmation link to {email}. Open it to activate your account.",
+    "checkSpam": "If it has not arrived within two minutes, check your spam folder.",
+    "resend": "Send the link again",
+    "resent": "Sent again",
+    "confirming": "Activating your account…",
+    "linkDeadTitle": "This link is no longer valid",
+    "linkDeadBody": "Confirmation links expire after a while. Ask for a new one.",
+    "forgotTitle": "Forgot your password",
+    "forgotSubtitle": "Enter your email and we will send a link to set a new password.",
+    "forgotLink": "Forgot your password?",
+    "sendResetLink": "Send the link",
+    "resetSent": "If an account exists for {email}, a link is on its way.",
+    "backToSignIn": "Back to sign in",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "setNewPassword": "Save password",
+    "agreeTo": "By creating an account you agree to the"
   },
   "onboarding": {
     "title": "Set up your studio",
@@ -586,7 +603,25 @@
     "saved": "Saved, and the reminders are updated."
   },
   "errors": {
-    "signUpMailBlocked": "Signup is waiting on a confirmation email, and the mail service refused to send one (rate limit). This product never sends email, so \"Confirm email\" should be turned off in the Supabase settings."
+    "signUpMailBlocked": "Signup is waiting on a confirmation email, and the mail service refused to send one (rate limit). This product never sends email, so \"Confirm email\" should be turned off in the Supabase settings.",
+    "generic": "Something went wrong. Try again, and tell us via the feedback button if it keeps happening.",
+    "emailNotConfirmed": "This account is not activated yet. Open the confirmation link in your email.",
+    "badCredentials": "That email or password is not right.",
+    "emailTaken": "An account with that email already exists. Try signing in.",
+    "passwordTooShort": "That password is too short — at least 6 characters.",
+    "mailNotSent": "We could not send the email just now. Try again shortly, or tell us.",
+    "tooManyAttempts": "Too many attempts in a short time. Wait a little and try again.",
+    "linkExpired": "That link has expired. Ask for a new one.",
+    "sessionExpired": "Your session has ended. Please sign in again.",
+    "notYours": "That item does not belong to your workspace.",
+    "duplicate": "That already exists.",
+    "inUse": "It cannot be deleted — other things are linked to it.",
+    "invalidValue": "That value is not accepted.",
+    "notAllowed": "You do not have permission for that.",
+    "offline": "No connection. Check your network and try again.",
+    "fileTooBig": "That file is larger than the limit.",
+    "fileType": "That file type is not supported.",
+    "retry": "Try again"
   },
   "suppliers": {
     "subtitle": "{count} suppliers",
@@ -716,7 +751,13 @@
     "derivedHelp": "These two are deliberately not fields here — the contract reads them from their own source so it can never disagree with it.",
     "workingDays": "Working days (from booking setup)",
     "freeRevisions": "Free revisions (from portal settings)",
-    "noAvailability": "not set up yet in booking setup"
+    "noAvailability": "not set up yet in booking setup",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "placeholderTitle": "Placeholder — not final",
+    "placeholderBody": "This page has not been written. Legal text is written by a lawyer; inventing it here would be worse than leaving it blank.",
+    "termsPlaceholder": "[ Terms of Service goes here ]\n\nTo cover: scope of the service · obligations on both sides · subscription and payment · account termination · limits of liability · intellectual property.",
+    "privacyPlaceholder": "[ Privacy Policy goes here ]\n\nTo cover: what data is collected · why · where it is stored · how long it is kept · who it is shared with · the user’s right to access and delete it."
   },
   "pricing": {
     "title": "Fee calculator",

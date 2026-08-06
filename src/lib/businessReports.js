@@ -19,7 +19,7 @@ export async function loadBusinessReports({ from, to }) {
     supabase.from('project_stages').select('project_id, stage_key, completed_at'),
     supabase.from('invoices').select('project_id, contact_id, amount, issued_at, created_at, status'),
     supabase.from('bookings').select('id, contact_id, created_at, status'),
-    supabase.from('lead_sources').select('id, name_ar, name_en'),
+    supabase.from('lead_sources').select('id, label_ar, label_en'),
     minutesByProject(),
   ])
 

@@ -87,10 +87,39 @@ export function AuthProvider({ children }) {
       supabase.auth.signUp({
         email,
         password,
-        options: { data: { name, studio_name: studioName } },
+        options: {
+          data: { name, studio_name: studioName },
+          // Where the confirmation link lands. Must be whitelisted in
+          // Authentication → URL Configuration or the link dies.
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       }),
 
     signOut: () => supabase.auth.signOut(),
+
+    /** Re-sends the confirmation mail for an address that never got one. */
+    resendConfirmation: (email) =>
+      supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      }),
+
+    /** Sends the reset link. Supabase writes and sends the mail itself. */
+    requestPasswordReset: (email) =>
+      supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset`,
+      }),
+
+    /** Used by the screen the reset link lands on, and by Settings. */
+    updatePassword: (password) => supabase.auth.updateUser({ password }),
+
+    /** Changing an email sends a confirmation to BOTH addresses. */
+    updateEmail: (email) =>
+      supabase.auth.updateUser(
+        { email },
+        { emailRedirectTo: `${window.location.origin}/auth/callback` }
+      ),
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

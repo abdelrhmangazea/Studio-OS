@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
+import { errorMessage } from '../lib/errorMessage'
 import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../components/ui'
 
 export default function Signup() {
-  const { session, signUp } = useAuth()
+  const { session, signUp, resendConfirmation } = useAuth()
   const { theme, language, toggleTheme, toggleLanguage } = usePrefs()
   const { t } = useI18n()
 
@@ -16,6 +17,7 @@ export default function Signup() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
+  const [resent, setResent] = useState(false)
   const [busy, setBusy] = useState(false)
 
   if (session) return <Navigate to="/" replace />
@@ -31,21 +33,12 @@ export default function Signup() {
     const { data, error: signUpError } = await signUp(email, password, name, studioName)
 
     if (signUpError) {
-      // Supabase only tries to send a confirmation mail because
-      // "Confirm email" is on, and its built-in mailer allows a handful
-      // an hour. This product never sends email at all, so the setting
-      // being on is the real fault — say that, rather than showing the
-      // raw upstream string.
-      const code = signUpError.code ?? ''
-      setError(
-        code.includes('rate_limit') || /rate limit/i.test(signUpError.message ?? '')
-          ? t('errors.signUpMailBlocked')
-          : signUpError.message || t('errors.signUp')
-      )
+      // Supabase Auth puts its text in `msg`, not `message`. Reading
+      // only `.message` is what produced the empty box.
+      setError(errorMessage(signUpError, t, 'errors.signUp'))
     } else if (data?.user && !data?.session) {
-      // Signed up, but the account is held until a confirmation link is
-      // clicked. Nothing failed — the page used to sit here saying
-      // nothing at all, which is exactly what looked like a hang.
+      // Created, and waiting on the emailed link. This is the normal
+      // path now that confirmation is on.
       setPending(true)
     }
 
@@ -105,9 +98,22 @@ export default function Signup() {
             <ErrorText>{error}</ErrorText>
 
             {pending && (
-              <p className="rounded border border-border p-3 text-sm text-text-secondary">
-                {t('auth.confirmPending')}
-              </p>
+              <div className="rounded border border-border p-3">
+                <p className="text-sm text-text">{t('auth.confirmSent', { email })}</p>
+                <p className="mt-1 text-xs text-text-secondary">{t('auth.checkSpam')}</p>
+                <button
+                  type="button"
+                  className="mt-2 text-sm text-accent hover:underline disabled:opacity-50"
+                  disabled={resent}
+                  onClick={async () => {
+                    const { error: failure } = await resendConfirmation(email)
+                    if (failure) setError(errorMessage(failure, t))
+                    else setResent(true)
+                  }}
+                >
+                  {resent ? t('auth.resent') : t('auth.resend')}
+                </button>
+              </div>
             )}
 
             <Button type="submit" disabled={busy} className="w-full">
@@ -115,7 +121,14 @@ export default function Signup() {
             </Button>
           </form>
 
-          <p className="mt-6 text-sm text-text-secondary">
+          <p className="mt-6 text-xs text-text-secondary">
+            {t('auth.agreeTo')}{' '}
+            <Link to="/terms" className="text-accent hover:underline">{t('legal.terms')}</Link>
+            {' '}·{' '}
+            <Link to="/privacy" className="text-accent hover:underline">{t('legal.privacy')}</Link>
+          </p>
+
+          <p className="mt-4 text-sm text-text-secondary">
             {t('auth.haveAccount')}{' '}
             <Link to="/login" className="text-accent hover:underline">
               {t('auth.signIn')}

@@ -17,6 +17,11 @@ import BookingHome from './pages/BookingHome'
 import PublicBooking from './pages/PublicBooking'
 import BookingConfirmation from './pages/BookingConfirmation'
 import Portal from './pages/Portal'
+import AuthCallback from './pages/AuthCallback'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import Suppliers from './pages/Suppliers'
@@ -58,6 +63,14 @@ export default function App() {
       <Route path="/book/:slug" element={<PublicBooking />} />
       <Route path="/booking/:token" element={<BookingConfirmation />} />
       <Route path="/portal/:token" element={<Portal />} />
+
+      {/* Where every emailed link lands. Must be whitelisted in
+          Authentication → URL Configuration. */}
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/auth/reset" element={<ResetPassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
