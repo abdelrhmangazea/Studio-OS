@@ -15,6 +15,7 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [pending, setPending] = useState(false)
   const [busy, setBusy] = useState(false)
 
   if (session) return <Navigate to="/" replace />
@@ -23,12 +24,31 @@ export default function Signup() {
     event.preventDefault()
     setBusy(true)
     setError('')
+    setPending(false)
 
     // The signup trigger in the database reads `name` and `studio_name`
     // out of this metadata to build the workspace, profile and settings.
-    const { error: signUpError } = await signUp(email, password, name, studioName)
+    const { data, error: signUpError } = await signUp(email, password, name, studioName)
 
-    if (signUpError) setError(signUpError.message || t('errors.signUp'))
+    if (signUpError) {
+      // Supabase only tries to send a confirmation mail because
+      // "Confirm email" is on, and its built-in mailer allows a handful
+      // an hour. This product never sends email at all, so the setting
+      // being on is the real fault — say that, rather than showing the
+      // raw upstream string.
+      const code = signUpError.code ?? ''
+      setError(
+        code.includes('rate_limit') || /rate limit/i.test(signUpError.message ?? '')
+          ? t('errors.signUpMailBlocked')
+          : signUpError.message || t('errors.signUp')
+      )
+    } else if (data?.user && !data?.session) {
+      // Signed up, but the account is held until a confirmation link is
+      // clicked. Nothing failed — the page used to sit here saying
+      // nothing at all, which is exactly what looked like a hang.
+      setPending(true)
+    }
+
     setBusy(false)
   }
 
@@ -83,6 +103,12 @@ export default function Signup() {
             </Field>
 
             <ErrorText>{error}</ErrorText>
+
+            {pending && (
+              <p className="rounded border border-border p-3 text-sm text-text-secondary">
+                {t('auth.confirmPending')}
+              </p>
+            )}
 
             <Button type="submit" disabled={busy} className="w-full">
               {busy ? t('common.loading') : t('auth.signUp')}

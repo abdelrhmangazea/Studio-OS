@@ -64,7 +64,8 @@
     "signUp": "Create account",
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
-    "passwordHint": "At least 6 characters."
+    "passwordHint": "At least 6 characters.",
+    "confirmPending": "The account was created, but Supabase is holding it until the email is confirmed. If this is your studio, turn off \"Confirm email\" in the Supabase settings — this product never sends email."
   },
   "onboarding": {
     "title": "Set up your studio",
@@ -196,7 +197,14 @@
     "deleteNote": "Delete note",
     "deleteNoteConfirm": "Delete this note permanently?",
     "addedOn": "Added {date}",
-    "notFound": "That contact does not exist, or is not in your workspace."
+    "notFound": "That contact does not exist, or is not in your workspace.",
+    "noTasks": "No tasks or reminders for this client.",
+    "noPayments": "No invoice has been raised for this client yet.",
+    "remindersTitle": "Reminders",
+    "remindersHelp": "Reminders follow the client, not the project, so they stay here after a project is delivered.",
+    "noDateYet": "no date yet",
+    "paid": "Paid",
+    "outstanding": "Outstanding"
   },
   "validation": {
     "firstNameRequired": "First name is required.",
@@ -572,5 +580,8 @@
     "new_year": "New Year",
     "newYearFixed": "Fixed on 1 January. Not asked for.",
     "saved": "Saved, and the reminders are updated."
+  },
+  "errors": {
+    "signUpMailBlocked": "Signup is waiting on a confirmation email, and the mail service refused to send one (rate limit). This product never sends email, so \"Confirm email\" should be turned off in the Supabase settings."
   }
 }
