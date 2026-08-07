@@ -4,6 +4,7 @@ import {
   answerFileUrl,
   confirmReceipt,
   getBooking,
+  getBookingSettings,
   issueInvoice,
   listBookings,
   listInvoices,
@@ -50,8 +51,14 @@ export default function Bookings() {
   const [answerLinks, setAnswerLinks] = useState({})
   const [filed, setFiled] = useState([])
 
+  // Booking times are shown in the STUDIO's timezone, never the
+  // browser's. A designer working from Dubai was seeing a Cairo
+  // 11:00 appointment as 12:00.
+  const [timezone, setTimezone] = useState(null)
+
   async function load() {
     setBookings(await listBookings())
+    setTimezone((await getBookingSettings())?.timezone ?? null)
     setLoading(false)
   }
 
@@ -145,7 +152,7 @@ export default function Bookings() {
                   </span>
                 </span>
                 <span className="mt-1 block text-xs text-text-secondary">
-                  {formatDateTime(booking.slot_start, language)}
+                  {formatDateTime(booking.slot_start, language, timezone)}
                 </span>
               </button>
             ))}
@@ -162,7 +169,13 @@ export default function Bookings() {
                     <div>
                       <h2 className="text-lg font-semibold text-text">{selected.client_name}</h2>
                       <p className="mt-1 text-sm text-text-secondary">
-                        {formatDateTime(selected.slot_start, language)} ·{' '}
+                        {formatDateTime(selected.slot_start, language, timezone)}
+                        {timezone && (
+                          <span className="ms-1 text-xs opacity-70" dir="ltr">
+                            ({timezone})
+                          </span>
+                        )}{' '}
+                        ·{' '}
                         {selected.session_type
                           ? language === 'ar'
                             ? selected.session_type.label_ar

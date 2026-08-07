@@ -14,10 +14,15 @@ import { formatDateTime } from './format'
  * the modal itself, and the inbox, which generates and files it the
  * first time a booking is opened.
  */
-export function buildPrepSheet({ booking, items, language }) {
+export function buildPrepSheet({ booking, items, language, timezone }) {
   const rtl = language === 'ar'
   const contact = booking.contact
   const title = rtl ? 'ورقة تحضير الاستشارة' : 'Consultation Prep Sheet'
+
+  // The sheet the designer carries into the meeting. The time on it has
+  // to be the studio's, not whatever zone the laptop that printed it
+  // happened to be in.
+  const tz = timezone ?? booking.timezone ?? null
 
   const rows = [
     [rtl ? 'العميل' : 'Client', contact ? fullName(contact) : booking.client_name],
@@ -26,7 +31,10 @@ export function buildPrepSheet({ booking, items, language }) {
       rtl ? 'الهاتف' : 'Phone',
       booking.client_phone ? formatPhone(booking.client_phone_code, booking.client_phone) : '—',
     ],
-    [rtl ? 'الموعد' : 'When', formatDateTime(booking.slot_start, language)],
+    [
+      rtl ? 'الموعد' : 'When',
+      formatDateTime(booking.slot_start, language, tz) + (tz ? ` (${tz})` : ''),
+    ],
     [
       rtl ? 'نوع الاستشارة' : 'Session',
       booking.session_type ? (rtl ? booking.session_type.label_ar : booking.session_type.label_en) : '—',

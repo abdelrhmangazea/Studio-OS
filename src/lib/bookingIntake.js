@@ -90,7 +90,17 @@ async function filePrepSheet({ booking, language }) {
     (row) => row.stage_key === '01_consultation'
   )
 
-  const { title, bodyHtml } = buildPrepSheet({ booking, items, language })
+  const { data: cfg } = await supabase
+    .from('booking_settings')
+    .select('timezone')
+    .maybeSingle()
+
+  const { title, bodyHtml } = buildPrepSheet({
+    booking,
+    items,
+    language,
+    timezone: cfg?.timezone,
+  })
 
   return saveGeneratedDocument({
     contact_id: booking.contact_id,
