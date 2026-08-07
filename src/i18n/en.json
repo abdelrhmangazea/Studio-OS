@@ -64,7 +64,7 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "passwordHint": "At least 6 characters.",
-    "confirmPending": "The account was created, but Supabase is holding it until the email is confirmed. If this is your studio, turn off \"Confirm email\" in the Supabase settings — this product never sends email.",
+    "confirmPending": "The account was created and is waiting on an email confirmation. If the mail never arrives, the SMTP settings need attention.",
     "confirmSent": "We sent a confirmation link to {email}. Open it to activate your account.",
     "checkSpam": "If it has not arrived within two minutes, check your spam folder.",
     "resend": "Send the link again",
@@ -81,7 +81,9 @@
     "resetTitle": "New password",
     "newPassword": "New password",
     "setNewPassword": "Save password",
-    "agreeTo": "By creating an account you agree to the"
+    "agreeTo": "By creating an account you agree to the",
+    "misroutedTitle": "This link came back to the wrong address",
+    "misroutedBody": "The link opened on localhost instead of the live site, so it could not be used. That is a project setting, not a problem with your account: Supabase -> Authentication -> URL Configuration. Set Site URL to the live address and add it to Redirect URLs. Then ask for a new link."
   },
   "onboarding": {
     "title": "Set up your studio",

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { supabase } from './supabase'
+import { authRedirect } from './siteUrl'
 
 /**
  * Holds who is signed in, and the three rows that describe their studio:
@@ -91,7 +92,7 @@ export function AuthProvider({ children }) {
           data: { name, studio_name: studioName },
           // Where the confirmation link lands. Must be whitelisted in
           // Authentication → URL Configuration or the link dies.
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: authRedirect('/auth/callback'),
         },
       }),
 
@@ -102,13 +103,13 @@ export function AuthProvider({ children }) {
       supabase.auth.resend({
         type: 'signup',
         email,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        options: { emailRedirectTo: authRedirect('/auth/callback') },
       }),
 
     /** Sends the reset link. Supabase writes and sends the mail itself. */
     requestPasswordReset: (email) =>
       supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset`,
+        redirectTo: authRedirect('/auth/reset'),
       }),
 
     /** Used by the screen the reset link lands on, and by Settings. */
@@ -118,7 +119,7 @@ export function AuthProvider({ children }) {
     updateEmail: (email) =>
       supabase.auth.updateUser(
         { email },
-        { emailRedirectTo: `${window.location.origin}/auth/callback` }
+        { emailRedirectTo: authRedirect('/auth/callback') }
       ),
   }
 

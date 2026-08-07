@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './lib/AuthContext'
+import { isStrandedRecoveryLink } from './lib/authLink'
 import { useI18n } from './i18n'
 import AppShell from './components/AppShell'
 import Login from './pages/Login'
@@ -57,7 +59,33 @@ function RequireAuth({ children }) {
   return children
 }
 
+/**
+ * A recovery link that landed on the wrong path.
+ *
+ * Supabase drops the path when it falls back to Site URL, so the link
+ * arrives at "/" with the token still in the fragment. Without this
+ * the person is quietly signed in and shown the dashboard, having
+ * asked to change their password. Move them to the reset screen and
+ * keep the fragment, which is what carries the session.
+ */
+function useRecoveryRescue() {
+  const [rescued, setRescued] = useState(false)
+
+  useEffect(() => {
+    if (isStrandedRecoveryLink()) {
+      window.location.replace(`/auth/reset${window.location.hash}`)
+      setRescued(true)
+    }
+  }, [])
+
+  return rescued
+}
+
 export default function App() {
+  // Runs before anything renders a route, so the dashboard never
+  // flashes up in place of the password form.
+  if (useRecoveryRescue()) return <Loading />
+
   return (
     <Routes>
       {/* Public, no login, outside the app shell entirely. */}

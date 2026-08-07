@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
+import { consumeAuthLink, landedOnLocalhost } from '../lib/authLink'
 import { errorMessage } from '../lib/errorMessage'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../components/ui'
@@ -9,9 +9,11 @@ import { Button, Card, ErrorText, Field, Input } from '../components/ui'
 /**
  * Where the reset link lands.
  *
- * The link carries a short-lived session in the URL fragment. If it has
- * expired, this says so and offers a new one rather than showing a form
- * that will fail on submit.
+ * It used to wait 800ms, call getSession(), and blame every failure on
+ * the link having expired. That is wrong often enough to matter: the
+ * commonest failure is not expiry at all, it is the link coming back
+ * to the wrong origin because Supabase's Site URL was never set — and
+ * "ask for a new one" sends you round that loop forever.
  */
 export default function ResetPassword() {
   const { t } = useI18n()
@@ -19,16 +21,21 @@ export default function ResetPassword() {
   const navigate = useNavigate()
 
   const [ready, setReady] = useState(null)
+  const [failure, setFailure] = useState(null)
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      const { data } = await supabase.auth.getSession()
-      setReady(Boolean(data?.session))
-    }, 800)
-    return () => clearTimeout(timer)
+    let cancelled = false
+    consumeAuthLink().then(({ session, failure: why }) => {
+      if (cancelled) return
+      setReady(Boolean(session))
+      setFailure(session ? null : why)
+    })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   async function submit(event) {
@@ -36,12 +43,20 @@ export default function ResetPassword() {
     setBusy(true)
     setError('')
 
-    const { error: failure } = await updatePassword(password)
-    if (failure) setError(errorMessage(failure, t))
+    const { error: why } = await updatePassword(password)
+    if (why) setError(errorMessage(why, t))
     else navigate('/', { replace: true })
 
     setBusy(false)
   }
+
+  // The tell-tale: an emailed link that lands on localhost was not
+  // expired, it was redirected to the project's default Site URL.
+  // Saying "expired" here would send them round the loop again.
+  // Only when GoTrue offered no reason of its own. An otp_expired
+  // link opened during local dev is expired, not misrouted.
+  const misrouted =
+    ready === false && failure?.code === 'no_session' && landedOnLocalhost()
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg p-6">
@@ -53,10 +68,25 @@ export default function ResetPassword() {
             <p className="mt-3 text-sm text-text-secondary">{t('common.loading')}</p>
           )}
 
-          {ready === false && (
+          {misrouted && (
+            <>
+              <p className="mt-3 text-sm text-warning">{t('auth.misroutedTitle')}</p>
+              <p className="mt-2 text-sm text-text-secondary">{t('auth.misroutedBody')}</p>
+            </>
+          )}
+
+          {ready === false && !misrouted && (
             <>
               <p className="mt-3 text-sm text-text-secondary">{t('auth.linkDeadBody')}</p>
-              <a href="/forgot-password" className="mt-4 inline-block text-sm text-accent hover:underline">
+              {failure?.description && (
+                <p className="mt-2 text-xs text-text-secondary" dir="ltr">
+                  {failure.description}
+                </p>
+              )}
+              <a
+                href="/forgot-password"
+                className="mt-4 inline-block text-sm text-accent hover:underline"
+              >
                 {t('auth.sendResetLink')}
               </a>
             </>
