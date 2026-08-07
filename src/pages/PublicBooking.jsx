@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchBookingPage, fetchSlots, submitBooking, uploadAnswerFile } from '../lib/publicBooking'
 import { COUNTRIES } from '../data/countries'
+import { publicErrorMessage } from '../lib/errorMessage'
 import { usePageTitle } from '../lib/usePageTitle'
 
 /**
@@ -152,7 +153,7 @@ export default function PublicBooking() {
       navigate(`/booking/${result.token}`)
     } catch (failure) {
       // A clash here means someone took the slot first — refresh what is left.
-      setError(failure.message)
+      setError(publicErrorMessage(failure, rtl))
       const from = new Date()
       const to = new Date()
       to.setDate(to.getDate() + (page.settings?.maximum_days_ahead ?? 60))

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchBookingStatus, uploadAnswerFile, uploadReceipt } from '../lib/publicBooking'
+import { publicErrorMessage } from '../lib/errorMessage'
 import { usePageTitle } from '../lib/usePageTitle'
 
 /**
@@ -10,6 +11,11 @@ import { usePageTitle } from '../lib/usePageTitle'
  * There is no payment gateway. The client transfers manually, uploads a
  * photo of the receipt, and the designer confirms it by hand — that
  * confirmation is the only thing that makes the booking confirmed.
+ *
+ * Renders in the studio's language, like the booking page it follows.
+ * It used to be hardcoded to English with dir="ltr", so a client who
+ * booked in Arabic landed here and found the page had switched language
+ * under them.
  */
 export default function BookingConfirmation() {
   const { token } = useParams()
@@ -39,12 +45,16 @@ export default function BookingConfirmation() {
   // White-label reaches the tab too, not just the page.
   usePageTitle(booking?.studio?.name)
 
-  const rtl = false
+  const language = booking?.studio?.language === 'ar' ? 'ar' : 'en'
+  const rtl = language === 'ar'
+  const t = (ar, en) => (rtl ? ar : en)
   const tz = booking?.timezone ?? 'Africa/Cairo'
 
   const when = useMemo(() => {
     if (!booking?.slot_start) return ''
-    return new Intl.DateTimeFormat('en-GB', {
+    // Latin digits in Arabic too: a date is read back to a bank
+    // transfer reference and copied into a calendar.
+    return new Intl.DateTimeFormat(rtl ? 'ar-EG-u-nu-latn' : 'en-GB', {
       weekday: 'long',
       day: '2-digit',
       month: 'long',
@@ -54,16 +64,25 @@ export default function BookingConfirmation() {
       hour12: false,
       timeZone: tz,
     }).format(new Date(booking.slot_start))
-  }, [booking, tz])
+  }, [booking, tz, rtl])
 
   if (loading) return <div className="public-page p-10 text-sm">…</div>
 
   if (!booking) {
     return (
       <div className="public-page flex min-h-screen items-center justify-center p-10">
-        <p className="text-sm">We could not find that booking.</p>
+        <p className="text-sm">
+          {t('ما لقيناش الحجز ده.', 'We could not find that booking.')}
+        </p>
       </div>
     )
+  }
+
+  const STATUS_LABEL = {
+    pending:   t('في انتظار التأكيد', 'Awaiting confirmation'),
+    confirmed: t('مؤكَّد', 'Confirmed'),
+    cancelled: t('ملغي', 'Cancelled'),
+    completed: t('تم', 'Completed'),
   }
 
   const accent = booking.studio?.accent_color || '#0077B6'
@@ -79,7 +98,7 @@ export default function BookingConfirmation() {
       setUploaded(true)
       await load()
     } catch (failure) {
-      setError(failure.message)
+      setError(publicErrorMessage(failure, rtl))
     }
     setUploading(false)
   }
@@ -95,13 +114,18 @@ export default function BookingConfirmation() {
       await uploadAnswerFile(token, booking.upload_prefix, question.id, file)
       await load()
     } catch (failure) {
-      setAnswerError(failure.message)
+      setAnswerError(publicErrorMessage(failure, rtl))
     }
     setAnswerBusy(null)
   }
 
   return (
-    <div className="public-page" dir="ltr" style={{ '--pub-accent': accent }}>
+    <div
+      className="public-page"
+      dir={rtl ? 'rtl' : 'ltr'}
+      lang={language}
+      style={{ '--pub-accent': accent }}
+    >
       <div className="mx-auto max-w-xl px-5 py-10">
         <header className="mb-8 flex items-center gap-3">
           {booking.studio?.logo_url ? (
@@ -112,20 +136,24 @@ export default function BookingConfirmation() {
 
         <div className="pub-card p-5">
           <p className="text-sm font-medium" style={{ color: accent }}>
-            {booking.status === 'confirmed' ? 'Your booking is confirmed' : 'Your booking is reserved'}
+            {booking.status === 'confirmed'
+              ? t('حجزك مؤكَّد', 'Your booking is confirmed')
+              : t('حجزك محفوظ', 'Your booking is reserved')}
           </p>
-          <h2 className="mt-2 text-xl font-semibold">{booking.session?.label_en}</h2>
+          <h2 className="mt-2 text-xl font-semibold">
+            {rtl ? booking.session?.label_ar : booking.session?.label_en}
+          </h2>
           <p className="mt-1 text-sm">{when}</p>
-          <p className="pub-muted mt-1 text-xs">{tz}</p>
+          <p className="pub-muted mt-1 text-xs" dir="ltr">{tz}</p>
 
           <dl className="mt-4 border-t pt-4 text-sm" style={{ borderColor: 'var(--pub-border)' }}>
             <div className="flex justify-between py-1">
-              <dt className="pub-muted">Name</dt>
+              <dt className="pub-muted">{t('الاسم', 'Name')}</dt>
               <dd>{booking.client_name}</dd>
             </div>
             <div className="flex justify-between py-1">
-              <dt className="pub-muted">Status</dt>
-              <dd className="capitalize">{booking.status}</dd>
+              <dt className="pub-muted">{t('الحالة', 'Status')}</dt>
+              <dd>{STATUS_LABEL[booking.status] ?? booking.status}</dd>
             </div>
           </dl>
         </div>
@@ -133,23 +161,31 @@ export default function BookingConfirmation() {
         {/* ---------- Files the booking form asked for but never got ---------- */}
         {(booking.pending_files ?? []).length > 0 && (
           <div className="pub-card mt-4 p-5">
-            <h3 className="text-sm font-semibold">Still needed</h3>
+            <h3 className="text-sm font-semibold">{t('ناقص', 'Still needed')}</h3>
             <p className="pub-muted mt-1 text-xs">
-              These files did not upload with your booking. Your booking is safe — please attach
-              them here.
+              {t(
+                'الملفات دي ما اترفعتش مع حجزك. حجزك سليم — ارفعها من هنا.',
+                'These files did not upload with your booking. Your booking is safe — please attach them here.'
+              )}
             </p>
 
             <div className="mt-4 space-y-4">
               {booking.pending_files.map((question) => (
                 <div key={question.id}>
-                  <p className="mb-1 text-sm">{question.label_en || question.label_ar}</p>
+                  <p className="mb-1 text-sm">
+                    {(rtl ? question.label_ar : question.label_en) ||
+                      question.label_en ||
+                      question.label_ar}
+                  </p>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"
                     disabled={answerBusy === question.id}
                     onChange={(event) => handleAnswerFile(question, event)}
                   />
-                  {answerBusy === question.id && <p className="mt-1 text-xs">Uploading…</p>}
+                  {answerBusy === question.id && (
+                    <p className="mt-1 text-xs">{t('جاري الرفع…', 'Uploading…')}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -165,19 +201,23 @@ export default function BookingConfirmation() {
         {/* ---------- Invoice and receipt: no gateway anywhere ---------- */}
         {booking.invoice ? (
           <div className="pub-card mt-4 p-5">
-            <h3 className="text-sm font-semibold">Payment</h3>
-            <p className="mt-1 text-2xl font-semibold">
+            <h3 className="text-sm font-semibold">{t('الدفع', 'Payment')}</h3>
+            <p className="mt-1 text-2xl font-semibold" dir="ltr">
               {booking.invoice.amount} {booking.invoice.currency}
             </p>
             <p className="pub-muted mt-2 text-xs">
-              Transfer the amount using the details the studio sent you, then upload a photo of the
-              transfer receipt here. The studio confirms it manually — nothing is charged
-              automatically and no card details are ever collected.
+              {t(
+                'حوّل المبلغ بالبيانات اللي بعتها لك الاستوديو، وبعدين ارفع صورة إيصال التحويل هنا. الاستوديو بيأكّده بنفسه — مفيش أي خصم تلقائي ومفيش بيانات كارت بتتاخد أبداً.',
+                'Transfer the amount using the details the studio sent you, then upload a photo of the transfer receipt here. The studio confirms it manually — nothing is charged automatically and no card details are ever collected.'
+              )}
             </p>
 
             {booking.receipt_uploaded || uploaded ? (
               <p className="mt-4 text-sm" style={{ color: '#22C55E' }}>
-                Receipt received. The studio will confirm it shortly.
+                {t(
+                  'وصلنا الإيصال. الاستوديو هيأكّده قريب.',
+                  'Receipt received. The studio will confirm it shortly.'
+                )}
               </p>
             ) : (
               <div className="mt-4">
@@ -188,8 +228,10 @@ export default function BookingConfirmation() {
                   onChange={handleUpload}
                   disabled={uploading}
                 />
-                <p className="pub-muted mt-2 text-xs">JPG, PNG or PDF, up to 5MB.</p>
-                {uploading && <p className="mt-2 text-xs">Uploading…</p>}
+                <p className="pub-muted mt-2 text-xs">
+                  {t('JPG أو PNG أو PDF، وحتى ٥ ميجابايت.', 'JPG, PNG or PDF, up to 5MB.')}
+                </p>
+                {uploading && <p className="mt-2 text-xs">{t('جاري الرفع…', 'Uploading…')}</p>}
                 {error && (
                   <p className="mt-2 text-xs" style={{ color: '#e11d3c' }}>
                     {error}
@@ -200,7 +242,10 @@ export default function BookingConfirmation() {
           </div>
         ) : (
           <p className="pub-muted mt-4 text-sm">
-            The studio will send you an invoice for this consultation shortly.
+            {t(
+              'الاستوديو هيبعت لك فاتورة الاستشارة دي قريب.',
+              'The studio will send you an invoice for this consultation shortly.'
+            )}
           </p>
         )}
 

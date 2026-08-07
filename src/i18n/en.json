@@ -603,8 +603,11 @@
     "saved": "Saved, and the reminders are updated."
   },
   "errors": {
-    "signUpMailBlocked": "Signup is waiting on a confirmation email, and the mail service refused to send one (rate limit). This product never sends email, so \"Confirm email\" should be turned off in the Supabase settings.",
+    "signUpMailBlocked": "Signup is waiting on a confirmation email and the mail service refused to send it. That is a setup problem on our side, not yours — please tell us and we will fix it.",
     "generic": "Something went wrong. Try again, and tell us via the feedback button if it keeps happening.",
+    "signUp": "We could not create the account. Try again, and tell us if it keeps happening.",
+    "signIn": "We could not sign you in. Try again, and tell us if it keeps happening.",
+    "upload": "That file could not be uploaded. Check its size and type, then try again.",
     "emailNotConfirmed": "This account is not activated yet. Open the confirmation link in your email.",
     "badCredentials": "That email or password is not right.",
     "emailTaken": "An account with that email already exists. Try signing in.",

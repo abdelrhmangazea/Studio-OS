@@ -6,6 +6,7 @@ import {
   submitDecision,
   uploadPortalReceipt,
 } from '../lib/publicPortal'
+import { publicErrorMessage } from '../lib/errorMessage'
 import { usePageTitle } from '../lib/usePageTitle'
 
 /**
@@ -105,7 +106,7 @@ export default function Portal() {
       }
       await load()
     } catch (failure) {
-      setError(failure.message)
+      setError(publicErrorMessage(failure, rtl))
     }
     setBusy(false)
   }
@@ -119,7 +120,7 @@ export default function Portal() {
       await uploadPortalReceipt(token, data.upload_prefix, file)
       await load()
     } catch (failure) {
-      setError(failure.message)
+      setError(publicErrorMessage(failure, rtl))
     }
     setReceiptBusy(false)
   }
