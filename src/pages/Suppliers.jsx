@@ -25,6 +25,7 @@ import {
   SidePanel,
   Textarea,
 } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 const BLANK = {
   name: '',
@@ -50,6 +51,7 @@ const BLANK = {
  * one-star supplier, and the list never sorts them as though it were.
  */
 export default function Suppliers() {
+  useFeatureUse('suppliers')
   const { t, language } = useI18n()
   const [suppliers, setSuppliers] = useState([])
   const [loading, setLoading] = useState(true)

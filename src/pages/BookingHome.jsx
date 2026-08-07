@@ -3,6 +3,7 @@ import { useI18n } from '../i18n'
 import { Tabs } from '../components/ui'
 import Bookings from './Bookings'
 import BookingSetup from './BookingSetup'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Bookings and Booking Setup share one sidebar item.
@@ -12,6 +13,7 @@ import BookingSetup from './BookingSetup'
  * the settings that produce them live behind the same entry.
  */
 export default function BookingHome() {
+  useFeatureUse('booking_setup')
   const { t } = useI18n()
   const [tab, setTab] = useState('inbox')
 

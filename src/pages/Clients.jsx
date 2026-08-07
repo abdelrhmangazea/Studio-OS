@@ -7,6 +7,7 @@ import { formatDate } from '../lib/format'
 import { listLabel, useLists } from '../lib/useLists'
 import { useI18n } from '../i18n'
 import { Badge, EmptyState, Input, PageTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Clients are the same rows as leads, with is_client = true. Shown as
@@ -14,6 +15,7 @@ import { Badge, EmptyState, Input, PageTitle, Select } from '../components/ui'
  * time, not scanned in bulk.
  */
 export default function Clients() {
+  useFeatureUse('clients')
   const { t, language } = useI18n()
   const { statuses, loading: listsLoading } = useLists()
   const navigate = useNavigate()

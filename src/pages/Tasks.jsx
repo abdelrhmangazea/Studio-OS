@@ -7,6 +7,7 @@ import { fullName } from '../lib/contacts'
 import { formatDate } from '../lib/format'
 import { useI18n } from '../i18n'
 import { Button, Card, EmptyState, Field, Input, PageTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Tasks, in three groups: Overdue, Today, Upcoming.
@@ -16,6 +17,7 @@ import { Button, Card, EmptyState, Field, Input, PageTitle, Select } from '../co
  * view until it is actually done.
  */
 export default function Tasks() {
+  useFeatureUse('tasks')
   const { t, language } = useI18n()
   const [tasks, setTasks] = useState([])
   const [contacts, setContacts] = useState([])

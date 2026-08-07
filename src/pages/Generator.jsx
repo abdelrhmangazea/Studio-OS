@@ -36,6 +36,7 @@ import {
   Select,
   WarningText,
 } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * The generator.
@@ -45,6 +46,7 @@ import {
  * see there is exactly what gets exported and saved.
  */
 export default function Generator() {
+  useFeatureUse('document_generator')
   const { key, contactId } = useParams()
   const [searchParams] = useSearchParams()
   const projectId = searchParams.get('project')

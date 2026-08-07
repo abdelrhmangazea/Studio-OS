@@ -6,6 +6,7 @@ import { formatDate } from '../lib/format'
 import { useI18n } from '../i18n'
 import NewProjectPanel from '../components/project/NewProjectPanel'
 import { Badge, Button, EmptyState, PageTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Two tabs: Active and Delivered.
@@ -15,6 +16,7 @@ import { Badge, Button, EmptyState, PageTitle, Select } from '../components/ui'
  * on against the contact.
  */
 export default function Projects() {
+  useFeatureUse('projects')
   const { t, language } = useI18n()
   const navigate = useNavigate()
 

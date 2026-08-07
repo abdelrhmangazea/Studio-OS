@@ -20,6 +20,7 @@ import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import PrepSheet from '../components/booking/PrepSheet'
 import { Badge, Button, Card, EmptyState, ErrorText, Field, Input, PageTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 const STATUS_COLOR = {
   pending: 'var(--warning)',
@@ -36,6 +37,7 @@ const STATUS_COLOR = {
  * automatically and no gateway is involved anywhere.
  */
 export default function Bookings() {
+  useFeatureUse('bookings_inbox')
   const { t, language } = useI18n()
   const { settings, profile } = useAuth()
   const navigate = useNavigate()

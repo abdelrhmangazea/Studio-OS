@@ -14,6 +14,7 @@ import TemplateEditor from '../components/templates/TemplateEditor'
 import ChecklistEditor from '../components/templates/ChecklistEditor'
 import ContactPicker from '../components/templates/ContactPicker'
 import { Badge, Button, Card, EmptyState, Modal, PageTitle } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * The template library.
@@ -22,6 +23,7 @@ import { Badge, Button, Card, EmptyState, Modal, PageTitle } from '../components
  * its Arabic and English versions side by side.
  */
 export default function Templates() {
+  useFeatureUse('templates')
   const { t, language } = useI18n()
   const navigate = useNavigate()
 

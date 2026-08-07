@@ -26,6 +26,7 @@ import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import Suppliers from './pages/Suppliers'
 import Reports from './pages/Reports'
+import Admin from './pages/Admin'
 
 function Loading() {
   const { t } = useI18n()
@@ -105,6 +106,11 @@ export default function App() {
         <Route path="/suppliers" element={<Suppliers />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/settings" element={<Settings />} />
+
+        {/* Internal. Not linked from the sidebar. The database refuses
+            it to anyone not in platform_admins, so the route being
+            reachable is not what keeps it closed. */}
+        <Route path="/admin" element={<Admin />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

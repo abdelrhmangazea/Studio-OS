@@ -4,6 +4,7 @@ import { formatDate } from '../../lib/format'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, Select } from '../ui'
+import { useFeatureUse } from '../../lib/useFeatureUse'
 
 /**
  * Hours on this project.
@@ -12,6 +13,7 @@ import { Button, Card, ErrorText, Field, Input, Select } from '../ui'
  * designer types and 90 is what survives without rounding.
  */
 export default function TimeLogCard({ project, definitions }) {
+  useFeatureUse('time_log')
   const { t, language } = useI18n()
   const { profile } = useAuth()
 

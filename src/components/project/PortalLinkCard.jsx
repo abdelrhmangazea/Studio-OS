@@ -9,6 +9,7 @@ import {
 } from '../../lib/portal'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../ui'
+import { useFeatureUse } from '../../lib/useFeatureUse'
 
 /**
  * The portal link, and the revision budget that goes with it.
@@ -18,6 +19,7 @@ import { Button, Card, ErrorText, Field, Input } from '../ui'
  * transaction, so two working links can never exist at once.
  */
 export default function PortalLinkCard({ project, changeRequests }) {
+  useFeatureUse('client_portal')
   const { t } = useI18n()
   const [link, setLink] = useState(null)
   const [revisions, setRevisions] = useState(null)

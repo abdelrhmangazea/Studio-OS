@@ -2,6 +2,7 @@ import { useAuth } from '../lib/AuthContext'
 import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
 import GlobalSearch from './GlobalSearch'
+import BetaBadge from './BetaBadge'
 import { Button } from './ui'
 
 export default function TopBar() {
@@ -15,6 +16,7 @@ export default function TopBar() {
         <span className="whitespace-nowrap text-sm text-text">
           {profile?.name || session?.user?.email}
         </span>
+        <BetaBadge />
         <GlobalSearch />
       </div>
 

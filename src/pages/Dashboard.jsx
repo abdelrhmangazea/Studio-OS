@@ -15,6 +15,7 @@ import ProgressRing from '../components/project/ProgressRing'
 import InsightCard from '../components/dashboard/InsightCard'
 import ReminderRow from '../components/dashboard/ReminderRow'
 import { Badge, Button, Card, EmptyState, PageTitle } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * The dashboard, and the screen the app opens on.
@@ -24,6 +25,7 @@ import { Badge, Button, Card, EmptyState, PageTitle } from '../components/ui'
  * including the five insight numbers, each of which opens its own list.
  */
 export default function Dashboard() {
+  useFeatureUse('dashboard')
   const { t, language } = useI18n()
 
   const [tasks, setTasks] = useState([])

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import TopBar from './TopBar'
+import FeedbackButton from './FeedbackButton'
 import { useAuth } from '../lib/AuthContext'
 
 export default function AppShell() {
@@ -16,6 +17,9 @@ export default function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      {/* On every signed-in screen, always in the same corner. */}
+      <FeedbackButton />
     </div>
   )
 }

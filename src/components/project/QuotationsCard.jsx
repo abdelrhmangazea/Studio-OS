@@ -12,6 +12,7 @@ import { formatDate } from '../../lib/format'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Badge, Button, Card, ErrorText, Field, Input, Select } from '../ui'
+import { useFeatureUse } from '../../lib/useFeatureUse'
 
 const STATUS_COLOR = {
   requested: 'var(--muted)',
@@ -28,6 +29,7 @@ const STATUS_COLOR = {
  * not always the one you accept.
  */
 export default function QuotationsCard({ project }) {
+  useFeatureUse('quotations')
   const { t, language } = useI18n()
   const { settings } = useAuth()
 

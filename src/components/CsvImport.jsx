@@ -6,6 +6,7 @@ import { digitsOnly, isValidEmail, validatePhone } from '../lib/phone'
 import { listLabel } from '../lib/useLists'
 import { useI18n } from '../i18n'
 import { Button, ErrorText, Modal, Select } from './ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * CSV import: choose a file, map the columns, preview, import.
@@ -85,6 +86,7 @@ function resolveCountry(raw) {
 }
 
 export default function CsvImport({ open, onClose, onImported, statuses, sources }) {
+  useFeatureUse('csv_import')
   const { t, language } = useI18n()
 
   const [step, setStep] = useState(1)

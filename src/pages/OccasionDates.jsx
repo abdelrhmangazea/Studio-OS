@@ -7,6 +7,7 @@ import {
 } from '../lib/reminders'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input, SectionTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * This year's occasion dates, typed in by hand.
@@ -19,6 +20,7 @@ import { Button, Card, ErrorText, Field, Input, SectionTitle, Select } from '../
  * New Year is fixed on 1 January and is not asked for.
  */
 export default function OccasionDates() {
+  useFeatureUse('occasion_dates')
   const { t } = useI18n()
   const thisYear = new Date().getFullYear()
 

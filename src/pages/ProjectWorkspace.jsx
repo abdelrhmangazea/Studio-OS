@@ -25,6 +25,7 @@ import FeeCalculator from '../components/project/FeeCalculator'
 import QuotationsCard from '../components/project/QuotationsCard'
 import TimeLogCard from '../components/project/TimeLogCard'
 import { Badge, Button, Card, EmptyState, Field, Input, Select, Textarea } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * The project workspace — the most important screen in the product.
@@ -34,6 +35,7 @@ import { Badge, Button, Card, EmptyState, Field, Input, Select, Textarea } from 
  * reads out of stage_definitions.
  */
 export default function ProjectWorkspace() {
+  useFeatureUse('project_workspace')
   const { id } = useParams()
   const { t, language } = useI18n()
   const navigate = useNavigate()

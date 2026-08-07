@@ -6,6 +6,7 @@ import { listLabel } from '../lib/useLists'
 import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import { Button, Card, Field, Input, PageTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Reports.
@@ -62,6 +63,7 @@ function download(name, rows) {
 }
 
 export default function Reports() {
+  useFeatureUse('reports')
   const { t, language } = useI18n()
   const { settings } = useAuth()
 

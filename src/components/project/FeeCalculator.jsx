@@ -11,6 +11,7 @@ import { formatDate } from '../../lib/format'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, Select } from '../ui'
+import { useFeatureUse } from '../../lib/useFeatureUse'
 
 const COMPLEXITY = ['simple', 'standard', 'complex']
 
@@ -26,6 +27,7 @@ const COMPLEXITY = ['simple', 'standard', 'complex']
  * is a total you will discount the moment they push back.
  */
 export default function FeeCalculator({ project, onApplied }) {
+  useFeatureUse('fee_calculator')
   const { t, language } = useI18n()
   const { settings } = useAuth()
 

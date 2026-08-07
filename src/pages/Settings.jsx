@@ -21,6 +21,7 @@ import {
   Select,
   SectionTitle,
 } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Studio profile, preferences, occasion dates, lists, templates, team.
@@ -30,6 +31,7 @@ import {
  */
 
 export default function Settings() {
+  useFeatureUse('settings')
   const { workspace, settings, profile, isOwner, refresh } = useAuth()
   const { theme, language, setTheme, setLanguage } = usePrefs()
   const { t } = useI18n()

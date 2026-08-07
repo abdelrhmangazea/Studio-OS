@@ -8,6 +8,7 @@ import LeadsKanban from './LeadsKanban'
 import AddLeadPanel from '../components/AddLeadPanel'
 import CsvImport from '../components/CsvImport'
 import { Button, EmptyState, PageTitle, Select } from '../components/ui'
+import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * Leads: two views of the same rows.
@@ -16,6 +17,7 @@ import { Button, EmptyState, PageTitle, Select } from '../components/ui'
  * moves it out of both views and into Clients, without copying anything.
  */
 export default function Leads() {
+  useFeatureUse('leads')
   const { t, language } = useI18n()
   const { statuses, sources, loading: listsLoading } = useLists()
 
