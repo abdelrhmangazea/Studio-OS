@@ -14,6 +14,20 @@ export async function mySubscription() {
   return data
 }
 
+/**
+ * The plans, for anybody — including a visitor with no account.
+ *
+ * Goes through a SECURITY DEFINER function rather than the table,
+ * because the table is authenticated-only and adding an anon policy
+ * would break "zero anon policies on any table". Returns a fixed set
+ * of columns, so processor price ids never reach a browser.
+ */
+export async function publicPlans() {
+  const { data, error } = await supabase.rpc('public_plans')
+  if (error) throw error
+  return data ?? []
+}
+
 export async function listPlans() {
   const { data, error } = await supabase
     .from('plans')

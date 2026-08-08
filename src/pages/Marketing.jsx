@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { copy } from '../marketing/copy'
-import { listPlans, yearlyPrice } from '../lib/subscription'
+import { publicPlans, yearlyPrice } from '../lib/subscription'
 
 /**
  * The public site at the root of the domain.
@@ -63,7 +63,7 @@ export default function Marketing() {
   }, [lang, rtl, t])
 
   useEffect(() => {
-    listPlans().then(setPlans).catch(() => setPlans([]))
+    publicPlans().then(setPlans).catch(() => setPlans([]))
   }, [])
 
   return (
@@ -242,16 +242,20 @@ export default function Marketing() {
                   reconciled with the processor it says so rather than
                   showing a number nobody has confirmed. */}
               <p className="mt-2 text-3xl font-semibold" dir="ltr">
-                {Number(p.price_monthly) === 0
+                {/* The free plan is free. Everything else shows a
+                    number ONLY once it has been reconciled with the
+                    processor — a placeholder of 0 must never read as
+                    "this tier costs nothing". */}
+                {p.key === 'free'
                   ? t.pricing.free
                   : p.is_live
                     ? `${p.currency} ${p.price_monthly}`
                     : t.pricing.soon}
-                {Number(p.price_monthly) > 0 && p.is_live && (
+                {p.key !== 'free' && p.is_live && (
                   <span className="text-sm text-text-secondary">{t.pricing.month}</span>
                 )}
               </p>
-              {Number(p.price_monthly) > 0 && p.is_live && (
+              {p.key !== 'free' && p.is_live && (
                 <p className="mt-1 text-xs text-text-secondary" dir="ltr">
                   {p.currency} {yearlyPrice(p)}/year
                 </p>
