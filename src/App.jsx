@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './lib/AuthContext'
 import { isStrandedRecoveryLink } from './lib/authLink'
@@ -6,31 +6,42 @@ import { useI18n } from './i18n'
 import AppShell from './components/AppShell'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import Onboarding from './pages/Onboarding'
-import Settings from './pages/Settings'
-import Leads from './pages/Leads'
-import Clients from './pages/Clients'
-import Contact from './pages/Contact'
-import Templates from './pages/Templates'
-import Projects from './pages/Projects'
-import ProjectWorkspace from './pages/ProjectWorkspace'
-import Generator from './pages/Generator'
-import BookingHome from './pages/BookingHome'
-import PublicBooking from './pages/PublicBooking'
-import BookingConfirmation from './pages/BookingConfirmation'
-import Portal from './pages/Portal'
 import AuthCallback from './pages/AuthCallback'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
-import Dashboard from './pages/Dashboard'
-import Tasks from './pages/Tasks'
-import Suppliers from './pages/Suppliers'
-import Reports from './pages/Reports'
-import Admin from './pages/Admin'
-import Help from './pages/Help'
 import AcceptInvite from './pages/AcceptInvite'
+import Marketing from './pages/Marketing'
+
+/**
+ * Everything behind the front door is loaded on demand.
+ *
+ * The marketing site is the first thing most people ever load, and
+ * most of them arrive from Instagram on a phone. Without this it
+ * pulled the entire application with it — the document generator,
+ * the PDF and Word pipelines, the whole app — before showing a word
+ * of the headline.
+ */
+const Settings = lazy(() => import('./pages/Settings'))
+const Leads = lazy(() => import('./pages/Leads'))
+const Clients = lazy(() => import('./pages/Clients'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Templates = lazy(() => import('./pages/Templates'))
+const Projects = lazy(() => import('./pages/Projects'))
+const ProjectWorkspace = lazy(() => import('./pages/ProjectWorkspace'))
+const Generator = lazy(() => import('./pages/Generator'))
+const BookingHome = lazy(() => import('./pages/BookingHome'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Tasks = lazy(() => import('./pages/Tasks'))
+const Suppliers = lazy(() => import('./pages/Suppliers'))
+const Reports = lazy(() => import('./pages/Reports'))
+const Admin = lazy(() => import('./pages/Admin'))
+const Help = lazy(() => import('./pages/Help'))
+const Onboarding = lazy(() => import('./pages/Onboarding'))
+const Portal = lazy(() => import('./pages/Portal'))
+const PublicBooking = lazy(() => import('./pages/PublicBooking'))
+const BookingConfirmation = lazy(() => import('./pages/BookingConfirmation'))
 
 function Loading() {
   const { t } = useI18n()
@@ -83,13 +94,25 @@ function useRecoveryRescue() {
   return rescued
 }
 
+/** Marketing for visitors, dashboard for studios. */
+function RootRoute() {
+  const { session, loading } = useAuth()
+  if (loading) return <Loading />
+  return session ? <Navigate to="/dashboard" replace /> : <Marketing />
+}
+
 export default function App() {
   // Runs before anything renders a route, so the dashboard never
   // flashes up in place of the password form.
   if (useRecoveryRescue()) return <Loading />
 
   return (
+    <Suspense fallback={<Loading />}>
     <Routes>
+      {/* The public site owns the root. A signed-in studio never sees
+          it — RootRoute sends them to their dashboard instead. */}
+      <Route path="/" element={<RootRoute />} />
+
       {/* Public, no login, outside the app shell entirely. */}
       <Route path="/book/:slug" element={<PublicBooking />} />
       <Route path="/booking/:token" element={<BookingConfirmation />} />
@@ -126,7 +149,6 @@ export default function App() {
           </RequireStudio>
         }
       >
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leads" element={<Leads />} />
         <Route path="/clients" element={<Clients />} />
@@ -150,5 +172,6 @@ export default function App() {
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </Suspense>
   )
 }

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /portal/
+Disallow: /booking/
+Disallow: /invite/
+Disallow: /auth/
+Disallow: /admin
+Sitemap: https://interiorstudioos.com/sitemap.xml
