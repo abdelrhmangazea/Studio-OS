@@ -79,10 +79,55 @@ union all
 --    tables it was approved for. is_platform_admin() must not appear
 --    in a policy on anything else.
 select '5. platform admin reach',
-       case when count(*) filter (where tablename not in ('feedback', 'feature_usage')) = 0
-            then 'PASS — feedback and feature_usage only'
+       case when count(*) filter (where tablename not in ('feedback', 'feature_usage', 'plans', 'subscriptions', 'promo_codes', 'promo_redemptions')) = 0
+            then 'PASS — feedback and billing tables only'
             else 'FAIL — also on: ' || string_agg(tablename, ', ')
-                 filter (where tablename not in ('feedback', 'feature_usage')) end
+                 filter (where tablename not in ('feedback', 'feature_usage', 'plans', 'subscriptions', 'promo_codes', 'promo_redemptions')) end
 from pg_policies
 where schemaname = 'public'
-  and (coalesce(qual, '') || coalesce(with_check, '')) like '%is_platform_admin%';
+  and (coalesce(qual, '') || coalesce(with_check, '')) like '%is_platform_admin%'
+union all
+
+-- 6. Every write policy on workspace data requires can_write(), so a
+--    viewer cannot write through the API.
+select '6. write policies guarded',
+       format('%s of %s carry can_write()',
+         count(*) filter (where (coalesce(qual,'') || coalesce(with_check,'')) like '%can_write%'),
+         count(*))
+from pg_policies
+where schemaname = 'public' and cmd in ('INSERT','UPDATE','DELETE')
+  and tablename not in ('profiles','feedback','plans','subscriptions',
+                        'promo_codes','promo_redemptions','workspaces')
+
+union all
+
+-- 7. RLS is not enough on its own: SECURITY DEFINER functions bypass
+--    it entirely, so the trigger has to be on every workspace table.
+select '7. assert_can_write triggers',
+       case when count(*) >= 32 then 'PASS — ' || count(*) || ' tables'
+            else 'FAIL — only ' || count(*) end
+from pg_trigger where tgname = 'assert_can_write' and not tgisinternal
+
+union all
+
+-- 8. A member must not read a child row belonging to a project they
+--    cannot see.
+--
+--    NOTE ON THE PATTERN: Postgres normalises a policy expression when
+--    it stores it — "public.projects" comes back as "projects", and it
+--    inserts newlines. An earlier version of this check looked for
+--    "from public.projects" and reported 0 of 16 while the scoping was
+--    provably working. A check that cries wolf gets ignored, which is
+--    worse than not having it.
+select '8. child tables member-scoped',
+  case when count(*) filter (where not (qual ilike '%is_owner()%'
+         and (qual ilike '%FROM projects%' or qual ilike '%FROM contacts%'))) = 0
+       then 'PASS — all 16 scoped'
+       else 'FAIL — unscoped: ' || string_agg(tablename, ', ')
+            filter (where not (qual ilike '%is_owner()%'
+                   and (qual ilike '%FROM projects%' or qual ilike '%FROM contacts%'))) end
+from pg_policies
+where schemaname = 'public' and cmd = 'SELECT'
+  and tablename in ('approvals','bookings','checklist_items','fee_calculations','files',
+                    'generated_documents','invoices','notes','portal_links','project_stages',
+                    'project_suppliers','quotations','reminders','revisions','tasks','time_logs');
