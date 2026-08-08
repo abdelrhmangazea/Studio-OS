@@ -11,6 +11,7 @@ import TeamSettings from '../components/TeamSettings'
 import LegalSettings from '../components/settings/LegalSettings'
 import PricingSettings from '../components/settings/PricingSettings'
 import SupplierCategories from '../components/settings/SupplierCategories'
+import DataSettings from '../components/settings/DataSettings'
 import {
   Button,
   Card,
@@ -333,6 +334,9 @@ export default function Settings() {
           product, so a page about a plan would have nothing true to
           say. Removed rather than left as a promise. */}
       <TeamSettings />
+
+      {/* ---------- Your data: the bin, a copy, and the way out ---------- */}
+      <DataSettings />
     </div>
   )
 }

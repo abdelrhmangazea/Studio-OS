@@ -925,5 +925,37 @@
     "markRead": "Mark read",
     "close": "Close",
     "reply": "Reply"
+  },
+  "data": {
+    "bin": "Recently deleted",
+    "binHelp": "Deleted clients and projects wait here for 30 days before they are destroyed. Restore anything you did not mean to remove.",
+    "binEmpty": "Nothing deleted.",
+    "unnamed": "(no name)",
+    "deletedOn": "Deleted {date}",
+    "withProjects": "{count} projects went with it",
+    "daysLeft": "{days} days left",
+    "withClient": "Comes back with its client",
+    "restore": "Restore",
+    "export": "Export my data",
+    "exportHelp": "Every row this studio owns, in one file. Yours to keep, and nothing here is locked in.",
+    "exportButton": "Download everything",
+    "exporting": "Collecting…",
+    "exportDone": "Downloaded. {rows} rows across {tables} tables.",
+    "exportPartial": "These tables could not be read and are missing from the file: {tables}",
+    "close": "Close this account",
+    "closeHelp": "Deletes the studio and everything in it. There is no undo and no 30-day wait.",
+    "closeButton": "Close account…",
+    "ownerOnly": "Only the studio owner can close the account.",
+    "closeWarning": "This deletes every client, project, document, invoice and booking in this studio, permanently and immediately. Export your data first if you want a copy.",
+    "closeFiles": "Uploaded files in storage are not removed by this — tell us if you need them erased too.",
+    "closeConfirmLabel": "Type the studio name to confirm: {name}",
+    "closeConfirm": "Delete everything"
+  },
+  "trash": {
+    "confirmTitle": "Delete {name}?",
+    "confirmBody": "This moves it to Recently deleted. Nothing is destroyed today.",
+    "confirmProjects": "{count} projects go with it, and come back with it.",
+    "confirmWhere": "You have 30 days to restore it from Settings → Recently deleted.",
+    "confirmDelete": "Move to bin"
   }
 }

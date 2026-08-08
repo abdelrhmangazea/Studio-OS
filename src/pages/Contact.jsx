@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fullName, getContact } from '../lib/contacts'
+import { listProjectsForContact } from '../lib/projects'
 import { formatDate } from '../lib/format'
 import { useLists } from '../lib/useLists'
 import { useI18n } from '../i18n'
@@ -11,6 +12,7 @@ import TasksTab from '../components/contact/TasksTab'
 import PaymentsTab from '../components/contact/PaymentsTab'
 import ProjectsTab from '../components/contact/ProjectsTab'
 import { Badge, Card, EmptyState, Tabs } from '../components/ui'
+import DeleteButton from '../components/DeleteButton'
 
 /**
  * One contact, whether they are still a lead or already a client.
@@ -27,12 +29,16 @@ export default function Contact() {
   const [contact, setContact] = useState(null)
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('details')
+  // Only the count, and only so the delete dialog can say how many
+  // projects go into the bin alongside the client.
+  const [projectCount, setProjectCount] = useState(0)
 
   useEffect(() => {
     getContact(id).then((data) => {
       setContact(data)
       setLoading(false)
     })
+    listProjectsForContact(id).then((rows) => setProjectCount(rows.length))
   }, [id])
 
   if (loading || listsLoading) {
@@ -85,9 +91,18 @@ export default function Contact() {
 
         {/* No convert button: a contact becomes a client by being moved
             onto a won status, on the Details tab or from the Leads views. */}
-        {!contact.is_client && (
-          <p className="max-w-xs text-xs text-text-secondary">{t('contact.convertHint')}</p>
-        )}
+        <div className="flex flex-col items-end gap-2">
+          {!contact.is_client && (
+            <p className="max-w-xs text-xs text-text-secondary">{t('contact.convertHint')}</p>
+          )}
+          <DeleteButton
+            kind="contact"
+            id={contact.id}
+            name={fullName(contact)}
+            projectCount={projectCount}
+            onDeleted={() => navigate(contact.is_client ? '/clients' : '/leads')}
+          />
+        </div>
       </div>
 
       {/* ---------- Tabs ---------- */}
