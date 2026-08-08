@@ -4,7 +4,7 @@ import { listTasks, setTaskDone, today } from '../../lib/tasks'
 import { listReminders, setReminderDone } from '../../lib/reminders'
 import { formatDate } from '../../lib/format'
 import { useI18n } from '../../i18n'
-import { Card, EmptyState } from '../ui'
+import { Card, EmptyState, Loadable } from '../ui'
 
 /**
  * Everything outstanding against one contact — their tasks and their
@@ -19,19 +19,35 @@ export default function TasksTab({ contact }) {
   const [tasks, setTasks] = useState([])
   const [reminders, setReminders] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
 
   async function load() {
-    const [taskRows, reminderRows] = await Promise.all([listTasks(), listReminders()])
-    setTasks(taskRows.filter((row) => row.contact_id === contact.id))
-    setReminders(reminderRows.filter((row) => row.contact_id === contact.id))
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const [taskRows, reminderRows] = await Promise.all([listTasks(), listReminders()])
+      setTasks(taskRows.filter((row) => row.contact_id === contact.id))
+      setReminders(reminderRows.filter((row) => row.contact_id === contact.id))
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     load()
   }, [contact.id])
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   if (tasks.length === 0 && reminders.length === 0) {
     return <EmptyState>{t('contact.noTasks')}</EmptyState>

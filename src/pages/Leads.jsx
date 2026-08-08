@@ -7,7 +7,7 @@ import LeadsTable from './LeadsTable'
 import LeadsKanban from './LeadsKanban'
 import AddLeadPanel from '../components/AddLeadPanel'
 import CsvImport from '../components/CsvImport'
-import { Button, EmptyState, PageTitle, Select } from '../components/ui'
+import { Button, EmptyState, Loadable, PageTitle, Select } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -23,6 +23,7 @@ export default function Leads() {
 
   const [contacts, setContacts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [view, setView] = useState('table')
   const [statusFilter, setStatusFilter] = useState('')
   const [sourceFilter, setSourceFilter] = useState('')
@@ -31,9 +32,19 @@ export default function Leads() {
   const [justConverted, setJustConverted] = useState(null)
 
   async function load() {
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
     setLoading(true)
-    setContacts(await listContacts(false))
-    setLoading(false)
+    setLoadFailure(null)
+    try {
+      setContacts(await listContacts(false))
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -68,6 +79,12 @@ export default function Leads() {
 
   if (loading || listsLoading) {
     return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  }
+
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
   }
 
   return (

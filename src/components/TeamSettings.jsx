@@ -4,6 +4,7 @@ import { useAuth } from '../lib/AuthContext'
 import { formatDate } from '../lib/format'
 import { useI18n } from '../i18n'
 import { Badge, Card, ErrorText, SectionTitle, Select } from './ui'
+import { errorMessage } from '../lib/errorMessage'
 
 const ROLES = ['owner', 'member', 'viewer']
 
@@ -27,12 +28,16 @@ export default function TeamSettings() {
   const isOwner = profile?.role === 'owner'
 
   async function load() {
-    const { data } = await supabase
-      .from('profiles')
-      .select('id, name, email, role, active, created_at')
-      .order('created_at')
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, name, email, role, active, created_at')
+        .order('created_at')
 
-    setMembers(data ?? [])
+      setMembers(data ?? [])
+    } catch (caught) {
+      setError(errorMessage(caught, t))
+    }
   }
 
   useEffect(() => {
@@ -42,7 +47,7 @@ export default function TeamSettings() {
   async function setRole(id, role) {
     setError('')
     const { error: failure } = await supabase.from('profiles').update({ role }).eq('id', id)
-    if (failure) setError(failure.message)
+    if (failure) setError(errorMessage(failure, t))
     load()
   }
 

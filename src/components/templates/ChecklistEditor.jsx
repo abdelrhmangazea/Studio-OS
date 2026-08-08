@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { updateTemplate } from '../../lib/templates'
 import { useI18n } from '../../i18n'
 import { Button, ErrorText, Input, SidePanel, Textarea, WarningText } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Edits a checklist template.
@@ -109,7 +110,7 @@ export default function ChecklistEditor({ open, pair, onClose, onSaved }) {
       await onSaved()
       onClose()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
   }

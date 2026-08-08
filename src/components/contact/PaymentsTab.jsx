@@ -5,7 +5,7 @@ import { confirmReceipt, receiptUrl } from '../../lib/booking'
 import { formatDate, formatDateTime } from '../../lib/format'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
-import { Badge, Button, Card, EmptyState } from '../ui'
+import { Badge, Button, Card, EmptyState, Loadable } from '../ui'
 
 /**
  * Every invoice raised against this contact, and the receipts against
@@ -22,16 +22,28 @@ export default function PaymentsTab({ contact }) {
   const [invoices, setInvoices] = useState([])
   const [links, setLinks] = useState({})
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
 
   async function load() {
-    const { data } = await supabase
-      .from('invoices')
-      .select('*, receipts(*), project:projects(id, code, name)')
-      .eq('contact_id', contact.id)
-      .order('created_at', { ascending: false })
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const { data } = await supabase
+        .from('invoices')
+        .select('*, receipts(*), project:projects(id, code, name)')
+        .eq('contact_id', contact.id)
+        .order('created_at', { ascending: false })
 
-    setInvoices(data ?? [])
-    setLoading(false)
+      setInvoices(data ?? [])
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -51,7 +63,11 @@ export default function PaymentsTab({ contact }) {
     })()
   }, [invoices])
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
   if (invoices.length === 0) return <EmptyState>{t('contact.noPayments')}</EmptyState>
 
   const paid = invoices

@@ -37,6 +37,7 @@ import {
   WarningText,
 } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
+import { errorMessage } from '../lib/errorMessage'
 
 /**
  * The generator.
@@ -220,7 +221,7 @@ export default function Generator() {
       })
       setSaved(true)
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 

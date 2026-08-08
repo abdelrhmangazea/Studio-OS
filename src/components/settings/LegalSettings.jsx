@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, SectionTitle, Select } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 const ID_TYPES = ['national_id', 'passport', 'residency', 'commercial_registration']
 const ROLES = ['lead_designer', 'senior_assistant', 'design_manager', 'office_designer', 'office_admin']
@@ -88,7 +89,7 @@ export default function LegalSettings() {
       })
       .eq('workspace_id', workspace.id)
 
-    if (failure) setError(failure.message)
+    if (failure) setError(errorMessage(failure, t))
     else {
       await refresh()
       setSaved(true)

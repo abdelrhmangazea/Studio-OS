@@ -8,6 +8,7 @@ import {
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input, SectionTitle, Select } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
+import { errorMessage } from '../lib/errorMessage'
 
 /**
  * This year's occasion dates, typed in by hand.
@@ -52,7 +53,7 @@ export default function OccasionDates() {
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
   }

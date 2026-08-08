@@ -3,6 +3,7 @@ import { createProject } from '../../lib/projects'
 import { fullName, listContacts } from '../../lib/contacts'
 import { useI18n } from '../../i18n'
 import { Button, ErrorText, Field, Input, SidePanel, Select, Textarea } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Creating a project is the one action available from outside a client
@@ -49,7 +50,7 @@ export default function NewProjectPanel({ open, onClose, onCreated, fixedContact
       onCreated(await createProject(form))
       onClose()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
   }

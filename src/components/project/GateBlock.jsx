@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { completeStage, overrideGate, setGateFlag } from '../../lib/projects'
 import { useI18n } from '../../i18n'
 import { Button, ErrorText, Modal, Textarea, WarningText } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Block 4 of 4 — the gate.
@@ -30,7 +31,7 @@ export default function GateBlock({ definition, stage, onChanged }) {
       await action()
       await onChanged()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
   }

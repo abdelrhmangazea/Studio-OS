@@ -19,8 +19,9 @@ import { formatDateTime } from '../lib/format'
 import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import PrepSheet from '../components/booking/PrepSheet'
-import { Badge, Button, Card, EmptyState, ErrorText, Field, Input, PageTitle, Select } from '../components/ui'
+import { Badge, Button, Card, EmptyState, ErrorText, Field, Input, Loadable, PageTitle, Select } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
+import { errorMessage } from '../lib/errorMessage'
 
 const STATUS_COLOR = {
   pending: 'var(--warning)',
@@ -46,6 +47,7 @@ export default function Bookings() {
   const [selected, setSelected] = useState(null)
   const [invoices, setInvoices] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [prepOpen, setPrepOpen] = useState(false)
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
@@ -59,9 +61,20 @@ export default function Bookings() {
   const [timezone, setTimezone] = useState(null)
 
   async function load() {
-    setBookings(await listBookings())
-    setTimezone((await getBookingSettings())?.timezone ?? null)
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      setBookings(await listBookings())
+      setTimezone((await getBookingSettings())?.timezone ?? null)
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -86,7 +99,7 @@ export default function Bookings() {
       })
       setFiled(created)
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
 
     if (!full.seen_at) {
@@ -119,7 +132,11 @@ export default function Bookings() {
     })()
   }, [selected])
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   return (
     <div>
@@ -340,7 +357,7 @@ export default function Bookings() {
                             })
                             setInvoices(await listInvoices(selected.id))
                           } catch (failure) {
-                            setError(failure.message)
+                            setError(errorMessage(failure, t))
                           }
                         }}
                       >

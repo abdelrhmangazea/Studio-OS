@@ -10,6 +10,7 @@ import {
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../ui'
 import { useFeatureUse } from '../../lib/useFeatureUse'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * The portal link, and the revision budget that goes with it.
@@ -29,8 +30,12 @@ export default function PortalLinkCard({ project, changeRequests }) {
   const [confirmRegenerate, setConfirmRegenerate] = useState(false)
 
   async function load() {
-    setLink(await getPortalLink(project.id))
-    setRevisions(await getRevisions(project.id))
+    try {
+      setLink(await getPortalLink(project.id))
+      setRevisions(await getRevisions(project.id))
+    } catch (caught) {
+      setError(errorMessage(caught, t))
+    }
   }
 
   useEffect(() => {
@@ -44,7 +49,7 @@ export default function PortalLinkCard({ project, changeRequests }) {
       await action()
       await load()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
     setConfirmRegenerate(false)

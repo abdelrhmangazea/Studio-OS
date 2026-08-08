@@ -14,7 +14,7 @@ import { useI18n } from '../i18n'
 import ProgressRing from '../components/project/ProgressRing'
 import InsightCard from '../components/dashboard/InsightCard'
 import ReminderRow from '../components/dashboard/ReminderRow'
-import { Badge, Button, Card, EmptyState, PageTitle } from '../components/ui'
+import { Badge, Button, Card, EmptyState, Loadable, PageTitle } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -39,39 +39,51 @@ export default function Dashboard() {
   const [insights, setInsights] = useState(null)
   const [occasionGaps, setOccasionGaps] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
 
   async function load() {
-    const [
-      taskRows, reminderRows, bookingRows, projectRows,
-      contactRows, templateRows, insightData,
-    ] = await Promise.all([
-      listTasks(),
-      listReminders(),
-      listBookings(),
-      listProjects(),
-      listContacts(),
-      listTemplates(),
-      loadInsights(),
-    ])
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const [
+        taskRows, reminderRows, bookingRows, projectRows,
+        contactRows, templateRows, insightData,
+      ] = await Promise.all([
+        listTasks(),
+        listReminders(),
+        listBookings(),
+        listProjects(),
+        listContacts(),
+        listTemplates(),
+        loadInsights(),
+      ])
 
-    // Progress rings need each active project's stages and checklist.
-    const active = projectRows.filter((p) => !p.is_archived)
-    const [stageRows, itemRows] = await Promise.all([
-      Promise.all(active.map((p) => listProjectStages(p.id))).then((r) => r.flat()),
-      Promise.all(active.map((p) => listChecklistItems(p.id))).then((r) => r.flat()),
-    ])
+      // Progress rings need each active project's stages and checklist.
+      const active = projectRows.filter((p) => !p.is_archived)
+      const [stageRows, itemRows] = await Promise.all([
+        Promise.all(active.map((p) => listProjectStages(p.id))).then((r) => r.flat()),
+        Promise.all(active.map((p) => listChecklistItems(p.id))).then((r) => r.flat()),
+      ])
 
-    setTasks(taskRows)
-    setReminders(reminderRows)
-    setBookings(bookingRows)
-    setProjects(projectRows)
-    setStages(stageRows)
-    setItems(itemRows)
-    setContacts(contactRows)
-    setPairs(pairByKey(templateRows))
-    setInsights(insightData)
-    setOccasionGaps(datelessOccasions(reminderRows))
-    setLoading(false)
+      setTasks(taskRows)
+      setReminders(reminderRows)
+      setBookings(bookingRows)
+      setProjects(projectRows)
+      setStages(stageRows)
+      setItems(itemRows)
+      setContacts(contactRows)
+      setPairs(pairByKey(templateRows))
+      setInsights(insightData)
+      setOccasionGaps(datelessOccasions(reminderRows))
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -138,7 +150,11 @@ export default function Dashboard() {
       })
   }, [projects, contacts, stages, items])
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   return (
     <div>

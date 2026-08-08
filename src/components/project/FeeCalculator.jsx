@@ -12,6 +12,7 @@ import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, Select } from '../ui'
 import { useFeatureUse } from '../../lib/useFeatureUse'
+import { errorMessage } from '../../lib/errorMessage'
 
 const COMPLEXITY = ['simple', 'standard', 'complex']
 
@@ -89,7 +90,7 @@ export default function FeeCalculator({ project, onApplied }) {
       setHistory(await listCalculations(project.id))
       setNote(t('pricing.saved'))
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 
@@ -108,7 +109,7 @@ export default function FeeCalculator({ project, onApplied }) {
       setNote(t('pricing.pushed', { phases: phases.join(' · ') }))
       onApplied?.()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 

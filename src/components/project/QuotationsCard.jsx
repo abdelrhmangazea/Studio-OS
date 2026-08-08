@@ -13,6 +13,7 @@ import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Badge, Button, Card, ErrorText, Field, Input, Select } from '../ui'
 import { useFeatureUse } from '../../lib/useFeatureUse'
+import { errorMessage } from '../../lib/errorMessage'
 
 const STATUS_COLOR = {
   requested: 'var(--muted)',
@@ -40,8 +41,12 @@ export default function QuotationsCard({ project }) {
   const [error, setError] = useState('')
 
   async function load() {
-    setRows(await listQuotations(project.id))
-    setSuppliers((await listSuppliers()).filter((s) => s.active))
+    try {
+      setRows(await listQuotations(project.id))
+      setSuppliers((await listSuppliers()).filter((s) => s.active))
+    } catch (caught) {
+      setError(errorMessage(caught, t))
+    }
   }
 
   useEffect(() => {
@@ -67,7 +72,7 @@ export default function QuotationsCard({ project }) {
       setAdding(false)
       load()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 

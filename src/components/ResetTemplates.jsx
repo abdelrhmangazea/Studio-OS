@@ -3,6 +3,7 @@ import { resetSystemTemplates } from '../lib/templates'
 import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, SectionTitle } from './ui'
+import { errorMessage } from '../lib/errorMessage'
 
 /**
  * Settings → Reset templates to defaults.
@@ -26,7 +27,7 @@ export default function ResetTemplates() {
     try {
       setRestored(await resetSystemTemplates())
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
   }

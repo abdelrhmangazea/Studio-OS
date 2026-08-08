@@ -4,7 +4,7 @@ import { STATE_COLOR, listProjectsForContact, listStageDefinitions } from '../..
 import { formatDate } from '../../lib/format'
 import { useI18n } from '../../i18n'
 import NewProjectPanel from '../project/NewProjectPanel'
-import { Badge, Button, EmptyState } from '../ui'
+import { Badge, Button, EmptyState, Loadable } from '../ui'
 
 /** Every project belonging to this contact. Replaces the placeholder. */
 export default function ProjectsTab({ contact }) {
@@ -14,16 +14,28 @@ export default function ProjectsTab({ contact }) {
   const [projects, setProjects] = useState([])
   const [definitions, setDefinitions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [creating, setCreating] = useState(false)
 
   async function load() {
-    const [rows, defs] = await Promise.all([
-      listProjectsForContact(contact.id),
-      listStageDefinitions(),
-    ])
-    setProjects(rows)
-    setDefinitions(defs)
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const [rows, defs] = await Promise.all([
+        listProjectsForContact(contact.id),
+        listStageDefinitions(),
+      ])
+      setProjects(rows)
+      setDefinitions(defs)
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -35,7 +47,11 @@ export default function ProjectsTab({ contact }) {
     return (language === 'ar' ? d?.title_ar : d?.title_en) ?? key
   }
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   return (
     <div className="max-w-3xl">

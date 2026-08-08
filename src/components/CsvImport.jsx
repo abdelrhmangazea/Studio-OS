@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { COUNTRIES } from '../data/countries'
 import { digitsOnly, isValidEmail, validatePhone } from '../lib/phone'
 import { listLabel } from '../lib/useLists'
+import { errorMessage } from '../lib/errorMessage'
 import { useI18n } from '../i18n'
 import { Button, ErrorText, Modal, Select } from './ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
@@ -211,7 +212,7 @@ export default function CsvImport({ open, onClose, onImported, statuses, sources
     const { error: insertError } = await supabase.from('contacts').insert(ready)
 
     if (insertError) {
-      setError(insertError.message)
+      setError(errorMessage(insertError, t))
       setBusy(false)
       return
     }

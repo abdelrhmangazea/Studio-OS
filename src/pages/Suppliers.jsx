@@ -12,20 +12,9 @@ import { listSupplierCategories } from '../lib/quotations'
 import { listLabel } from '../lib/useLists'
 import { formatPhone } from '../lib/phone'
 import { useI18n } from '../i18n'
-import {
-  Badge,
-  Button,
-  Card,
-  EmptyState,
-  ErrorText,
-  Field,
-  Input,
-  PageTitle,
-  Select,
-  SidePanel,
-  Textarea,
-} from '../components/ui'
+import { Badge, Button, Card, EmptyState, ErrorText, Field, Input, Loadable, PageTitle, Select, SidePanel, Textarea } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
+import { errorMessage } from '../lib/errorMessage'
 
 const BLANK = {
   name: '',
@@ -55,6 +44,7 @@ export default function Suppliers() {
   const { t, language } = useI18n()
   const [suppliers, setSuppliers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [search, setSearch] = useState('')
   const [showInactive, setShowInactive] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -65,9 +55,20 @@ export default function Suppliers() {
   const [filter, setFilter] = useState('')
 
   async function load() {
-    setSuppliers(await listSuppliers())
-    setCategories(await listSupplierCategories())
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      setSuppliers(await listSuppliers())
+      setCategories(await listSupplierCategories())
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -127,11 +128,15 @@ export default function Suppliers() {
       setEditing(null)
       load()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   return (
     <div>

@@ -3,6 +3,7 @@ import { deleteFile, fileUrl, listFiles, setFilePublished, uploadFile } from '..
 import { formatDate } from '../../lib/format'
 import { useI18n } from '../../i18n'
 import { Button } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Block 5 of 5 — the files this stage produced.
@@ -22,8 +23,12 @@ export default function FilesBlock({ project, stageKey, onChanged }) {
   const [links, setLinks] = useState({})
 
   async function load() {
-    const rows = await listFiles(project.id)
-    setFiles(rows.filter((row) => row.stage_key === stageKey))
+    try {
+      const rows = await listFiles(project.id)
+      setFiles(rows.filter((row) => row.stage_key === stageKey))
+    } catch (caught) {
+      setError(errorMessage(caught, t))
+    }
   }
 
   useEffect(() => {
@@ -50,7 +55,7 @@ export default function FilesBlock({ project, stageKey, onChanged }) {
       await load()
       onChanged?.()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
     event.target.value = ''

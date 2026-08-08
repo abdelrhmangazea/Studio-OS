@@ -6,7 +6,7 @@ import { listProjects } from '../lib/projects'
 import { fullName } from '../lib/contacts'
 import { formatDate } from '../lib/format'
 import { useI18n } from '../i18n'
-import { Button, Card, EmptyState, Field, Input, PageTitle, Select } from '../components/ui'
+import { Button, Card, EmptyState, Field, Input, Loadable, PageTitle, Select } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -23,26 +23,42 @@ export default function Tasks() {
   const [contacts, setContacts] = useState([])
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [adding, setAdding] = useState(false)
   const [draft, setDraft] = useState({ title: '', due_date: today(), contact_id: '', project_id: '' })
 
   async function load() {
-    const [taskRows, contactRows, projectRows] = await Promise.all([
-      listTasks(),
-      listContacts(),
-      listProjects(),
-    ])
-    setTasks(taskRows)
-    setContacts(contactRows)
-    setProjects(projectRows)
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const [taskRows, contactRows, projectRows] = await Promise.all([
+        listTasks(),
+        listContacts(),
+        listProjects(),
+      ])
+      setTasks(taskRows)
+      setContacts(contactRows)
+      setProjects(projectRows)
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     load()
   }, [])
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   const groups = groupTasks(tasks)
 

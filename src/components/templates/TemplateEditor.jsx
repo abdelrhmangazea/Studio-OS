@@ -4,6 +4,7 @@ import { extractFields, splitFields } from '../../lib/mergeEngine'
 import { MERGE_FIELDS, NOT_YET_AVAILABLE } from '../../data/mergeFields'
 import { useI18n } from '../../i18n'
 import { Button, ErrorText, Field, Input, SidePanel, Textarea, WarningText } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Edits one language of a template.
@@ -77,7 +78,7 @@ export default function TemplateEditor({ open, row, template, language, onClose,
       }
       onClose()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
     setBusy(false)
   }

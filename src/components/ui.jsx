@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import { errorMessage } from '../lib/errorMessage'
 
 /**
  * The shared building blocks. Flat by design — no shadows, no gradients.
@@ -228,4 +229,35 @@ export function EmptyState({ children }) {
       <p className="text-sm text-text-secondary">{children}</p>
     </div>
   )
+}
+
+/**
+ * The three states every network-backed screen has: loading, failed,
+ * loaded. Failed is the one that used to be missing — a screen that
+ * could not reach the server showed a spinner forever.
+ *
+ * Retry is a button, not "reload the page". The person did nothing
+ * wrong and should not have to lose where they were.
+ */
+export function Loadable({ loading, failure, onRetry, children, t }) {
+  if (loading) {
+    return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  }
+
+  if (failure) {
+    return (
+      <div className="rounded border border-danger/40 p-6 text-center">
+        <p className="text-sm text-text">{errorMessage(failure, t)}</p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-3 rounded border border-border px-3 py-1.5 text-sm text-accent hover:bg-surface"
+        >
+          {t('errors.retry')}
+        </button>
+      </div>
+    )
+  }
+
+  return children
 }

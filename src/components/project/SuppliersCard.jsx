@@ -9,6 +9,7 @@ import {
 import { formatPhone } from '../../lib/phone'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, Select } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Who worked on this project.
@@ -27,12 +28,16 @@ export default function SuppliersCard({ project }) {
   const [error, setError] = useState('')
 
   async function load() {
-    const [attached, everyone] = await Promise.all([
-      listProjectSuppliers(project.id),
-      listSuppliers(),
-    ])
-    setRows(attached)
-    setAll(everyone.filter((s) => s.active))
+    try {
+      const [attached, everyone] = await Promise.all([
+        listProjectSuppliers(project.id),
+        listSuppliers(),
+      ])
+      setRows(attached)
+      setAll(everyone.filter((s) => s.active))
+    } catch (caught) {
+      setError(errorMessage(caught, t))
+    }
   }
 
   useEffect(() => {
@@ -50,7 +55,7 @@ export default function SuppliersCard({ project }) {
       setAdding(false)
       load()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 

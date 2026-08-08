@@ -13,7 +13,7 @@ import { useI18n } from '../i18n'
 import TemplateEditor from '../components/templates/TemplateEditor'
 import ChecklistEditor from '../components/templates/ChecklistEditor'
 import ContactPicker from '../components/templates/ContactPicker'
-import { Badge, Button, Card, EmptyState, Modal, PageTitle } from '../components/ui'
+import { Badge, Button, Card, EmptyState, Loadable, Modal, PageTitle } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -30,16 +30,28 @@ export default function Templates() {
   const [rows, setRows] = useState([])
   const [questionnaire, setQuestionnaire] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [editing, setEditing] = useState(null)
   const [previewing, setPreviewing] = useState(null)
   const [pickingFor, setPickingFor] = useState(null)
   const [editingChecklist, setEditingChecklist] = useState(null)
 
   async function load() {
-    const [templates, q] = await Promise.all([listTemplates(), getQuestionnaire()])
-    setRows(templates)
-    setQuestionnaire(q)
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const [templates, q] = await Promise.all([listTemplates(), getQuestionnaire()])
+      setRows(templates)
+      setQuestionnaire(q)
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -53,7 +65,11 @@ export default function Templates() {
     message: pairs.filter((p) => p.type === 'message'),
   }
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   return (
     <div>

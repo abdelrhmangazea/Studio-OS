@@ -4,6 +4,7 @@ import { useLists } from '../lib/useLists'
 import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Input, SectionTitle } from './ui'
+import { errorMessage } from '../lib/errorMessage'
 
 /**
  * Settings → Lists.
@@ -38,7 +39,7 @@ export default function ListsSettings() {
   async function run(action) {
     setError('')
     const { error: failure } = await action()
-    if (failure) setError(failure.message)
+    if (failure) setError(errorMessage(failure, t))
     await reload()
   }
 

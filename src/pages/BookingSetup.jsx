@@ -11,7 +11,8 @@ import {
 } from '../lib/booking'
 import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
-import { Button, Card, ErrorText, Field, Input, PageTitle, SectionTitle, Select } from '../components/ui'
+import { Button, Card, ErrorText, Field, Input, Loadable, PageTitle, SectionTitle, Select } from '../components/ui'
+import { errorMessage } from '../lib/errorMessage'
 
 const DAYS = [0, 1, 2, 3, 4, 5, 6]
 const MODES = ['zoom', 'onsite', 'office']
@@ -27,40 +28,56 @@ export default function BookingSetup() {
   const [questions, setQuestions] = useState([])
   const [blocked, setBlocked] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailure, setLoadFailure] = useState(null)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
 
   async function load() {
-    const [s, ty, q, bd] = await Promise.all([
-      getBookingSettings(),
-      listSessionTypes(),
-      listBookingQuestions(),
-      listBlockedDates(),
-    ])
-    setSettings(
-      s ?? {
-        availability: [],
-        session_duration_minutes: 60,
-        buffer_minutes: 15,
-        minimum_notice_hours: 24,
-        maximum_days_ahead: 60,
-        timezone: 'Africa/Cairo',
-        public_slug: '',
-        is_active: false,
-      }
-    )
-    setTypes(ty)
-    setQuestions(q)
-    setBlocked(bd)
-    setLoading(false)
+    // Reset both, or a successful retry leaves the old error
+    // sitting on screen underneath fresh data.
+    setLoading(true)
+    setLoadFailure(null)
+    try {
+      const [s, ty, q, bd] = await Promise.all([
+        getBookingSettings(),
+        listSessionTypes(),
+        listBookingQuestions(),
+        listBlockedDates(),
+      ])
+      setSettings(
+        s ?? {
+          availability: [],
+          session_duration_minutes: 60,
+          buffer_minutes: 15,
+          minimum_notice_hours: 24,
+          maximum_days_ahead: 60,
+          timezone: 'Africa/Cairo',
+          public_slug: '',
+          is_active: false,
+        }
+      )
+      setTypes(ty)
+      setQuestions(q)
+      setBlocked(bd)
+    } catch (caught) {
+      setLoadFailure(caught)
+    } finally {
+      // Always. A failed load must never leave the
+      // screen spinning with no way out.
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     load()
   }, [])
 
-  if (loading) return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+  if (loading || loadFailure) {
+    return (
+      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
+    )
+  }
 
   const publicUrl = `${window.location.origin}/book/${settings.public_slug || '…'}`
 
@@ -93,7 +110,7 @@ export default function BookingSetup() {
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 

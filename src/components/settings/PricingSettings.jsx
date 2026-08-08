@@ -6,6 +6,7 @@ import { formatDate } from '../../lib/format'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, SectionTitle, Select } from '../ui'
+import { errorMessage } from '../../lib/errorMessage'
 
 const SPACES = ['living', 'kitchen', 'bathroom', 'outdoor']
 const ROOMS = ['bedroom', 'living', 'kitchen', 'bathroom']
@@ -64,7 +65,7 @@ export default function PricingSettings() {
       .update({ pricing_config: config, default_pricing_method: method })
       .eq('workspace_id', workspace.id)
 
-    if (failure) setError(failure.message)
+    if (failure) setError(errorMessage(failure, t))
     else {
       await refresh()
       setSaved(true)

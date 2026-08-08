@@ -5,6 +5,7 @@ import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Button, Card, ErrorText, Field, Input, Select } from '../ui'
 import { useFeatureUse } from '../../lib/useFeatureUse'
+import { errorMessage } from '../../lib/errorMessage'
 
 /**
  * Hours on this project.
@@ -22,7 +23,11 @@ export default function TimeLogCard({ project, definitions }) {
   const [error, setError] = useState('')
 
   async function load() {
-    setLogs(await listTimeLogs(project.id))
+    try {
+      setLogs(await listTimeLogs(project.id))
+    } catch (caught) {
+      setError(errorMessage(caught, t))
+    }
   }
 
   useEffect(() => {
@@ -52,7 +57,7 @@ export default function TimeLogCard({ project, definitions }) {
       setDraft({ hours: '', stage_key: '', note: '' })
       load()
     } catch (failure) {
-      setError(failure.message)
+      setError(errorMessage(failure, t))
     }
   }
 
