@@ -22,6 +22,7 @@ export const NAV_ITEMS = [
   { to: '/booking-setup', key: 'nav.bookingSetup' },
   { to: '/suppliers', key: 'nav.suppliers' },
   { to: '/reports', key: 'nav.reports' },
+  { to: '/help', key: 'nav.help' },
   { to: '/settings', key: 'nav.settings' },
 ]
 

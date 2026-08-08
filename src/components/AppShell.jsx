@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 import FeedbackButton from './FeedbackButton'
+import Tour from './Tour'
 import { useAuth } from '../lib/AuthContext'
 
 export default function AppShell() {
@@ -20,6 +21,9 @@ export default function AppShell() {
 
       {/* On every signed-in screen, always in the same corner. */}
       <FeedbackButton />
+
+      {/* First run only, and skippable at every step. */}
+      <Tour />
     </div>
   )
 }

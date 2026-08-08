@@ -29,6 +29,7 @@ import Tasks from './pages/Tasks'
 import Suppliers from './pages/Suppliers'
 import Reports from './pages/Reports'
 import Admin from './pages/Admin'
+import Help from './pages/Help'
 
 function Loading() {
   const { t } = useI18n()
@@ -133,6 +134,7 @@ export default function App() {
         <Route path="/booking-setup" element={<BookingHome />} />
         <Route path="/suppliers" element={<Suppliers />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/help" element={<Help />} />
         <Route path="/settings" element={<Settings />} />
 
         {/* Internal. Not linked from the sidebar. The database refuses
