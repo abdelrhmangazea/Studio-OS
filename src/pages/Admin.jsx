@@ -5,6 +5,7 @@ import {
   adminUpdateFeedback,
   isPlatformAdmin,
 } from '../lib/feedback'
+import AccessCodes from '../components/settings/AccessCodes'
 import { errorMessage } from '../lib/errorMessage'
 import { formatDateTime } from '../lib/format'
 import { useI18n } from '../i18n'
@@ -124,6 +125,9 @@ export default function Admin() {
           </Card>
         ))}
       </div>
+
+      {/* ---------- Access codes and plans ---------- */}
+      <AccessCodes />
 
       {/* ---------- Item 19: what anyone actually opens ---------- */}
       <Card className="mb-6">

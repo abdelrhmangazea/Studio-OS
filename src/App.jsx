@@ -30,6 +30,7 @@ import Suppliers from './pages/Suppliers'
 import Reports from './pages/Reports'
 import Admin from './pages/Admin'
 import Help from './pages/Help'
+import AcceptInvite from './pages/AcceptInvite'
 
 function Loading() {
   const { t } = useI18n()
@@ -101,6 +102,10 @@ export default function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
+
+      {/* An invite link. Peeking does not consume it, so signing up
+          and coming back to the same link works. */}
+      <Route path="/invite/:token" element={<AcceptInvite />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />

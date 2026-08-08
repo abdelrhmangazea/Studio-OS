@@ -4,6 +4,7 @@ import { EMPTY_CONTACT, toContactRow, validateContact } from '../lib/contactForm
 import { conversionPatch } from '../lib/conversion'
 import { useI18n } from '../i18n'
 import ContactFields from './ContactFields'
+import PlanLimitNotice from './PlanLimitNotice'
 import { Button, ErrorText, SidePanel, WarningText } from './ui'
 
 export default function AddLeadPanel({ open, onClose, onCreated, statuses, sources }) {
@@ -57,7 +58,7 @@ export default function AddLeadPanel({ open, onClose, onCreated, statuses, sourc
       onCreated(created)
       onClose()
     } catch (error) {
-      setFailed(error.message)
+      setFailed(error)
     }
     setBusy(false)
   }
@@ -75,7 +76,9 @@ export default function AddLeadPanel({ open, onClose, onCreated, statuses, sourc
           <Button variant="ghost" onClick={onClose} disabled={busy}>
             {t('common.cancel')}
           </Button>
-          <ErrorText>{failed}</ErrorText>
+          {/* The panel stays mounted, so everything typed is still
+              here. The notice appears beside it, not instead of it. */}
+          <PlanLimitNotice failure={failed} />
         </>
       }
     >

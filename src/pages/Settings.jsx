@@ -12,6 +12,7 @@ import LegalSettings from '../components/settings/LegalSettings'
 import PricingSettings from '../components/settings/PricingSettings'
 import SupplierCategories from '../components/settings/SupplierCategories'
 import DataSettings from '../components/settings/DataSettings'
+import SubscriptionSettings from '../components/settings/SubscriptionSettings'
 import {
   Button,
   Card,
@@ -333,6 +334,8 @@ export default function Settings() {
           No Subscription section: there is no billing anywhere in this
           product, so a page about a plan would have nothing true to
           say. Removed rather than left as a promise. */}
+      <SubscriptionSettings />
+
       <TeamSettings />
 
       {/* ---------- Your data: the bin, a copy, and the way out ---------- */}

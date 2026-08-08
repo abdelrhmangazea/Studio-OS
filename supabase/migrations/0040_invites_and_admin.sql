@@ -1,0 +1,22 @@
+-- =============================================================
+-- Studio OS — invites, and the admin controls for plans.
+--
+-- AN INVITE LINK IS A CREDENTIAL, NOT A URL.
+--
+-- Same treatment as the portal token: 256 bits of cryptographic
+-- random, single use, seven days, revocable. Anyone holding it can
+-- join the workspace and read whatever is assigned to them, so it is
+-- exactly as sensitive as a password and the screen says so next to
+-- the copy button rather than in a help article.
+--
+-- It is a LINK because this product sends nothing on anyone's behalf,
+-- and that does not change for invites. The owner copies it and sends
+-- it themselves, exactly as they send everything else it writes.
+--
+-- Seats are checked when the invite is CREATED as well as when it is
+-- accepted. Handing out five links on a one-seat plan and letting
+-- four of them fail later is not a kindness.
+--
+-- Accepting is ONE conditional update, so two people opening a
+-- forwarded link at the same moment cannot both get in.
+-- =============================================================

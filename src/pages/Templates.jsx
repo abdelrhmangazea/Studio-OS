@@ -15,6 +15,7 @@ import ChecklistEditor from '../components/templates/ChecklistEditor'
 import ContactPicker from '../components/templates/ContactPicker'
 import { Badge, Button, Card, EmptyState, Loadable, Modal, PageTitle } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
+import { isTemplateLocked, myTemplateAccess } from '../lib/subscription'
 
 /**
  * The template library.
@@ -23,6 +24,7 @@ import { useFeatureUse } from '../lib/useFeatureUse'
  * its Arabic and English versions side by side.
  */
 export default function Templates() {
+  const [access, setAccess] = useState(null)
   useFeatureUse('templates')
   const { t, language } = useI18n()
   const navigate = useNavigate()
@@ -35,6 +37,13 @@ export default function Templates() {
   const [previewing, setPreviewing] = useState(null)
   const [pickingFor, setPickingFor] = useState(null)
   const [editingChecklist, setEditingChecklist] = useState(null)
+
+  // One call for the whole library. A locked template stays listed
+  // and stays previewable — one nobody can see does not exist to
+  // them, and cannot persuade them of anything.
+  useEffect(() => {
+    myTemplateAccess().then(setAccess).catch(() => setAccess(null))
+  }, [])
 
   async function load() {
     // Reset both, or a successful retry leaves the old error
@@ -90,13 +99,13 @@ export default function Templates() {
 
       <Section title={t('templates.documents')} empty={t('templates.documentsEmpty')} pairs={bySection.document}>
         {bySection.document.map((pair) => (
-          <Row key={pair.key} pair={pair} {...{ setEditing, setPreviewing, setPickingFor, load }} />
+          <Row key={pair.key} pair={pair} access={access} {...{ setEditing, setPreviewing, setPickingFor, load }} />
         ))}
       </Section>
 
       <Section title={t('templates.messages')} empty={t('templates.messagesEmpty')} pairs={bySection.message}>
         {bySection.message.map((pair) => (
-          <Row key={pair.key} pair={pair} {...{ setEditing, setPreviewing, setPickingFor, load }} />
+          <Row key={pair.key} pair={pair} access={access} {...{ setEditing, setPreviewing, setPickingFor, load }} />
         ))}
       </Section>
 
@@ -172,7 +181,11 @@ function Section({ title, empty, pairs, children }) {
   )
 }
 
-function Row({ pair, setEditing, setPreviewing, setPickingFor, load, onEditChecklist }) {
+function Row({ pair, access, setEditing, setPreviewing, setPickingFor, load, onEditChecklist }) {
+  // Locked means cannot generate and cannot export. It does NOT mean
+  // hidden, and it does not mean unreadable: preview is what tells
+  // somebody whether the thing is worth paying for.
+  const locked = isTemplateLocked(pair, access)
   const { t, language } = useI18n()
 
   const primary = pair[language] || pair.ar || pair.en
@@ -187,6 +200,7 @@ function Row({ pair, setEditing, setPreviewing, setPickingFor, load, onEditCheck
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-medium text-text">{primary?.title}</span>
             <Badge>{pair.is_system ? t('templates.system') : t('templates.custom')}</Badge>
+            {locked && <Badge color="var(--warning)">{t('plan.locked')}</Badge>}
             {!pair.active && <Badge color="#b7b7b7">{t('templates.inactive')}</Badge>}
           </div>
           {pair.stage && (

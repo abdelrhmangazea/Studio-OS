@@ -3,6 +3,7 @@ import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 import FeedbackButton from './FeedbackButton'
 import Tour from './Tour'
+import BetaExpiryBanner from './BetaExpiryBanner'
 import { useAuth } from '../lib/AuthContext'
 
 export default function AppShell() {
@@ -14,6 +15,7 @@ export default function AppShell() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
+        <BetaExpiryBanner />
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>

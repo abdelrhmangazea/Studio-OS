@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { createProject } from '../../lib/projects'
 import { fullName, listContacts } from '../../lib/contacts'
 import { useI18n } from '../../i18n'
+import PlanLimitNotice from '../PlanLimitNotice'
 import { Button, ErrorText, Field, Input, SidePanel, Select, Textarea } from '../ui'
 import { errorMessage } from '../../lib/errorMessage'
 
@@ -50,7 +51,7 @@ export default function NewProjectPanel({ open, onClose, onCreated, fixedContact
       onCreated(await createProject(form))
       onClose()
     } catch (failure) {
-      setError(errorMessage(failure, t))
+      setError(failure)
     }
     setBusy(false)
   }
@@ -70,7 +71,7 @@ export default function NewProjectPanel({ open, onClose, onCreated, fixedContact
           <Button variant="ghost" onClick={onClose}>
             {t('common.cancel')}
           </Button>
-          <ErrorText>{error}</ErrorText>
+          <PlanLimitNotice failure={error} />
         </>
       }
     >
