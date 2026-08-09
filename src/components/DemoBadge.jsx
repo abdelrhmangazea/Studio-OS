@@ -26,7 +26,7 @@ export default function DemoBadge({ on, className = '' }) {
     <span
       title={t('demo.tooltip')}
       className={
-        'inline-flex shrink-0 items-center rounded border border-border ' +
+        'inline-flex shrink-0 items-center rounded-card border border-separator ' +
         'px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ' +
         `text-text-secondary ${className}`
       }

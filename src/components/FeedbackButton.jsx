@@ -75,7 +75,7 @@ export default function FeedbackButton() {
           setOpen(true)
         }}
         title={t('feedback.title')}
-        className="fixed bottom-5 end-5 z-40 rounded-full border border-border bg-surface px-4 py-2 text-sm text-text shadow-lg hover:bg-bg"
+        className="fixed bottom-5 end-5 z-40 rounded-full border border-separator bg-surface px-4 py-2 text-sm text-text shadow-lg hover:bg-bg"
       >
         {t('feedback.button')}
       </button>
@@ -126,7 +126,7 @@ export default function FeedbackButton() {
                     className={`rounded border px-3 py-1.5 text-sm ${
                       kind === k
                         ? 'border-accent bg-accent/10 text-text'
-                        : 'border-border text-text-secondary hover:bg-surface'
+                        : 'border-separator text-text-secondary hover:bg-surface'
                     }`}
                   >
                     {t(`feedback.kind_${k}`)}
@@ -163,7 +163,7 @@ export default function FeedbackButton() {
             ) : mine.length === 0 ? (
               <p className="text-xs text-text-secondary">{t('feedback.noneYet')}</p>
             ) : (
-              <div className="max-h-48 space-y-2 overflow-y-auto border-t border-border pt-3">
+              <div className="max-h-48 space-y-2 overflow-y-auto border-t border-separator pt-3">
                 {mine.map((row) => (
                   <div key={row.id} className="text-xs">
                     <p className="text-text-secondary">

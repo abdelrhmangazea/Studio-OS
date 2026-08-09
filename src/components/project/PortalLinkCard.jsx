@@ -59,7 +59,7 @@ export default function PortalLinkCard({ project, changeRequests }) {
 
   return (
     <Card>
-      <h3 className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+      <h3 className="mb-1 t-section">
         {t('portal.title')}
       </h3>
       <p className="mb-3 text-xs text-text-secondary">{t('portal.help')}</p>
@@ -86,7 +86,7 @@ export default function PortalLinkCard({ project, changeRequests }) {
               href={url}
               target="_blank"
               rel="noreferrer"
-              className="rounded border border-border px-3 py-2 text-sm text-accent hover:underline"
+              className="rounded-card border border-separator px-3 py-2 text-sm text-accent hover:underline"
             >
               {t('portal.preview')}
             </a>
@@ -125,7 +125,7 @@ export default function PortalLinkCard({ project, changeRequests }) {
 
       {/* ---------- Revisions ---------- */}
       {revisions && (
-        <div className="mt-4 border-t border-border pt-4">
+        <div className="mt-4 border-t border-separator pt-4">
           <div className="flex flex-wrap items-end gap-3">
             <div className="w-32">
               <Field label={t('portal.freeAllowance')}>

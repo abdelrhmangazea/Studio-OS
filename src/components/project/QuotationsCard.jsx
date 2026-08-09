@@ -78,7 +78,7 @@ export default function QuotationsCard({ project }) {
 
   return (
     <Card>
-      <h3 className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+      <h3 className="mb-1 t-section">
         {t('quotations.title')}
       </h3>
       <p className="mb-3 text-xs text-text-secondary">{t('quotations.help')}</p>
@@ -88,7 +88,7 @@ export default function QuotationsCard({ project }) {
       ) : (
         <ul className="space-y-2">
           {rows.map((row) => (
-            <li key={row.id} className="rounded border border-border p-3">
+            <li key={row.id} className="rounded-card border border-separator p-3">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-sm text-text">
@@ -114,7 +114,7 @@ export default function QuotationsCard({ project }) {
                 </div>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-end gap-2 border-t border-border pt-3">
+              <div className="mt-3 flex flex-wrap items-end gap-2 border-t border-separator pt-3">
                 <div className="w-32">
                   <Field label={t('quotations.amount')}>
                     <Input
@@ -163,7 +163,7 @@ export default function QuotationsCard({ project }) {
       )}
 
       {adding ? (
-        <div className="mt-3 space-y-3 border-t border-border pt-3">
+        <div className="mt-3 space-y-3 border-t border-separator pt-3">
           <Field label={t('quotations.supplier')}>
             <Select
               value={draft.supplier_id}

@@ -57,7 +57,7 @@ export default function Settings() {
       currency: settings.currency || 'EGP',
       project_code_prefix: settings.project_code_prefix || 'IZ',
       default_language: settings.default_language || 'ar',
-      default_theme: settings.default_theme || 'dark',
+      default_theme: settings.default_theme || 'light',
       default_revision_allowance: settings.default_revision_allowance ?? 2,
     })
   }, [settings])
@@ -138,7 +138,7 @@ export default function Settings() {
               accept="image/*"
               onChange={handleLogo}
               disabled={!isOwner}
-              className="block w-full text-sm text-text-secondary file:me-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:text-white"
+              className="block w-full text-sm text-text-secondary file:me-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-2 file:text-[13px] file:text-on-accent"
             />
             {uploading && (
               <span className="mt-2 block text-xs text-text-secondary">
@@ -149,7 +149,7 @@ export default function Settings() {
               <img
                 src={form.logo_url}
                 alt=""
-                className="mt-3 h-16 rounded border border-border bg-bg object-contain p-2"
+                className="mt-3 h-16 rounded-card border border-separator bg-bg object-contain p-2"
               />
             )}
           </Field>
@@ -161,7 +161,7 @@ export default function Settings() {
                 value={form.accent_color}
                 onChange={(e) => update('accent_color', e.target.value)}
                 disabled={!isOwner}
-                className="h-10 w-14 cursor-pointer rounded border border-border bg-surface"
+                className="h-10 w-14 cursor-pointer rounded-card border border-separator bg-surface"
               />
               <Input
                 value={form.accent_color}

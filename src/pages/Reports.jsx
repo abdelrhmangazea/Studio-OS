@@ -142,7 +142,7 @@ export default function Reports() {
               <button
                 onClick={() => step.count > 0 && toggle(`funnel-${step.key}`)}
                 disabled={step.count === 0}
-                className="flex w-full flex-wrap items-baseline justify-between gap-3 rounded border border-border p-3 text-start disabled:cursor-default hover:bg-bg"
+                className="flex w-full flex-wrap items-baseline justify-between gap-3 rounded-card border border-separator p-3 text-start disabled:cursor-default hover:bg-bg"
               >
                 <span className="text-sm text-text">{t(`reports.funnel_${step.key}`)}</span>
                 <span className="flex items-baseline gap-3">
@@ -158,7 +158,7 @@ export default function Reports() {
               </button>
 
               {open === `funnel-${step.key}` && (
-                <ul className="mt-1 space-y-1 rounded border border-border p-3">
+                <ul className="mt-1 space-y-1 rounded-card border border-separator p-3">
                   {step.rows.slice(0, 60).map((row) => (
                     <li key={row.id} className="text-sm">
                       <Link
@@ -212,8 +212,8 @@ export default function Reports() {
         )}
 
         {data.revenue.byType.length > 0 && (
-          <div className="border-t border-border pt-3">
-            <p className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+          <div className="border-t border-separator pt-3">
+            <p className="mb-2 t-section">
               {t('reports.byType')}
             </p>
             <ul className="space-y-1">
@@ -249,7 +249,7 @@ export default function Reports() {
         ) : (
           <ul className="space-y-2">
             {data.profitability.map((p) => (
-              <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3">
+              <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-separator p-3">
                 <Link to={`/projects/${p.id}`} className="text-sm text-accent hover:underline">
                   <span className="font-mono" dir="ltr">{p.code}</span> {p.name}
                 </Link>
@@ -285,7 +285,7 @@ export default function Reports() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[520px] text-sm">
             <thead>
-              <tr className="text-start text-xs uppercase tracking-wide text-text-secondary">
+              <tr className="text-start t-section">
                 <th className="p-2 text-start">{t('reports.source')}</th>
                 <th className="p-2 text-start">{t('reports.funnel_leads')}</th>
                 <th className="p-2 text-start">{t('reports.funnel_consultations')}</th>
@@ -295,7 +295,7 @@ export default function Reports() {
             </thead>
             <tbody>
               {data.sources.map((s) => (
-                <tr key={s.id} className="border-t border-border">
+                <tr key={s.id} className="border-t border-separator">
                   <td className="p-2 text-text">{listLabel(s, language)}</td>
                   <td className="p-2 text-text-secondary">{s.leads}</td>
                   <td className="p-2 text-text-secondary">{s.consultations}</td>
@@ -315,7 +315,7 @@ function Header({ title, onExport }) {
   const { t } = useI18n()
   return (
     <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-      <h2 className="text-xs uppercase tracking-wide text-text-secondary">{title}</h2>
+      <h2 className="t-section">{title}</h2>
       <Button variant="secondary" className="px-2 py-1" onClick={onExport}>
         {t('reports.exportCsv')}
       </Button>

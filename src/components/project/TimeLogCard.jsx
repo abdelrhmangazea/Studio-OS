@@ -63,7 +63,7 @@ export default function TimeLogCard({ project, definitions }) {
 
   return (
     <Card>
-      <h3 className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+      <h3 className="mb-1 t-section">
         {t('time.title')}
       </h3>
       <p className="mb-3 text-xs text-text-secondary">{t('time.help')}</p>
@@ -83,7 +83,7 @@ export default function TimeLogCard({ project, definitions }) {
         </ul>
       )}
 
-      <div className="flex flex-wrap items-end gap-2 border-t border-border pt-3">
+      <div className="flex flex-wrap items-end gap-2 border-t border-separator pt-3">
         <div className="w-24">
           <Field label={t('time.hours')}>
             <Input type="number" step="0.25" value={draft.hours} onChange={(e) => setDraft({ ...draft, hours: e.target.value })} />
@@ -112,7 +112,7 @@ export default function TimeLogCard({ project, definitions }) {
       <ErrorText>{error}</ErrorText>
 
       {logs.length > 0 && (
-        <ul className="mt-4 space-y-1 border-t border-border pt-3">
+        <ul className="mt-4 space-y-1 border-t border-separator pt-3">
           {logs.slice(0, 12).map((log) => (
             <li key={log.id} className="flex flex-wrap items-center justify-between gap-2 text-sm">
               <span className="text-text">

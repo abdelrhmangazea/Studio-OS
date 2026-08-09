@@ -374,7 +374,7 @@ export default function Generator() {
           </div>
 
           {/* Always white with dark text: this is paper, not app chrome. */}
-          <div className="overflow-x-auto rounded border border-border bg-white p-8">
+          <div className="overflow-x-auto rounded-card border border-separator bg-paper text-paper-text p-8">
             <div
               ref={previewRef}
               contentEditable
@@ -409,7 +409,7 @@ export default function Generator() {
         <p className="mb-2 text-xs text-text-secondary">{t('generator.whatsappHelp')}</p>
         <pre
           dir={documentLanguage === 'ar' ? 'rtl' : 'ltr'}
-          className="whitespace-pre-wrap rounded border border-border bg-bg p-3 font-sans text-sm text-text"
+          className="whitespace-pre-wrap rounded-card border border-separator bg-bg p-3 font-sans text-sm text-text"
         >
           {htmlToWhatsappText(bodyHtml)}
         </pre>

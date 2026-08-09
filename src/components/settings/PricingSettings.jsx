@@ -159,7 +159,7 @@ export default function PricingSettings() {
       <ErrorText>{error}</ErrorText>
 
       {/* ---------- which methods earn their place ---------- */}
-      <div className="mt-6 border-t border-border pt-4">
+      <div className="mt-6 border-t border-separator pt-4">
         <h3 className="mb-1 text-sm font-medium text-text">{t('pricing.usageTitle')}</h3>
         <p className="mb-3 text-xs text-text-secondary">{t('pricing.usageHelp')}</p>
 

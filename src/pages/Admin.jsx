@@ -138,7 +138,7 @@ export default function Admin() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-start text-xs text-text-secondary">
+              <tr className="border-b border-separator text-start text-xs text-text-secondary">
                 <th className="p-2 text-start">{t('admin.feature')}</th>
                 <th className="p-2 text-start">{t('admin.uses')}</th>
                 <th className="p-2 text-start">{t('admin.studios')}</th>
@@ -147,7 +147,7 @@ export default function Admin() {
             </thead>
             <tbody>
               {overview.features.map((f) => (
-                <tr key={f.feature} className="border-b border-border">
+                <tr key={f.feature} className="border-b border-separator">
                   <td className="p-2 text-text">{f.feature}</td>
                   <td className="p-2 font-mono text-text" dir="ltr">{f.total}</td>
                   <td className="p-2 font-mono text-text" dir="ltr">{f.studios}</td>
@@ -166,7 +166,7 @@ export default function Admin() {
         <SectionTitle hint={t('admin.studiosHelp')}>{t('admin.studioList')}</SectionTitle>
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border text-xs text-text-secondary">
+            <tr className="border-b border-separator text-xs text-text-secondary">
               <th className="p-2 text-start">{t('admin.studio')}</th>
               <th className="p-2 text-start">{t('admin.contacts')}</th>
               <th className="p-2 text-start">{t('admin.projects')}</th>
@@ -175,7 +175,7 @@ export default function Admin() {
           </thead>
           <tbody>
             {(overview?.studios ?? []).map((s) => (
-              <tr key={s.id} className="border-b border-border">
+              <tr key={s.id} className="border-b border-separator">
                 <td className="p-2 text-text">{s.name}</td>
                 <td className="p-2 font-mono text-text" dir="ltr">{s.contacts}</td>
                 <td className="p-2 font-mono text-text" dir="ltr">{s.projects}</td>
@@ -206,7 +206,7 @@ export default function Admin() {
         ) : (
           <div className="space-y-3">
             {rows.map((row) => (
-              <div key={row.id} className="rounded border border-border p-3">
+              <div key={row.id} className="rounded-card border border-separator p-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge color={STATE_COLOR[row.state]}>{t(`feedback.state_${row.state}`)}</Badge>
                   <span className="text-xs text-text-secondary">

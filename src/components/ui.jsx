@@ -26,15 +26,19 @@ const fillsRow = (className) => (/(^|\s)w-\S/.test(className) ? '' : 'w-full ')
 
 export function Button({ variant = 'primary', className = '', ...props }) {
   const base =
-    'inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium ' +
+    'inline-flex items-center justify-center rounded-control px-4 py-2 text-[15px] font-medium ' +
     'transition-colors disabled:opacity-50 disabled:cursor-not-allowed ' +
     'focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg'
 
+  // text-on-accent / text-on-danger, never text-white. In dark mode the
+  // accent is #4aa8e0 and the danger is #ff453a — both light, saturated
+  // colours that white text cannot be read on. The token resolves to
+  // black there and white in light mode, so this cannot break again.
   const variants = {
-    primary: 'bg-accent text-white hover:opacity-90',
-    secondary: 'bg-surface text-text border border-border hover:border-accent',
+    primary: 'bg-accent text-on-accent hover:opacity-90',
+    secondary: 'bg-surface text-text border border-separator hover:border-accent',
     ghost: 'text-text-secondary hover:text-text',
-    danger: 'bg-danger text-white hover:opacity-90',
+    danger: 'bg-danger text-on-danger hover:opacity-90',
   }
 
   return <button className={`${base} ${variants[variant]} ${className}`} {...props} />
@@ -45,7 +49,7 @@ export function Input({ className = '', ...props }) {
     <input
       className={
         fillsRow(className) +
-        'rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
+        'rounded-control border border-separator bg-surface px-3 py-2.5 text-[15px] text-text ' +
         'placeholder:text-text-secondary focus:border-accent focus:outline-none ' +
         `focus:ring-1 focus:ring-accent ${className}`
       }
@@ -59,7 +63,7 @@ export function Select({ className = '', children, ...props }) {
     <select
       className={
         fillsRow(className) +
-        'rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
+        'rounded-control border border-separator bg-surface px-3 py-2.5 text-[15px] text-text ' +
         `focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent ${className}`
       }
       {...props}
@@ -73,24 +77,32 @@ export function Select({ className = '', children, ...props }) {
 export function Field({ label, hint, children }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-text">{label}</span>
+      <span className="t-row-label mb-1.5 block text-text">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-xs text-text-secondary">{hint}</span>}
+      {hint && <span className="t-meta mt-1.5 block text-text-secondary">{hint}</span>}
     </label>
   )
 }
 
+/**
+ * The card is the unit of layering. It is always closer to the eye than
+ * the page — white on grey in light mode, grey on black in dark. That
+ * one relationship is what stops every screen reading as a single flat
+ * surface, and it is why the two themes are not inversions.
+ */
 export function Card({ className = '', children }) {
   return (
-    <div className={`rounded border border-border bg-surface p-6 ${className}`}>{children}</div>
+    <div className={`rounded-card border border-separator bg-surface p-6 ${className}`}>
+      {children}
+    </div>
   )
 }
 
 export function PageTitle({ children, subtitle }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-semibold text-text">{children}</h1>
-      {subtitle && <p className="mt-1 text-sm text-text-secondary">{subtitle}</p>}
+      <h1 className="t-page-title text-text">{children}</h1>
+      {subtitle && <p className="t-body mt-1.5 text-text-secondary">{subtitle}</p>}
     </div>
   )
 }
@@ -98,32 +110,75 @@ export function PageTitle({ children, subtitle }) {
 export function SectionTitle({ children, hint }) {
   return (
     <div className="mb-4">
-      <h2 className="text-base font-semibold text-text">{children}</h2>
-      {hint && <p className="mt-1 text-sm text-text-secondary">{hint}</p>}
+      <h2 className="t-card-title text-text">{children}</h2>
+      {hint && <p className="t-meta mt-1 text-text-secondary">{hint}</p>}
+    </div>
+  )
+}
+
+/**
+ * A small all-caps-free label above a group. 13px/700 in secondary —
+ * the deliberate opposite of the value it labels, which is 26px/700.
+ * That contrast is what makes a dense screen readable in two seconds;
+ * a timid middle size makes both of them mush.
+ */
+export function SectionLabel({ children, className = '' }) {
+  return <p className={`t-section ${className}`}>{children}</p>
+}
+
+/** A metric: big number, small label. Never the other way round. */
+export function Metric({ label, value, tone = 'text-text' }) {
+  return (
+    <div>
+      <p className={`t-metric ${tone}`}>{value}</p>
+      <p className="t-section mt-0.5">{label}</p>
     </div>
   )
 }
 
 export function ErrorText({ children }) {
   if (!children) return null
-  return <p className="text-sm text-danger">{children}</p>
+  return <p className="t-meta mt-1.5 text-danger">{children}</p>
 }
 
 export function WarningText({ children }) {
   if (!children) return null
-  return <p className="text-sm text-warning">{children}</p>
+  return <p className="t-meta mt-1.5 text-warning">{children}</p>
 }
 
-/** A small coloured pill. Used for lead statuses and lead/client type. */
-export function Badge({ color, children }) {
+/**
+ * A small pill.
+ *
+ * `tone` is the supported way to colour one: it resolves to a tinted
+ * block whose text colour is designed against its own fill, so it is
+ * readable in both themes. Prefer it.
+ *
+ * `color` takes a raw value and exists for ONE reason — lead status
+ * colours are per-workspace user data, not theme tokens, and the user
+ * chose them. It paints the dot only; the text stays neutral. Painting
+ * the border and the label from an arbitrary stored hex is what made
+ * the old badges illegible against a white card, and we do not get to
+ * silently override somebody's choice.
+ */
+const TONES = {
+  neutral: 'border-separator text-text-secondary',
+  success: 'border-transparent bg-success-bg text-success-text',
+  warning: 'border-transparent bg-warning-bg text-warning-text',
+  danger: 'border-transparent bg-danger-bg text-danger-text',
+  accent: 'border-transparent bg-accent text-on-accent',
+}
+
+export function Badge({ color, tone = 'neutral', children }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs"
-      style={color ? { borderColor: color, color } : undefined}
+      className={
+        'inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 ' +
+        `t-meta font-medium ${TONES[tone] ?? TONES.neutral}`
+      }
     >
       {color && (
         <span
-          className="inline-block h-1.5 w-1.5 rounded-full"
+          className="inline-block h-2 w-2 shrink-0 rounded-full"
           style={{ backgroundColor: color }}
         />
       )}
@@ -142,13 +197,13 @@ export function SidePanel({ open, title, onClose, children, footer }) {
 
   return (
     <div className="fixed inset-0 z-40">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="absolute inset-0 bg-scrim" onClick={onClose} />
       <div
-        className="absolute inset-y-0 flex w-full max-w-md flex-col border-s border-border bg-surface"
+        className="absolute inset-y-0 flex w-full max-w-md flex-col border-s border-separator bg-surface"
         style={{ insetInlineEnd: 0 }}
       >
-        <div className="flex items-center justify-between border-b border-border px-5 py-4">
-          <h2 className="text-base font-semibold text-text">{title}</h2>
+        <div className="flex items-center justify-between border-b border-separator px-5 py-4">
+          <h2 className="t-card-title text-text">{title}</h2>
           <button
             onClick={onClose}
             className="text-xl leading-none text-text-secondary hover:text-text"
@@ -161,7 +216,7 @@ export function SidePanel({ open, title, onClose, children, footer }) {
         <div className="flex-1 overflow-y-auto p-5">{children}</div>
 
         {footer && (
-          <div className="flex items-center gap-3 border-t border-border px-5 py-4">{footer}</div>
+          <div className="flex items-center gap-3 border-t border-separator px-5 py-4">{footer}</div>
         )}
       </div>
     </div>
@@ -174,14 +229,14 @@ export function Modal({ open, title, onClose, children, footer, wide = false }) 
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center p-6">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="absolute inset-0 bg-scrim" onClick={onClose} />
       <div
-        className={`relative flex max-h-[85vh] w-full flex-col rounded border border-border bg-surface ${
+        className={`relative flex max-h-[85vh] w-full flex-col rounded-card border border-separator bg-surface ${
           wide ? 'max-w-3xl' : 'max-w-md'
         }`}
       >
-        <div className="flex items-center justify-between border-b border-border px-5 py-4">
-          <h2 className="text-base font-semibold text-text">{title}</h2>
+        <div className="flex items-center justify-between border-b border-separator px-5 py-4">
+          <h2 className="t-card-title text-text">{title}</h2>
           <button
             onClick={onClose}
             className="text-xl leading-none text-text-secondary hover:text-text"
@@ -194,7 +249,7 @@ export function Modal({ open, title, onClose, children, footer, wide = false }) 
         <div className="flex-1 overflow-y-auto p-5">{children}</div>
 
         {footer && (
-          <div className="flex items-center justify-end gap-3 border-t border-border px-5 py-4">
+          <div className="flex items-center justify-end gap-3 border-t border-separator px-5 py-4">
             {footer}
           </div>
         )}
@@ -206,17 +261,17 @@ export function Modal({ open, title, onClose, children, footer, wide = false }) 
 /** Horizontal tab strip. `tabs` is [{ key, label, disabled }]. */
 export function Tabs({ tabs, active, onChange }) {
   return (
-    <div className="flex gap-1 border-b border-border">
+    <div className="flex gap-1 border-b border-separator">
       {tabs.map((tab) => (
         <button
           key={tab.key}
           onClick={() => !tab.disabled && onChange(tab.key)}
           className={
-            'relative px-4 py-2.5 text-sm transition-colors ' +
+            'relative px-4 py-2.5 text-[15px] font-medium transition-colors ' +
             (tab.key === active
               ? 'text-text after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-accent'
               : tab.disabled
-                ? 'cursor-default text-text-secondary/50'
+                ? 'cursor-default text-text-disabled'
                 : 'text-text-secondary hover:text-text')
           }
         >
@@ -234,7 +289,7 @@ export const Textarea = forwardRef(function Textarea({ className = '', ...props 
       ref={ref}
       className={
         fillsRow(className) +
-        'rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
+        'rounded-control border border-separator bg-surface px-3 py-2.5 text-[15px] text-text ' +
         'placeholder:text-text-secondary focus:border-accent focus:outline-none ' +
         `focus:ring-1 focus:ring-accent ${className}`
       }
@@ -245,8 +300,8 @@ export const Textarea = forwardRef(function Textarea({ className = '', ...props 
 
 export function EmptyState({ children }) {
   return (
-    <div className="rounded border border-dashed border-border p-10 text-center">
-      <p className="text-sm text-text-secondary">{children}</p>
+    <div className="rounded-card border border-dashed border-separator p-10 text-center">
+      <p className="t-body text-text-secondary">{children}</p>
     </div>
   )
 }
@@ -261,17 +316,17 @@ export function EmptyState({ children }) {
  */
 export function Loadable({ loading, failure, onRetry, children, t }) {
   if (loading) {
-    return <p className="text-sm text-text-secondary">{t('common.loading')}</p>
+    return <p className="t-body text-text-secondary">{t('common.loading')}</p>
   }
 
   if (failure) {
     return (
-      <div className="rounded border border-danger/40 p-6 text-center">
-        <p className="text-sm text-text">{errorMessage(failure, t)}</p>
+      <div className="rounded-card border border-separator bg-danger-bg p-6 text-center">
+        <p className="t-body text-danger-text">{errorMessage(failure, t)}</p>
         <button
           type="button"
           onClick={onRetry}
-          className="mt-3 rounded border border-border px-3 py-1.5 text-sm text-accent hover:bg-surface"
+          className="mt-3 rounded-control border border-separator bg-surface px-3 py-1.5 t-meta font-medium text-text hover:border-accent"
         >
           {t('errors.retry')}
         </button>

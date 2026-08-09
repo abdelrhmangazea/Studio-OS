@@ -154,7 +154,7 @@ export default function DataSettings() {
         </Button>
 
         {exported && (
-          <div className="mt-4 rounded border border-border p-3 text-sm">
+          <div className="mt-4 rounded-card border border-separator p-3 text-sm">
             <p className="text-text">
               {t('data.exportDone', {
                 rows: Object.values(exported.row_counts).reduce((a, b) => a + b, 0),
@@ -224,7 +224,7 @@ export default function DataSettings() {
 
 function Row({ title, note, busy, label, onRestore, disabled }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-separator p-3">
       <div className="min-w-0">
         <p className="text-sm text-text">{title}</p>
         <p className="text-xs text-text-secondary">

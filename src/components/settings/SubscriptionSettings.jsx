@@ -59,7 +59,7 @@ export default function SubscriptionSettings() {
       <SectionTitle hint={t('plan.settingsHint')}>{t('plan.title')}</SectionTitle>
 
       {/* ---------- where you stand ---------- */}
-      <div className="mb-6 rounded border border-border p-4">
+      <div className="mb-6 rounded-card border border-separator p-4">
         <p className="text-xs text-text-secondary">{t('plan.current')}</p>
         <p className="mt-1 text-xl font-semibold text-text">
           {plan ? (language === 'ar' ? plan.name_ar : plan.name_en) : '—'}
@@ -117,7 +117,7 @@ export default function SubscriptionSettings() {
           <div
             key={p.key}
             className={`rounded border p-4 ${
-              p.key === effective ? 'border-accent' : 'border-border'
+              p.key === effective ? 'border-accent' : 'border-separator'
             }`}
           >
             <p className="text-sm font-semibold text-text">

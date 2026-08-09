@@ -48,7 +48,7 @@ export default function ContactPicker({ open, onClose, onPick }) {
             <button
               key={contact.id}
               onClick={() => onPick(contact)}
-              className="flex w-full items-center justify-between gap-3 rounded border border-transparent px-3 py-2 text-start hover:border-border hover:bg-bg"
+              className="flex w-full items-center justify-between gap-3 rounded border border-transparent px-3 py-2 text-start hover:border-separator hover:bg-bg"
             >
               <span>
                 <span className="block text-sm text-text">{fullName(contact)}</span>
@@ -58,7 +58,7 @@ export default function ContactPicker({ open, onClose, onPick }) {
                     '—'}
                 </span>
               </span>
-              <Badge color={contact.is_client ? '#22C55E' : '#0077B6'}>
+              <Badge tone={contact.is_client ? 'success' : 'neutral'}>
                 {t(contact.is_client ? 'contact.client' : 'contact.lead')}
               </Badge>
             </button>

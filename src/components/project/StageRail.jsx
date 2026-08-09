@@ -32,10 +32,10 @@ export default function StageRail({ definitions, stages, openKey, onOpen, itemsB
               className={
                 'flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs ' +
                 (status === 'complete'
-                  ? 'bg-success text-white'
+                  ? 'bg-success text-on-success'
                   : status === 'active'
-                    ? 'bg-accent text-white'
-                    : 'border border-border text-text-secondary')
+                    ? 'bg-accent text-on-accent'
+                    : 'border border-separator text-text-secondary')
               }
             >
               {status === 'complete' ? '✓' : status === 'locked' ? '🔒' : definition.sort_order}

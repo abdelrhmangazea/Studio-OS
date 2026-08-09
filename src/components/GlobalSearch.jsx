@@ -83,7 +83,7 @@ export default function GlobalSearch() {
       />
 
       {open && term.trim().length > 0 && (
-        <div className="absolute inset-x-0 top-full z-30 mt-1 max-h-96 overflow-y-auto rounded border border-border bg-surface">
+        <div className="absolute inset-x-0 top-full z-30 mt-1 max-h-96 overflow-y-auto rounded-card border border-separator bg-surface">
           {term.trim().length < 2 ? (
             <p className="p-3 text-xs text-text-secondary">{t('search.hint')}</p>
           ) : searching ? (
@@ -107,8 +107,8 @@ function ResultGroup({ title, items, onPick }) {
   if (items.length === 0) return null
 
   return (
-    <div className="border-b border-border last:border-0">
-      <p className="px-3 pb-1 pt-2 text-xs uppercase tracking-wide text-text-secondary">{title}</p>
+    <div className="border-b border-separator last:border-0">
+      <p className="px-3 pb-1 pt-2 t-section">{title}</p>
 
       {items.map((contact) => (
         <button
@@ -131,8 +131,8 @@ function ProjectGroup({ title, items, onPick }) {
   if (items.length === 0) return null
 
   return (
-    <div className="border-b border-border last:border-0">
-      <p className="px-3 pb-1 pt-2 text-xs uppercase tracking-wide text-text-secondary">{title}</p>
+    <div className="border-b border-separator last:border-0">
+      <p className="px-3 pb-1 pt-2 t-section">{title}</p>
 
       {items.map((project) => (
         <button

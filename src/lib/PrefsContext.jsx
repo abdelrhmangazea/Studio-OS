@@ -25,7 +25,10 @@ export function PrefsProvider({ children }) {
   const [language, setLanguageState] = useState(
     () => localStorage.getItem(STORAGE_LANGUAGE) || 'ar'
   )
-  const [theme, setThemeState] = useState(() => localStorage.getItem(STORAGE_THEME) || 'dark')
+  // Light is the default for anyone who has not chosen. An existing
+  // profile always carries an explicit theme, so nobody who has
+  // already picked dark is moved off it by this.
+  const [theme, setThemeState] = useState(() => localStorage.getItem(STORAGE_THEME) || 'light')
 
   // Once signed in, the profile is the source of truth.
   useEffect(() => {

@@ -30,7 +30,7 @@ export default function Onboarding() {
     logo_url: settings?.logo_url || '',
     accent_color: settings?.accent_color || '#0077B6',
     default_language: settings?.default_language || 'ar',
-    default_theme: settings?.default_theme || 'dark',
+    default_theme: settings?.default_theme || 'light',
     currency: settings?.currency || 'EGP',
     project_code_prefix: settings?.project_code_prefix || 'IZ',
   })
@@ -89,7 +89,7 @@ export default function Onboarding() {
     <div className="flex min-h-screen items-center justify-center bg-bg p-6">
       <div className="w-full max-w-lg">
         <Card>
-          <p className="text-xs uppercase tracking-wide text-text-secondary">
+          <p className="t-section">
             {t('onboarding.step', { current: step, total: TOTAL_STEPS })}
           </p>
           <h1 className="mt-1 text-xl font-semibold text-text">{t('onboarding.title')}</h1>
@@ -117,7 +117,7 @@ export default function Onboarding() {
                   type="file"
                   accept="image/*"
                   onChange={handleLogo}
-                  className="block w-full text-sm text-text-secondary file:me-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:text-white"
+                  className="block w-full text-sm text-text-secondary file:me-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-2 file:text-[13px] file:text-on-accent"
                 />
                 {uploading && (
                   <span className="mt-2 block text-xs text-text-secondary">
@@ -128,7 +128,7 @@ export default function Onboarding() {
                   <img
                     src={form.logo_url}
                     alt=""
-                    className="mt-3 h-16 rounded border border-border bg-bg object-contain p-2"
+                    className="mt-3 h-16 rounded-card border border-separator bg-bg object-contain p-2"
                   />
                 )}
               </Field>
@@ -139,7 +139,7 @@ export default function Onboarding() {
                     type="color"
                     value={form.accent_color}
                     onChange={(e) => update('accent_color', e.target.value)}
-                    className="h-10 w-14 cursor-pointer rounded border border-border bg-surface"
+                    className="h-10 w-14 cursor-pointer rounded-card border border-separator bg-surface"
                   />
                   <Input
                     value={form.accent_color}

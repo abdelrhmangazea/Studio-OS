@@ -129,7 +129,7 @@ export default function TemplateEditor({ open, row, template, language, onClose,
           <select
             value=""
             onChange={(e) => e.target.value && insertField(e.target.value)}
-            className="w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none"
+            className="w-full rounded-card border border-separator bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none"
           >
             <option value="">—</option>
             {MERGE_FIELDS.map((field) => (
@@ -142,7 +142,7 @@ export default function TemplateEditor({ open, row, template, language, onClose,
         </Field>
 
         <div>
-          <p className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+          <p className="mb-1 t-section">
             {t('templates.fieldsUsed')} ({used.length})
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -155,7 +155,7 @@ export default function TemplateEditor({ open, row, template, language, onClose,
                     ? 'border-danger text-danger'
                     : NOT_YET_AVAILABLE.has(name)
                       ? 'border-warning text-warning'
-                      : 'border-border text-text-secondary')
+                      : 'border-separator text-text-secondary')
                 }
               >
                 {name}

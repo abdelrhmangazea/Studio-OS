@@ -32,7 +32,7 @@ export default function SupplierCategories() {
 
       <ul className="mb-4 space-y-2">
         {rows.map((row) => (
-          <li key={row.id} className="flex flex-wrap items-center gap-2 rounded border border-border p-2">
+          <li key={row.id} className="flex flex-wrap items-center gap-2 rounded-card border border-separator p-2">
             <Input
               className="w-40"
               defaultValue={row.name_ar}
@@ -66,7 +66,7 @@ export default function SupplierCategories() {
         ))}
       </ul>
 
-      <div className="flex flex-wrap items-end gap-2 border-t border-border pt-3">
+      <div className="flex flex-wrap items-end gap-2 border-t border-separator pt-3">
         <div className="w-40">
           <Field label={t('lists.labelAr')}>
             <Input value={draft.name_ar} onChange={(e) => setDraft({ ...draft, name_ar: e.target.value })} />

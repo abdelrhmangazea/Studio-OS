@@ -117,7 +117,7 @@ export default function FeeCalculator({ project, onApplied }) {
 
   return (
     <Card>
-      <h3 className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+      <h3 className="mb-1 t-section">
         {t('pricing.title')}
       </h3>
       <p className="mb-4 text-xs text-text-secondary">{t('pricing.help')}</p>
@@ -178,8 +178,8 @@ export default function FeeCalculator({ project, onApplied }) {
 
       {/* ---------- the breakdown ---------- */}
       {result.steps.length > 0 && (
-        <div className="mt-5 rounded border border-border p-4">
-          <h4 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+        <div className="mt-5 rounded-card border border-separator p-4">
+          <h4 className="mb-3 t-section">
             {t('pricing.breakdown')}
           </h4>
           <ul className="space-y-1.5">
@@ -202,7 +202,7 @@ export default function FeeCalculator({ project, onApplied }) {
             ))}
           </ul>
 
-          <div className="mt-4 grid gap-3 border-t border-border pt-4 sm:grid-cols-3">
+          <div className="mt-4 grid gap-3 border-t border-separator pt-4 sm:grid-cols-3">
             <Figure label={t('pricing.low')} value={money(result.low)} />
             <Figure label={t('pricing.recommended')} value={money(result.recommended)} strong />
             <Figure label={t('pricing.high')} value={money(result.high)} />
@@ -212,8 +212,8 @@ export default function FeeCalculator({ project, onApplied }) {
 
       {/* ---------- what you actually charged before ---------- */}
       {comparison && (
-        <div className="mt-4 rounded border border-border p-4">
-          <h4 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+        <div className="mt-4 rounded-card border border-separator p-4">
+          <h4 className="mb-2 t-section">
             {t('pricing.comparison')}
           </h4>
           {comparison.enough ? (
@@ -243,15 +243,15 @@ export default function FeeCalculator({ project, onApplied }) {
 
       {/* ---------- how this project was priced before ---------- */}
       {history.length > 0 && (
-        <div className="mt-5 border-t border-border pt-4">
-          <h4 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+        <div className="mt-5 border-t border-separator pt-4">
+          <h4 className="mb-2 t-section">
             {t('pricing.history')}
           </h4>
           <ul className="space-y-2">
             {history.map((row) => (
               <li
                 key={row.id}
-                className="flex flex-wrap items-center justify-between gap-2 rounded border border-border p-2 text-sm"
+                className="flex flex-wrap items-center justify-between gap-2 rounded-card border border-separator p-2 text-sm"
               >
                 <span className="text-text">
                   {t(`pricing.method_${row.method}`, {}, row.method)}

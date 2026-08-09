@@ -146,7 +146,7 @@ export default function BookingSetup() {
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <code className="rounded border border-border bg-bg px-3 py-2 text-xs text-text-secondary" dir="ltr">
+          <code className="rounded-card border border-separator bg-bg px-3 py-2 text-xs text-text-secondary" dir="ltr">
             {publicUrl}
           </code>
           <Button
@@ -196,14 +196,14 @@ export default function BookingSetup() {
                       type="time"
                       value={rule.start}
                       onChange={(e) => setRule(day, { start: e.target.value })}
-                      className="rounded border border-border bg-surface px-2 py-1 text-sm text-text"
+                      className="rounded-card border border-separator bg-surface px-2 py-1 text-sm text-text"
                     />
                     <span className="text-text-secondary">→</span>
                     <input
                       type="time"
                       value={rule.end}
                       onChange={(e) => setRule(day, { end: e.target.value })}
-                      className="rounded border border-border bg-surface px-2 py-1 text-sm text-text"
+                      className="rounded-card border border-separator bg-surface px-2 py-1 text-sm text-text"
                     />
                   </div>
                 )}
@@ -293,7 +293,7 @@ export default function BookingSetup() {
 
         <div className="space-y-3">
           {types.map((type) => (
-            <div key={type.id} className="grid gap-2 rounded border border-border p-3 sm:grid-cols-2">
+            <div key={type.id} className="grid gap-2 rounded-card border border-separator p-3 sm:grid-cols-2">
               <Input
                 dir="rtl"
                 value={type.label_ar}
@@ -387,7 +387,7 @@ export default function BookingSetup() {
 
         <div className="space-y-3">
           {questions.map((question, index) => (
-            <div key={question.id} className="rounded border border-border p-3">
+            <div key={question.id} className="rounded-card border border-separator p-3">
               <div className="grid gap-2 sm:grid-cols-2">
                 <Input
                   dir="rtl"

@@ -2,54 +2,175 @@
 @tailwind components;
 @tailwind utilities;
 
-/* -------------------------------------------------------------
-   Theme tokens.
+/* =============================================================
+   THREE VISUAL SYSTEMS, NOT ONE THEME WITH VARIATIONS.
 
-   Dark is the default. Adding data-theme="light" to <html>
-   swaps the four surface colours. The status colours below do
-   not change between themes — that is deliberate, it is what
-   keeps a data-heavy screen readable.
+     1. App light   — the default for new accounts
+     2. App dark    — a designed theme, not an inversion
+     3. Portal      — always light, white-labelled, its own block
 
-   Every colour in the app comes from these variables, via the
-   Tailwind names in tailwind.config.js. No component should
-   ever contain a raw hex value.
-   ------------------------------------------------------------- */
+   The principle that connects light and dark is NOT that one is the
+   other flipped. It is that THE CARD IS ALWAYS CLOSER TO THE EYE THAN
+   THE PAGE. In light the page is grey and the card is white; in dark
+   the page is black and the card is grey. Invert either one and you
+   get the flat, gloomy screen this replaced.
 
-:root {
-  --bg: #1d191a;
-  --surface: #26201f;
-  --text: #ffffff;
-  --text-secondary: #b7b7b7;
-  --border: #3a3231;
+   Every colour in the app comes from here, via the Tailwind names in
+   tailwind.config.js. A raw hex in a component is a dark-mode bug that
+   nobody will notice until a customer does.
+   ============================================================= */
 
-  /* Shared across both themes */
+:root,
+:root[data-theme='light'] {
+  --bg: #f2f2f7;              /* page canvas — grey, deliberately not white */
+  --surface: #ffffff;         /* cards and panels, sitting ON the grey */
+  --surface-raised: #f2f2f7;  /* nested blocks inside a card */
+  --separator: #e5e5ea;       /* hairline between rows */
+  --separator-soft: #f2f2f7;  /* hairline inside a card */
+
+  --text: #000000;
+  --text-secondary: #8e8e93;
+  --text-disabled: #c7c7cc;
+
   --accent: #0077b6;
-  --warning: #f2d709;
-  --danger: #e11d3c;
-  --success: #22c55e;
-  --muted: #b7b7b7;
+  --success: #34c759;
+  --warning: #ff9f0a;
+  --danger: #ff3b30;
+  --muted: #8e8e93;
+
+  /* Tinted blocks: a soft fill with its own readable text colour.
+     Never put --text on one of these. */
+  --success-bg: #e8f8ec;
+  --success-text: #1b6e33;
+  --warning-bg: #fff4e5;
+  --warning-text: #7a4a00;
+  --danger-bg: #ffebea;
+  --danger-text: #8a1f19;
+
+  /* TEXT ON A SATURATED FILL.
+
+     This exists because "text-white" was hardcoded on every filled
+     button and pill. That is correct on a dark blue and unreadable on
+     #30d158 or #4aa8e0. Resolving it from a token is the only thing
+     that stops dark mode breaking here again — so a filled surface
+     must ALWAYS read its foreground from one of these, never from a
+     literal and never from --text. */
+  --on-accent: #ffffff;
+  --on-success: #ffffff;
+  --on-warning: #ffffff;
+  --on-danger: #ffffff;
+
+  /* The scrim behind a modal. Darker in light mode, or the dialog does
+     not separate from a white page. */
+  --scrim: rgb(0 0 0 / 0.32);
+
+  /* PAPER. Not a theme colour — the document preview is a picture of
+     what will be exported, so it is white with dark text in BOTH
+     themes. Declared as a token so "every colour comes from a
+     variable" is literally true and a reader can tell this white is
+     deliberate rather than a missed literal. */
+  --paper: #ffffff;
+  --paper-text: #1d191a;
 }
 
-:root[data-theme='light'] {
-  --bg: #ffffff;
-  --surface: #f7f7f7;
-  --text: #1d191a;
-  --text-secondary: #5a5a5a;
-  --border: #e4e4e4;
+:root[data-theme='dark'] {
+  --bg: #000000;              /* true black, not a dark grey */
+  --surface: #1c1c1e;         /* clearly lifted off the black */
+  --surface-raised: #2c2c2e;
+  --separator: #38383a;
+  --separator-soft: #2c2c2e;
+
+  --text: #ffffff;
+  /* The only token identical in both modes. It reads as secondary
+     against both #ffffff and #1c1c1e, which is why it survives. */
+  --text-secondary: #8e8e93;
+  --text-disabled: #48484a;
+
+  --accent: #4aa8e0;          /* lighter than light mode's accent */
+  --success: #30d158;
+  --warning: #ffa00a;
+  --danger: #ff453a;
+  --muted: #8e8e93;
+
+  --success-bg: #0c2a14;
+  --success-text: #4ade80;
+  --warning-bg: #2a1f08;
+  --warning-text: #ffc24d;
+  --danger-bg: #2a0f0d;
+  --danger-text: #ff8a80;
+
+  /* BLACK, not white. Every one of these fills is a light, saturated
+     colour in dark mode — white on #30d158 cannot be read. */
+  --on-accent: #000000;
+  --on-success: #000000;
+  --on-warning: #000000;
+  --on-danger: #000000;
+
+  --scrim: rgb(0 0 0 / 0.6);
+
+  /* Unchanged by theme, on purpose. See the note in the light block. */
+  --paper: #ffffff;
+  --paper-text: #1d191a;
+}
+
+/* Kept so `border-border` keeps working everywhere it is already
+   written. It is the same hairline --separator names. */
+:root { --border: var(--separator); }
+
+html {
+  /* No Inter. system-ui is already on the device, so it costs no
+     request and cannot arrive late; Cairo covers Arabic, which Latin
+     stacks have no glyphs for. */
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Cairo', sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+:root:lang(ar),
+[dir='rtl'] {
+  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
 }
 
 body {
   background-color: var(--bg);
   color: var(--text);
-  /* Flat by design: no shadows, no gradients anywhere in this app. */
+  font-size: 15px;
+  line-height: 1.47;
+  /* Flat by design: no shadows, no gradients, no backdrop-filter. */
+}
+
+@layer components {
+  /* -------------------------------------------------------------
+     Type scale. Named, so a screen cannot invent a timid middle size.
+     Weight is 400 / 600 / 700 and nothing else — 600 in both scripts,
+     because a weight that means two things in two languages is the kind
+     of inconsistency that never gets tracked down.
+     ------------------------------------------------------------- */
+
+  .t-page-title { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+  .t-card-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; }
+  .t-metric     { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+                  font-variant-numeric: tabular-nums; }
+  .t-body       { font-size: 15px; font-weight: 400; }
+  .t-row-label  { font-size: 15px; font-weight: 600; }
+  .t-meta       { font-size: 13px; font-weight: 400; }
+  .t-section    { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+
+  /* Numbers in a column only line up if the digits are the same width. */
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* RULE 4 — fade, don't hide. On the CONTAINER, never on text alone:
+     text at 55% drifts against different backgrounds, a faded container
+     keeps its own relationships intact. */
+  .is-faded { opacity: 0.55; }
 }
 
 /* -------------------------------------------------------------
    The document preview.
 
-   This is paper, not app chrome: always dark text on white in both
-   themes, because that is what will actually be exported. Mirrors
-   the print styles in src/lib/documentHtml.js.
+   Paper, not app chrome: dark text on white in BOTH themes, because
+   that is what actually gets exported. Mirrors the print styles in
+   src/lib/documentHtml.js, which is deliberately left alone — the
+   designer's client-facing output has its own rules.
    ------------------------------------------------------------- */
 
 .studio-doc {
@@ -73,62 +194,104 @@ body {
   border-radius: 2px;
 }
 
-/* -------------------------------------------------------------
-   The public, white-label pages (booking page, confirmation).
+/* =============================================================
+   SYSTEM 3 — the client portal and the public pages.
 
-   These are seen by the SUBSCRIBER'S clients, so they never inherit
-   the Interior Zone dark theme or the designer's own theme choice.
-   Always light, always neutral, with only the studio's accent colour
-   carried through.
-   ------------------------------------------------------------- */
+   Seen by the SUBSCRIBER'S clients, who have no account, no settings,
+   and no theme. Always light, on any device, in any lighting.
+
+   Everything here is LARGER than the app. The client is not a trained
+   user; they open this once a fortnight, usually on a phone.
+
+   The primary action is BLACK, not the brand accent. This page carries
+   the designer's own logo, and an accent would clash with whichever
+   identity is sitting next to it. Black and white work with every brand.
+   ============================================================= */
 
 .public-page {
-  --pub-bg: #ffffff;
-  --pub-surface: #f7f7f7;
-  --pub-text: #1d191a;
-  --pub-muted: #5a5a5a;
-  --pub-border: #e4e4e4;
+  --pub-bg: #f5f5f7;
+  --pub-surface: #ffffff;
+  --pub-raised: #f5f5f7;
+  --pub-text: #000000;
+  --pub-muted: #8e8e93;
+  --pub-border: #e5e5ea;
+  --pub-primary: #000000;
+  --pub-on-primary: #ffffff;
 
   min-height: 100vh;
   background: var(--pub-bg);
   color: var(--pub-text);
-  font-family: 'Inter', 'Cairo', system-ui, sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Cairo', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.public-page[dir='rtl'],
+.public-page:lang(ar) {
+  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
 }
 
 .public-page .pub-card {
   background: var(--pub-surface);
   border: 1px solid var(--pub-border);
-  border-radius: 6px;
+  border-radius: 20px;
 }
 .public-page .pub-muted { color: var(--pub-muted); }
+
+.public-page .pub-title { font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+.public-page .pub-h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.public-page .pub-meta { font-size: 14px; color: var(--pub-muted); }
+
+/* Exactly one visually dominant button. If approve and request-changes
+   look equally weighted the client hesitates, and a hesitating client
+   sends a WhatsApp message instead of clicking. */
+.public-page .pub-btn {
+  border-radius: 14px;
+  padding: 0.875rem 1.5rem;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.public-page .pub-btn-primary {
+  background: var(--pub-primary);
+  color: var(--pub-on-primary);
+}
+.public-page .pub-btn-secondary {
+  background: var(--pub-raised);
+  color: var(--pub-text);
+  border-color: var(--pub-border);
+}
+.public-page .pub-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
 .public-page input,
 .public-page select,
 .public-page textarea {
-  background: #fff;
+  background: var(--pub-surface);
   color: var(--pub-text);
   border: 1px solid var(--pub-border);
-  border-radius: 4px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 16px;   /* 16px or iOS zooms the page on focus */
   width: 100%;
 }
 .public-page input:focus,
 .public-page select:focus,
 .public-page textarea:focus {
   outline: none;
-  border-color: var(--pub-accent);
+  border-color: var(--pub-text);
 }
 .public-page .pub-slot {
   border: 1px solid var(--pub-border);
-  background: #fff;
-  border-radius: 4px;
-  padding: 0.5rem 0.25rem;
-  font-size: 0.8125rem;
+  background: var(--pub-surface);
+  border-radius: 12px;
+  padding: 0.625rem 0.5rem;
+  font-size: 15px;
   cursor: pointer;
 }
-.public-page .pub-slot:hover { border-color: var(--pub-accent); }
+.public-page .pub-slot:hover { border-color: var(--pub-text); }
 .public-page .pub-slot[data-selected='true'] {
-  background: var(--pub-accent);
-  border-color: var(--pub-accent);
-  color: #fff;
+  background: var(--pub-primary);
+  border-color: var(--pub-primary);
+  color: var(--pub-on-primary);
 }

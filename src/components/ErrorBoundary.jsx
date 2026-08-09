@@ -29,7 +29,7 @@ export default class ErrorBoundary extends Component {
     // than one in the wrong language.
     return (
       <div className="flex min-h-screen items-center justify-center bg-bg p-6">
-        <div className="w-full max-w-md rounded border border-border bg-surface p-6">
+        <div className="w-full max-w-md rounded-card border border-separator bg-surface p-6">
           <h1 className="text-lg font-semibold text-text">
             حصل خطأ في هذه الشاشة · Something broke on this screen
           </h1>
@@ -41,7 +41,7 @@ export default class ErrorBoundary extends Component {
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               onClick={() => window.location.reload()}
-              className="rounded bg-accent px-4 py-2 text-sm text-white"
+              className="rounded-control bg-accent px-4 py-2 text-[15px] text-on-accent"
             >
               تحديث · Reload
             </button>
@@ -50,7 +50,7 @@ export default class ErrorBoundary extends Component {
                 this.setState({ crashed: false })
                 window.location.href = '/dashboard'
               }}
-              className="rounded border border-border px-4 py-2 text-sm text-text"
+              className="rounded-card border border-separator px-4 py-2 text-sm text-text"
             >
               الرئيسية · Dashboard
             </button>

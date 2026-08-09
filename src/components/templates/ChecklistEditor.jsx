@@ -142,9 +142,9 @@ export default function ChecklistEditor({ open, pair, onClose, onSaved }) {
 
       <div className="space-y-5">
         {sections.map((section, sectionIndex) => (
-          <div key={section.id} className="rounded border border-border p-3">
+          <div key={section.id} className="rounded-card border border-separator p-3">
             <div className="mb-2 flex items-center justify-between gap-2">
-              <span className="text-xs uppercase tracking-wide text-text-secondary">
+              <span className="t-section">
                 {t('templates.section')} {sectionIndex + 1}
               </span>
               <span className="flex gap-1">

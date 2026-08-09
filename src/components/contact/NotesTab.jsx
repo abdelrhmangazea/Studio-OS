@@ -73,7 +73,7 @@ export default function NotesTab({ contact, onContactTouched }) {
       ) : (
         <ol className="space-y-3">
           {notes.map((note) => (
-            <li key={note.id} className="rounded border border-border bg-surface p-4">
+            <li key={note.id} className="rounded-card border border-separator bg-surface p-4">
               <div className="mb-1.5 flex items-center justify-between gap-3">
                 <time className="text-xs text-text-secondary">
                   {formatDateTime(note.created_at, language)}

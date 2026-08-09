@@ -64,7 +64,7 @@ export default function FilesBlock({ project, stageKey, onChanged }) {
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <label className="cursor-pointer rounded border border-border px-3 py-1.5 text-sm text-text hover:bg-bg">
+        <label className="cursor-pointer rounded-card border border-separator px-3 py-1.5 text-sm text-text hover:bg-bg">
           {busy ? t('files.uploading') : t('files.upload')}
           <input type="file" className="hidden" onChange={handleUpload} disabled={busy} />
         </label>
@@ -74,7 +74,7 @@ export default function FilesBlock({ project, stageKey, onChanged }) {
       {error && <p className="mb-2 text-sm text-danger">{error}</p>}
 
       {files.length === 0 ? (
-        <div className="rounded border border-dashed border-border p-5 text-center">
+        <div className="rounded-card border border-dashed border-separator p-5 text-center">
           <p className="text-sm text-text-secondary">{t('files.empty')}</p>
         </div>
       ) : (
@@ -82,7 +82,7 @@ export default function FilesBlock({ project, stageKey, onChanged }) {
           {files.map((file) => (
             <li
               key={file.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-separator p-3"
             >
               <div className="min-w-0">
                 {links[file.id] ? (

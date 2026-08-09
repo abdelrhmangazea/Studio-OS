@@ -22,7 +22,7 @@ export default function MessagesBlock({ pairs, project }) {
         return (
           <div
             key={pair.key}
-            className="flex items-center justify-between gap-3 rounded border border-border p-3"
+            className="flex items-center justify-between gap-3 rounded-card border border-separator p-3"
           >
             <span className="min-w-0">
               <span className="block truncate text-sm text-text">{row?.title}</span>

@@ -38,14 +38,14 @@ export default function ReminderRow({ reminder, pairs, language, t, onChanged, o
   }
 
   return (
-    <div className="rounded border border-border p-3">
+    <div className="rounded-card border border-separator p-3">
       <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={async () => {
             await setReminderDone(reminder.id, true)
             onChanged()
           }}
-          className="h-4 w-4 shrink-0 rounded border border-border hover:border-accent"
+          className="h-4 w-4 shrink-0 rounded-card border border-separator hover:border-accent"
           title={t('tasks.markDone')}
         />
 
@@ -79,10 +79,10 @@ export default function ReminderRow({ reminder, pairs, language, t, onChanged, o
       </div>
 
       {script && (
-        <div className="mt-3 border-t border-border pt-3">
+        <div className="mt-3 border-t border-separator pt-3">
           <pre
             dir={language === 'ar' ? 'rtl' : 'ltr'}
-            className="whitespace-pre-wrap rounded border border-border bg-bg p-3 font-sans text-sm text-text"
+            className="whitespace-pre-wrap rounded-card border border-separator bg-bg p-3 font-sans text-sm text-text"
           >
             {script}
           </pre>

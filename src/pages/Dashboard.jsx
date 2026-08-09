@@ -162,20 +162,20 @@ export default function Dashboard() {
 
       {/* Occasion dates missing — said out loud, never skipped quietly. */}
       {occasionGaps.length > 0 && (
-        <Card className="mb-6 border-warning">
+        <Card className="mb-6 border-transparent bg-warning-bg">
           {occasionGaps.map(({ year, kinds }) => (
             <div key={year} className="mb-2">
-              <p className="text-sm text-warning">
+              <p className="t-body text-warning-text">
                 {t('dashboard.occasionsMissing', { count: kinds.length, year })}
               </p>
-              <p className="mt-1 text-xs text-text-secondary">
+              <p className="t-meta mt-1 text-text-secondary">
                 {kinds.map((key) => t(`occasions.${key}`)).join(' · ')}
               </p>
             </div>
           ))}
           <Link
             to="/settings?tab=occasions"
-            className="mt-2 inline-block text-sm text-accent hover:underline"
+            className="t-body mt-2 inline-block text-accent hover:underline"
           >
             {t('dashboard.occasionsEnter')}
           </Link>
@@ -184,20 +184,20 @@ export default function Dashboard() {
 
       {/* ---------- 2. NEEDS ATTENTION (pinned to the top) ---------- */}
       {(overdueTasks.length > 0 || overdueReminders.length > 0 || needsAttention.length > 0) && (
-        <Card className="mb-6 border-warning">
-          <h2 className="mb-3 text-xs uppercase tracking-wide text-warning">
+        <Card className="mb-6 border-transparent bg-warning-bg">
+          <h2 className="t-section mb-3 text-warning-text">
             {t('dashboard.needsAttention')}
           </h2>
 
-          <div className="space-y-2">
+          <div className="divide-y divide-separator-soft">
             {needsAttention.map((project) => (
               <Link
                 key={project.id}
                 to={`/projects/${project.id}`}
-                className="flex items-center justify-between gap-3 rounded border border-border p-3 hover:bg-bg"
+                className="flex items-center justify-between gap-3 py-3 hover:opacity-80"
               >
-                <span className="text-sm text-text">
-                  <span className="font-mono text-xs text-text-secondary" dir="ltr">
+                <span className="t-row-label text-text">
+                  <span className="font-mono t-meta text-text-secondary" dir="ltr">
                     {project.code}
                   </span>{' '}
                   {project.name}
@@ -229,22 +229,22 @@ export default function Dashboard() {
 
       {/* ---------- 1. TODAY ---------- */}
       <Card className="mb-6">
-        <h2 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+        <h2 className="t-section mb-3">
           {t('dashboard.today')}
         </h2>
 
         {todaysBookings.length === 0 && todaysTasks.length === 0 && todaysReminders.length === 0 ? (
-          <p className="text-sm text-text-secondary">{t('dashboard.todayEmpty')}</p>
+          <p className="t-body text-text-secondary">{t('dashboard.todayEmpty')}</p>
         ) : (
-          <div className="space-y-2">
+          <div className="divide-y divide-separator-soft">
             {todaysBookings.map((booking) => (
               <div
                 key={booking.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3"
+                className="flex flex-wrap items-center justify-between gap-3 py-3"
               >
                 <div>
-                  <p className="text-sm text-text">{booking.client_name}</p>
-                  <p className="text-xs text-text-secondary">
+                  <p className="t-row-label text-text">{booking.client_name}</p>
+                  <p className="t-meta text-text-secondary">
                     {formatDateTime(booking.slot_start, language)}
                     {booking.project && (
                       <>
@@ -293,17 +293,17 @@ export default function Dashboard() {
 
       {/* ---------- 3. UPCOMING — the next 7 days ---------- */}
       <Card className="mb-6">
-        <h2 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+        <h2 className="t-section mb-3">
           {t('dashboard.upcoming')}
         </h2>
 
         {upcoming.length === 0 ? (
-          <p className="text-sm text-text-secondary">{t('dashboard.upcomingEmpty')}</p>
+          <p className="t-body text-text-secondary">{t('dashboard.upcomingEmpty')}</p>
         ) : (
-          <ol className="space-y-2">
+          <ol className="divide-y divide-separator-soft">
             {upcoming.map((entry, index) => (
-              <li key={index} className="flex flex-wrap items-center gap-3 text-sm">
-                <time className="w-32 shrink-0 text-xs text-text-secondary">
+              <li key={index} className="flex flex-wrap items-center gap-3 py-2.5 t-body">
+                <time className="t-meta w-32 shrink-0 text-text-secondary">
                   {formatDate(entry.date, language)}
                 </time>
                 {entry.kind === 'booking' && (
@@ -339,26 +339,26 @@ export default function Dashboard() {
 
       {/* ---------- 4. ACTIVE CLIENTS ---------- */}
       <Card className="mb-6">
-        <h2 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+        <h2 className="t-section mb-3">
           {t('dashboard.activeClients')}
         </h2>
 
         {activeClients.length === 0 ? (
-          <p className="text-sm text-text-secondary">{t('dashboard.activeClientsEmpty')}</p>
+          <p className="t-body text-text-secondary">{t('dashboard.activeClientsEmpty')}</p>
         ) : (
-          <div className="space-y-2">
+          <div className="divide-y divide-separator-soft">
             {activeClients.map(({ project, contact, progress, daysSince }) => (
               <Link
                 key={project.id}
                 to={`/projects/${project.id}`}
-                className="flex flex-wrap items-center gap-4 rounded border border-border p-3 hover:bg-bg"
+                className="flex flex-wrap items-center gap-4 py-3 hover:opacity-80"
               >
                 <ProgressRing percent={progress} size={40} />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-text">
+                  <p className="t-row-label text-text">
                     {contact ? fullName(contact) : project.name}
                   </p>
-                  <p className="text-xs text-text-secondary">
+                  <p className="t-meta text-text-secondary">
                     {stageTitle(project.current_stage)}
                     {daysSince !== null && ` · ${t('dashboard.daysSince', { days: daysSince })}`}
                   </p>
@@ -451,18 +451,18 @@ function useDefinitions() {
 
 function DashTask({ task, onChanged, language, t, overdue }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded border border-border p-3">
+    <div className="flex flex-wrap items-center gap-3 py-3">
       <button
         onClick={async () => {
           await setTaskDone(task.id, true)
           onChanged()
         }}
-        className="h-4 w-4 shrink-0 rounded border border-border hover:border-accent"
+        className="h-[18px] w-[18px] shrink-0 rounded-[6px] border border-separator hover:border-accent"
         title={t('tasks.markDone')}
       />
       <div className="min-w-0 flex-1">
-        <p className="text-sm text-text">{task.title}</p>
-        <p className="flex flex-wrap gap-x-2 text-xs text-text-secondary">
+        <p className="t-row-label text-text">{task.title}</p>
+        <p className="t-meta flex flex-wrap gap-x-2 text-text-secondary">
           {task.project && (
             <Link to={`/projects/${task.project.id}`} className="font-mono text-accent hover:underline" dir="ltr">
               {task.project.code}
@@ -474,7 +474,7 @@ function DashTask({ task, onChanged, language, t, overdue }) {
             </Link>
           )}
           {task.due_date && (
-            <span className={overdue ? 'text-warning' : ''}>
+            <span className={overdue ? 'font-medium text-warning' : ''}>
               {formatDate(task.due_date, language)}
             </span>
           )}

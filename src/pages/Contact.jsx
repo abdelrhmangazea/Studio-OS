@@ -69,10 +69,10 @@ export default function Contact() {
             ← {t(contact.is_client ? 'nav.clients' : 'nav.leads')}
           </button>
 
-          <h1 className="text-2xl font-semibold text-text">{fullName(contact)}</h1>
+          <h1 className="t-page-title text-text">{fullName(contact)}</h1>
 
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <Badge color={contact.is_client ? '#22C55E' : '#0077B6'}>
+            <Badge tone={contact.is_client ? 'success' : 'neutral'}>
               {t(contact.is_client ? 'contact.client' : 'contact.lead')}
             </Badge>
 

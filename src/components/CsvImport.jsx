@@ -233,7 +233,7 @@ export default function CsvImport({ open, onClose, onImported, statuses, sources
             type="file"
             accept=".csv,text/csv"
             onChange={handleFile}
-            className="block w-full text-sm text-text-secondary file:me-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:text-white"
+            className="block w-full text-sm text-text-secondary file:me-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-2 file:text-[13px] file:text-on-accent"
           />
           <ErrorText>{error}</ErrorText>
         </div>
@@ -288,10 +288,10 @@ export default function CsvImport({ open, onClose, onImported, statuses, sources
             {t('csv.previewHelp', { count: Math.min(5, ready.length) })}
           </p>
 
-          <div className="overflow-x-auto rounded border border-border">
+          <div className="overflow-x-auto rounded-card border border-separator">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border">
+                <tr className="border-b border-separator">
                   <th className="px-3 py-2 text-start text-text-secondary">
                     {t('fields.firstName')}
                   </th>
@@ -305,7 +305,7 @@ export default function CsvImport({ open, onClose, onImported, statuses, sources
               </thead>
               <tbody>
                 {ready.slice(0, 5).map((row, index) => (
-                  <tr key={index} className="border-b border-border last:border-0">
+                  <tr key={index} className="border-b border-separator last:border-0">
                     <td className="px-3 py-2 text-text">{row.first_name}</td>
                     <td className="px-3 py-2 text-text">{row.last_name ?? '—'}</td>
                     <td className="px-3 py-2 text-text">{row.email ?? '—'}</td>
@@ -367,17 +367,17 @@ function SkippedTable({ skipped }) {
       <h4 className="text-sm font-medium text-warning">{t('csv.skippedTitle')}</h4>
       <p className="mb-2 text-xs text-text-secondary">{t('csv.skippedHelp')}</p>
 
-      <div className="max-h-48 overflow-y-auto rounded border border-border">
+      <div className="max-h-48 overflow-y-auto rounded-card border border-separator">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border">
+            <tr className="border-b border-separator">
               <th className="w-20 px-3 py-2 text-start text-text-secondary">{t('csv.row')}</th>
               <th className="px-3 py-2 text-start text-text-secondary">{t('csv.reason')}</th>
             </tr>
           </thead>
           <tbody>
             {skipped.map((item) => (
-              <tr key={item.rowNumber} className="border-b border-border last:border-0">
+              <tr key={item.rowNumber} className="border-b border-separator last:border-0">
                 <td className="px-3 py-2 text-text">{item.rowNumber}</td>
                 <td className="px-3 py-2 text-text-secondary">{item.reason}</td>
               </tr>

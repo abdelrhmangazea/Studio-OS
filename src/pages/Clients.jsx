@@ -103,7 +103,7 @@ export default function Clients() {
               <button
                 key={contact.id}
                 onClick={() => navigate(`/contacts/${contact.id}`)}
-                className="rounded border border-border bg-surface p-4 text-start transition-colors hover:border-accent"
+                className="rounded-card border border-separator bg-surface p-4 text-start transition-colors hover:border-accent"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="text-sm font-medium text-text">

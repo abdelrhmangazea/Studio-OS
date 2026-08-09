@@ -84,7 +84,7 @@ export default function PaymentsTab({ contact }) {
       <Card>
         <div className="flex flex-wrap gap-8">
           <div>
-            <p className="text-xs uppercase tracking-wide text-text-secondary">
+            <p className="t-section">
               {t('contact.paid')}
             </p>
             <p className="mt-1 text-xl font-semibold text-success">
@@ -92,7 +92,7 @@ export default function PaymentsTab({ contact }) {
             </p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-wide text-text-secondary">
+            <p className="t-section">
               {t('contact.outstanding')}
             </p>
             <p className="mt-1 text-xl font-semibold text-text">
@@ -125,18 +125,18 @@ export default function PaymentsTab({ contact }) {
                 {invoice.issued_at && <span>{formatDate(invoice.issued_at, language)}</span>}
               </p>
             </div>
-            <Badge color={invoice.status === 'paid' ? 'var(--success)' : 'var(--warning)'}>
+            <Badge tone={invoice.status === 'paid' ? 'success' : 'warning'}>
               {t(`booking.invoice_${invoice.status}`)}
             </Badge>
           </div>
 
           {(invoice.receipts ?? []).length === 0 ? (
-            <p className="mt-3 border-t border-border pt-3 text-xs text-text-secondary">
+            <p className="mt-3 border-t border-separator pt-3 text-xs text-text-secondary">
               {t('booking.awaitingReceipt')}
             </p>
           ) : (
             (invoice.receipts ?? []).map((receipt) => (
-              <div key={receipt.id} className="mt-3 border-t border-border pt-3">
+              <div key={receipt.id} className="mt-3 border-t border-separator pt-3">
                 <p className="text-xs text-text-secondary">
                   {t('booking.receiptUploaded', {
                     date: formatDateTime(receipt.uploaded_at, language),
@@ -148,7 +148,7 @@ export default function PaymentsTab({ contact }) {
                     <img
                       src={links[receipt.id]}
                       alt=""
-                      className="max-h-56 rounded border border-border"
+                      className="max-h-56 rounded-card border border-separator"
                     />
                   </a>
                 )}

@@ -81,10 +81,19 @@ export function daysSince(timestamp) {
   return Math.floor((Date.now() - then.getTime()) / 86400000)
 }
 
-/** Grey under a week, orange after 7 days, red after 14. */
+/**
+ * Green, grey, orange, red — the one column in the leads table allowed
+ * to carry colour, so it has to say something at a glance.
+ *
+ * Green is not decoration: it is "contacted in the last three days",
+ * which is the only state that needs no action. Everything from four
+ * days to a week is unremarkable and stays grey. A row is only worth
+ * colouring if it is either fine or a problem.
+ */
 export function stalenessColor(days) {
   if (days === null) return 'text-text-secondary'
   if (days >= 14) return 'text-danger'
   if (days >= 7) return 'text-warning'
+  if (days <= 3) return 'text-success'
   return 'text-text-secondary'
 }

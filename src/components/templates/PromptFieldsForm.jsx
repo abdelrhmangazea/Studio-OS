@@ -42,7 +42,7 @@ export default function PromptFieldsForm({ open, fields, computed = [], onCancel
       <p className="mb-4 text-sm text-text-secondary">{t('generator.promptHelp')}</p>
 
       {computed.length > 0 && (
-        <div className="mb-4 rounded border border-border bg-bg p-3">
+        <div className="mb-4 rounded-card border border-separator bg-bg p-3">
           {computed.map((name) => (
             <div key={name} className="flex items-baseline justify-between gap-3">
               <span className="text-xs text-text-secondary">{name}</span>

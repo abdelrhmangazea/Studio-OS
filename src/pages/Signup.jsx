@@ -98,7 +98,7 @@ export default function Signup() {
             <ErrorText>{error}</ErrorText>
 
             {pending && (
-              <div className="rounded border border-border p-3">
+              <div className="rounded-card border border-separator p-3">
                 <p className="text-sm text-text">{t('auth.confirmSent', { email })}</p>
                 <p className="mt-1 text-xs text-text-secondary">{t('auth.checkSpam')}</p>
                 <button

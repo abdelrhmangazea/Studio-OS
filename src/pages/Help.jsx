@@ -56,7 +56,7 @@ export default function Help() {
 
       <div className="space-y-3">
         {TOPICS.map((key) => (
-          <details key={key} className="rounded border border-border p-4">
+          <details key={key} className="rounded-card border border-separator p-4">
             <summary className="cursor-pointer text-sm font-medium text-text">
               {t(`help.q_${key}`)}
             </summary>

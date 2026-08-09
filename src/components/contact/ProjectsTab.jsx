@@ -68,7 +68,7 @@ export default function ProjectsTab({ contact }) {
             <button
               key={project.id}
               onClick={() => navigate(`/projects/${project.id}`)}
-              className="flex w-full items-center justify-between gap-3 rounded border border-border bg-surface p-4 text-start hover:border-accent"
+              className="flex w-full items-center justify-between gap-3 rounded-card border border-separator bg-surface p-4 text-start hover:border-accent"
             >
               <span className="min-w-0">
                 <span className="flex flex-wrap items-center gap-2">
@@ -78,7 +78,7 @@ export default function ProjectsTab({ contact }) {
                   <span className="text-sm text-text">{project.name}</span>
                   <DemoBadge on={project} />
                   {project.is_archived && (
-                    <Badge color="#22C55E">{t('project.delivered')}</Badge>
+                    <Badge tone="success">{t('project.delivered')}</Badge>
                   )}
                 </span>
                 <span className="mt-1 block text-xs text-text-secondary">

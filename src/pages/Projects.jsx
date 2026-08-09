@@ -72,14 +72,14 @@ export default function Projects() {
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="flex overflow-hidden rounded border border-border">
+        <div className="flex overflow-hidden rounded-card border border-separator">
           {['active', 'delivered'].map((which) => (
             <button
               key={which}
               onClick={() => setTab(which)}
               className={
                 'px-3 py-1.5 text-sm ' +
-                (tab === which ? 'bg-accent text-white' : 'bg-surface text-text-secondary')
+                (tab === which ? 'bg-accent text-on-accent' : 'bg-surface text-text-secondary')
               }
             >
               {t(which === 'active' ? 'project.tabActive' : 'project.tabDelivered')}
@@ -130,10 +130,10 @@ export default function Projects() {
           {tab === 'active' ? t('project.emptyActive') : t('project.emptyDelivered')}
         </EmptyState>
       ) : (
-        <div className="overflow-x-auto rounded border border-border">
+        <div className="overflow-x-auto rounded-card border border-separator">
           <table className="w-full min-w-[860px] text-sm">
             <thead>
-              <tr className="border-b border-border bg-surface">
+              <tr className="border-b border-separator bg-surface">
                 {['code', 'name', 'client', 'stage', 'state', 'lastUpdate'].map((column) => (
                   <th key={column} className="px-3 py-2.5 text-start font-medium text-text-secondary">
                     {t(`project.col_${column}`)}
@@ -146,7 +146,7 @@ export default function Projects() {
                 <tr
                   key={project.id}
                   onClick={() => navigate(`/projects/${project.id}`)}
-                  className="cursor-pointer border-b border-border last:border-0 hover:bg-surface"
+                  className="cursor-pointer border-b border-separator last:border-0 hover:bg-surface"
                 >
                   <td className="whitespace-nowrap px-3 py-2.5 font-mono text-text-secondary" dir="ltr">
                     {project.code}

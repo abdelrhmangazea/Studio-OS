@@ -80,7 +80,7 @@ export default function StageView({
         <h2 className="text-lg font-semibold text-text">
           {language === 'ar' ? definition.title_ar : definition.title_en}
         </h2>
-        <span className="rounded border border-border px-2 py-0.5 text-xs text-text-secondary">
+        <span className="rounded-card border border-separator px-2 py-0.5 text-xs text-text-secondary">
           {t(`project.status_${stage.status}`)}
         </span>
       </div>
@@ -88,7 +88,7 @@ export default function StageView({
       <div className="space-y-4">
         {blocks.map((block) => (
           <Card key={block.key}>
-            <h3 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+            <h3 className="mb-3 t-section">
               {block.title}
             </h3>
             {block.body}

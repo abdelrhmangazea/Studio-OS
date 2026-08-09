@@ -183,7 +183,7 @@ export default function Suppliers() {
             <button
               key={supplier.id}
               onClick={() => open(supplier)}
-              className="flex w-full flex-wrap items-center justify-between gap-3 rounded border border-border p-3 text-start hover:bg-surface"
+              className="flex w-full flex-wrap items-center justify-between gap-3 rounded-card border border-separator p-3 text-start hover:bg-surface"
             >
               <div className="min-w-0">
                 <p className="text-sm text-text">
@@ -206,7 +206,7 @@ export default function Suppliers() {
               </div>
 
               {supplier.rating ? (
-                <Badge color="var(--accent)">
+                <Badge>
                   {'★'.repeat(supplier.rating)}
                   <span className="opacity-40">{'★'.repeat(5 - supplier.rating)}</span>
                 </Badge>
@@ -332,8 +332,8 @@ export default function Suppliers() {
 
           {/* Their actual track record with this studio. */}
           {editing !== 'new' && (
-            <div className="border-t border-border pt-4">
-              <h3 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+            <div className="border-t border-separator pt-4">
+              <h3 className="mb-2 t-section">
                 {t('suppliers.usedOn')}
               </h3>
               {jobs.length === 0 ? (

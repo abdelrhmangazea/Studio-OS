@@ -156,7 +156,7 @@ export default function Bookings() {
                 onClick={() => open(booking)}
                 className={
                   'w-full rounded border p-3 text-start ' +
-                  (selected?.id === booking.id ? 'border-accent bg-surface' : 'border-border hover:bg-surface')
+                  (selected?.id === booking.id ? 'border-accent bg-surface' : 'border-separator hover:bg-surface')
                 }
               >
                 <span className="flex items-center justify-between gap-2">
@@ -220,7 +220,7 @@ export default function Bookings() {
                     {selected.contact && (
                       <Link
                         to={`/contacts/${selected.contact_id}`}
-                        className="rounded border border-border px-2 py-1 text-xs text-accent hover:underline"
+                        className="rounded-card border border-separator px-2 py-1 text-xs text-accent hover:underline"
                       >
                         {t('booking.openClient')}
                       </Link>
@@ -228,7 +228,7 @@ export default function Bookings() {
                     {selected.project && (
                       <Link
                         to={`/projects/${selected.project_id}`}
-                        className="rounded border border-border px-2 py-1 text-xs text-accent hover:underline"
+                        className="rounded-card border border-separator px-2 py-1 text-xs text-accent hover:underline"
                       >
                         <span className="font-mono" dir="ltr">
                           {selected.project.code}
@@ -277,7 +277,7 @@ export default function Bookings() {
                   Object.keys(selected.answers ?? {}).length > 0 ||
                   Object.keys(selected.answer_files ?? {}).length > 0) && (
                   <Card className="mb-4">
-                    <h3 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+                    <h3 className="mb-2 t-section">
                       {t('booking.brief')}
                     </h3>
                     {selected.project_brief && (
@@ -295,8 +295,8 @@ export default function Bookings() {
                     </dl>
 
                     {Object.keys(selected.answer_files ?? {}).length > 0 && (
-                      <div className="mt-4 border-t border-border pt-3">
-                        <h4 className="mb-2 text-xs uppercase tracking-wide text-text-secondary">
+                      <div className="mt-4 border-t border-separator pt-3">
+                        <h4 className="mb-2 t-section">
                           {t('booking.attachedFiles')}
                         </h4>
                         <ul className="space-y-1">
@@ -326,7 +326,7 @@ export default function Bookings() {
 
                 {/* ---------- Invoice and receipt ---------- */}
                 <Card>
-                  <h3 className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+                  <h3 className="mb-1 t-section">
                     {t('booking.payment')}
                   </h3>
                   <p className="mb-3 text-xs text-text-secondary">{t('booking.paymentHelp')}</p>
@@ -367,7 +367,7 @@ export default function Bookings() {
                     </div>
                   ) : (
                     invoices.map((invoice) => (
-                      <div key={invoice.id} className="rounded border border-border p-3">
+                      <div key={invoice.id} className="rounded-card border border-separator p-3">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-sm text-text">
                             {invoice.amount} {invoice.currency}
@@ -399,7 +399,7 @@ export default function Bookings() {
                           </p>
                         ) : (
                           (invoice.receipts ?? []).map((receipt) => (
-                            <div key={receipt.id} className="mt-3 border-t border-border pt-3">
+                            <div key={receipt.id} className="mt-3 border-t border-separator pt-3">
                               <p className="text-xs text-text-secondary">
                                 {t('booking.receiptUploaded', {
                                   date: formatDateTime(receipt.uploaded_at, language),
@@ -416,7 +416,7 @@ export default function Bookings() {
                                   <img
                                     src={receiptLinks[receipt.id]}
                                     alt=""
-                                    className="max-h-64 rounded border border-border"
+                                    className="max-h-64 rounded-card border border-separator"
                                   />
                                 </a>
                               )}

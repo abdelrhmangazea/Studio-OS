@@ -208,7 +208,7 @@ export default function AccessCodes() {
         ) : (
           <div className="space-y-3">
             {codes.map((c) => (
-              <div key={c.id} className="rounded border border-border p-3">
+              <div key={c.id} className="rounded-card border border-separator p-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-mono text-sm text-text" dir="ltr">
                     {c.code}
@@ -247,7 +247,7 @@ export default function AccessCodes() {
                 </div>
 
                 {c.redemptions.length > 0 && (
-                  <div className="mt-2 space-y-1 border-t border-border pt-2">
+                  <div className="mt-2 space-y-1 border-t border-separator pt-2">
                     {c.redemptions.map((r) => (
                       <p key={r.workspace_id} className="text-xs text-text-secondary">
                         {r.workspace} · {formatDate(r.redeemed_at, language)} ·{' '}
@@ -299,7 +299,7 @@ export default function AccessCodes() {
 
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border text-xs text-text-secondary">
+            <tr className="border-b border-separator text-xs text-text-secondary">
               <th className="p-2 text-start">{t('admin.studio')}</th>
               <th className="p-2 text-start">{t('codes.plan')}</th>
               <th className="p-2 text-start">{t('codes.left')}</th>
@@ -309,7 +309,7 @@ export default function AccessCodes() {
           </thead>
           <tbody>
             {workspaces.map((w) => (
-              <tr key={w.id} className="border-b border-border">
+              <tr key={w.id} className="border-b border-separator">
                 <td className="p-2 text-text">{w.name}</td>
                 <td className="p-2">
                   <Badge color={w.effective === 'free' ? 'var(--muted)' : 'var(--accent)'}>
@@ -337,7 +337,7 @@ export default function AccessCodes() {
                           await adminSetPlan(w.id, k, k === 'free' ? null : null)
                           load()
                         }}
-                        className="rounded border border-border px-2 py-0.5 text-xs text-accent hover:bg-surface"
+                        className="rounded-card border border-separator px-2 py-0.5 text-xs text-accent hover:bg-surface"
                       >
                         {k}
                       </button>
@@ -348,7 +348,7 @@ export default function AccessCodes() {
                         await adminEndAccess(w.id)
                         load()
                       }}
-                      className="rounded border border-border px-2 py-0.5 text-xs text-text-secondary hover:bg-surface"
+                      className="rounded-card border border-separator px-2 py-0.5 text-xs text-text-secondary hover:bg-surface"
                       title={t('codes.endAccessHint')}
                     >
                       {t('codes.endAccess')}

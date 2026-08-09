@@ -107,7 +107,7 @@ export default function TeamSettings() {
         {members.map((m) => (
           <div
             key={m.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-separator p-3"
           >
             <div className="min-w-0">
               <p className="text-sm text-text">
@@ -142,7 +142,7 @@ export default function TeamSettings() {
       </div>
 
       {/* ---------- what each role can do ---------- */}
-      <div className="mb-6 rounded border border-border p-3 text-xs text-text-secondary">
+      <div className="mb-6 rounded-card border border-separator p-3 text-xs text-text-secondary">
         <p>{t('team.roleOwner')}</p>
         <p className="mt-1">{t('team.roleMember')}</p>
         <p className="mt-1">{t('team.roleViewer')}</p>
@@ -176,7 +176,7 @@ export default function TeamSettings() {
             <div className="mt-4 rounded border border-accent/50 bg-accent/10 p-3">
               <p className="text-sm text-text">{t('team.linkReady')}</p>
               <p
-                className="mt-2 break-all rounded border border-border bg-bg p-2 font-mono text-xs text-text"
+                className="mt-2 break-all rounded-card border border-separator bg-bg p-2 font-mono text-xs text-text"
                 dir="ltr"
               >
                 {linkFor(fresh.token)}
@@ -200,7 +200,7 @@ export default function TeamSettings() {
               {liveInvites.map((i) => (
                 <div
                   key={i.id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded border border-border p-2 text-xs"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-card border border-separator p-2 text-xs"
                 >
                   <span className="text-text">
                     {i.label || t(`team.role_${i.role}`)} ·{' '}

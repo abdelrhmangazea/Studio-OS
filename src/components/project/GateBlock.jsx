@@ -38,14 +38,14 @@ export default function GateBlock({ definition, stage, onChanged }) {
 
   if (definition.never_closes) {
     return (
-      <div className="rounded border border-border p-4">
+      <div className="rounded-card border border-separator p-4">
         <p className="text-sm text-text">{t('project.neverCloses')}</p>
       </div>
     )
   }
 
   return (
-    <div className="rounded border border-border p-4">
+    <div className="rounded-card border border-separator p-4">
       {/* What is blocking, in plain words */}
       {stage.gate_met ? (
         <p className="text-sm text-success">{t('project.gateMet')}</p>

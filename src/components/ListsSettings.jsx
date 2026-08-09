@@ -85,7 +85,7 @@ export default function ListsSettings() {
       <div
         key={item.id}
         className={
-          'flex flex-wrap items-end gap-2 rounded border border-border p-3 ' +
+          'flex flex-wrap items-end gap-2 rounded-card border border-separator p-3 ' +
           (item.is_active ? '' : 'opacity-60')
         }
       >
@@ -121,7 +121,7 @@ export default function ListsSettings() {
               defaultValue={item.color}
               disabled={!isOwner}
               onBlur={(event) => run(updateRow(table, item.id, { color: event.target.value }))}
-              className="h-9 w-12 cursor-pointer rounded border border-border bg-surface"
+              className="h-9 w-12 cursor-pointer rounded-card border border-separator bg-surface"
             />
           </label>
         )}

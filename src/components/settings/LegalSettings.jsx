@@ -201,7 +201,7 @@ export default function LegalSettings() {
       <ErrorText>{error}</ErrorText>
 
       {/* ---------- what the contract reads from elsewhere ---------- */}
-      <div className="mt-6 border-t border-border pt-4">
+      <div className="mt-6 border-t border-separator pt-4">
         <h3 className="mb-1 text-sm font-medium text-text">{t('legal.derived')}</h3>
         <p className="mb-3 text-xs text-text-secondary">{t('legal.derivedHelp')}</p>
 

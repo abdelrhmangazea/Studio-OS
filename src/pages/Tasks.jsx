@@ -180,7 +180,7 @@ function TaskGroup({ title, tasks, tone, onChanged, language, t }) {
     <section>
       <h2
         className={
-          'mb-2 text-xs uppercase tracking-wide ' +
+          'mb-2 t-section ' +
           (tone === 'warning' ? 'text-warning' : 'text-text-secondary')
         }
       >
@@ -203,13 +203,13 @@ function TaskGroup({ title, tasks, tone, onChanged, language, t }) {
 
 export function TaskRow({ task, onChanged, language, t }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded border border-border p-3">
+    <div className="flex flex-wrap items-center gap-3 rounded-card border border-separator p-3">
       <button
         onClick={async () => {
           await setTaskDone(task.id, true)
           onChanged()
         }}
-        className="h-4 w-4 shrink-0 rounded border border-border hover:border-accent"
+        className="h-4 w-4 shrink-0 rounded-card border border-separator hover:border-accent"
         title={t('tasks.markDone')}
       />
 

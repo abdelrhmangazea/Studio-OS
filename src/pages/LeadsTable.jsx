@@ -112,15 +112,18 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
   if (contacts.length === 0) return <EmptyState>{t('leads.emptyFiltered')}</EmptyState>
 
   return (
-    <div className="overflow-x-auto rounded border border-border">
-      <table className="w-full min-w-[1000px] text-sm">
+    // RULE 1 — the radius belongs to the table, not to the rows. Forty
+    // rounded cards is unreadable; one rounded container with flat rows
+    // inside it reads as a single object you can scan down.
+    <div className="overflow-x-auto rounded-card border border-separator bg-surface">
+      <table className="w-full min-w-[1220px]">
         <thead>
-          <tr className="border-b border-border bg-surface">
+          <tr className="border-b border-separator bg-surface-raised">
             {COLUMNS.map((column) => (
               <th
                 key={column.key}
                 onClick={() => toggleSort(column.key)}
-                className="cursor-pointer px-3 py-2.5 text-start font-medium text-text-secondary hover:text-text"
+                className="t-section cursor-pointer whitespace-nowrap px-3 py-2.5 text-start hover:text-text"
               >
                 {t(column.labelKey)}
                 {sortKey === column.key && (
@@ -134,6 +137,12 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
         <tbody>
           {sorted.map((contact) => {
             const days = daysSince(contactClock(contact))
+            // RULE 4 — fade, don't hide. A rejected lead keeps its place
+            // in the sort so the list does not silently shrink; it just
+            // stops competing for attention. The class goes on the ROW,
+            // never on the text: text at 55% drifts against the hover
+            // background, a faded row keeps its own contrast intact.
+            const lost = statusById[contact.status_id]?.is_lost
 
             return (
               <tr
@@ -143,17 +152,20 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
                   if (event.target.closest('input, select, textarea')) return
                   navigate(`/contacts/${contact.id}`)
                 }}
-                className="cursor-pointer border-b border-border last:border-0 hover:bg-surface"
+                className={
+                  'cursor-pointer border-b border-separator-soft last:border-0 ' +
+                  `hover:bg-surface-raised ${lost ? 'is-faded' : ''}`
+                }
               >
-                <td className="px-3 py-1.5">
+                <td className="min-w-[210px] px-3 py-[7px]">
                   <div className="flex items-center gap-1">
                     <Input
-                      className="px-2 py-1"
+                      className="min-w-0 flex-1 rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                       defaultValue={contact.first_name ?? ''}
                       onBlur={(e) => saveField(contact, 'first_name', e.target.value.trim())}
                     />
                     <Input
-                      className="px-2 py-1"
+                      className="min-w-0 flex-1 rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                       defaultValue={contact.last_name ?? ''}
                       onBlur={(e) => saveField(contact, 'last_name', e.target.value.trim())}
                     />
@@ -163,13 +175,13 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
 
                 {/* dir="ltr" so "+20" is not rendered as "20+" in Arabic.
                     Phone numbers read left-to-right in every language. */}
-                <td className="px-3 py-1.5">
+                <td className="min-w-[190px] px-3 py-[7px]">
                   <div dir="ltr" className="flex items-center gap-1">
                     <span className="whitespace-nowrap text-text-secondary">
                       {contact.phone_country_code}
                     </span>
                     <Input
-                      className="px-2 py-1"
+                      className="rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                       defaultValue={contact.phone_number ?? ''}
                       inputMode="numeric"
                       onBlur={(e) =>
@@ -179,18 +191,18 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
                   </div>
                 </td>
 
-                <td className="px-3 py-1.5">
+                <td className="min-w-[220px] px-3 py-[7px]">
                   <Input
-                    className="px-2 py-1"
+                    className="rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                     type="email"
                     defaultValue={contact.email ?? ''}
                     onBlur={(e) => saveField(contact, 'email', e.target.value.trim())}
                   />
                 </td>
 
-                <td className="px-3 py-1.5">
+                <td className="px-3 py-[7px]">
                   <Select
-                    className="min-w-32 px-2 py-1"
+                    className="min-w-32 rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                     value={contact.source_id ?? ''}
                     onChange={(e) => saveField(contact, 'source_id', e.target.value)}
                   >
@@ -203,18 +215,18 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
                   </Select>
                 </td>
 
-                <td className="px-3 py-1.5">
+                <td className="px-3 py-[7px]">
                   {/* The colour lives in a dot, not in the text — tinting the
                       select itself makes a grey status look disabled. */}
                   <div className="flex items-center gap-2">
                     <span
-                      className="inline-block h-2 w-2 shrink-0 rounded-full"
+                      className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
                       style={{
                         backgroundColor: statusById[contact.status_id]?.color ?? 'transparent',
                       }}
                     />
                     <Select
-                      className="min-w-32 px-2 py-1"
+                      className="min-w-32 rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                       value={contact.status_id ?? ''}
                       onChange={(e) => saveField(contact, 'status_id', e.target.value)}
                     >
@@ -228,22 +240,22 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
                   </div>
                 </td>
 
-                <td className="whitespace-nowrap px-3 py-1.5 text-text-secondary">
+                <td className="t-meta whitespace-nowrap px-3 py-[7px] text-text-secondary">
                   {contact.last_contact_at
                     ? formatDate(contact.last_contact_at, language)
                     : t('common.never')}
                 </td>
 
-                <td className="px-3 py-1.5">
+                <td className="px-3 py-[7px]">
                   <Input
-                    className="px-2 py-1"
+                    className="rounded-[8px] border-transparent bg-transparent px-2 py-1 hover:border-separator"
                     type="date"
                     defaultValue={contact.next_action_at ?? ''}
                     onBlur={(e) => saveField(contact, 'next_action_at', e.target.value)}
                   />
                 </td>
 
-                <td className={`whitespace-nowrap px-3 py-1.5 font-medium ${stalenessColor(days)}`}>
+                <td className={`tabular whitespace-nowrap px-3 py-[7px] text-[15px] font-bold ${stalenessColor(days)}`}>
                   {days === null ? t('common.none') : days}
                 </td>
               </tr>

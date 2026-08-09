@@ -59,7 +59,7 @@ export default function TasksTab({ contact }) {
     <div className="space-y-4">
       {tasks.length > 0 && (
         <Card>
-          <h3 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+          <h3 className="mb-3 t-section">
             {t('nav.tasks')}
           </h3>
           <div className="space-y-2">
@@ -85,7 +85,7 @@ export default function TasksTab({ contact }) {
 
       {reminders.length > 0 && (
         <Card>
-          <h3 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+          <h3 className="mb-3 t-section">
             {t('contact.remindersTitle')}
           </h3>
           <p className="mb-3 text-xs text-text-secondary">{t('contact.remindersHelp')}</p>
@@ -114,10 +114,10 @@ export default function TasksTab({ contact }) {
 
 function Row({ label, date, overdue, project, note, onDone, language, t }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded border border-border p-3">
+    <div className="flex flex-wrap items-center gap-3 rounded-card border border-separator p-3">
       <button
         onClick={onDone}
-        className="h-4 w-4 shrink-0 rounded border border-border hover:border-accent"
+        className="h-4 w-4 shrink-0 rounded-card border border-separator hover:border-accent"
         title={t('tasks.markDone')}
       />
       <div className="min-w-0 flex-1">

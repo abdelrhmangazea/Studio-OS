@@ -158,14 +158,14 @@ export default function ProjectWorkspace() {
             <ProgressRing percent={progress} />
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-sm text-text-secondary" dir="ltr">
+                <span className="t-meta font-mono text-text-secondary" dir="ltr">
                   {project.code}
                 </span>
-                {project.is_archived && <Badge color="#22C55E">{t('project.delivered')}</Badge>}
+                {project.is_archived && <Badge tone="success">{t('project.delivered')}</Badge>}
                 <DemoBadge on={project} />
               </div>
-              <h1 className="text-2xl font-semibold text-text">{project.name}</h1>
-              <p className="mt-1 text-sm">
+              <h1 className="t-page-title mt-1 text-text">{project.name}</h1>
+              <p className="t-body mt-1.5">
                 <Link
                   to={`/contacts/${project.contact_id}`}
                   className="text-accent hover:underline"
@@ -265,7 +265,7 @@ export default function ProjectWorkspace() {
 
           {/* ---------- Project details ---------- */}
           <Card className="mt-6">
-            <h3 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+            <h3 className="mb-3 t-section">
               {t('project.details')}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -317,7 +317,7 @@ export default function ProjectWorkspace() {
 
           {/* ---------- Timeline ---------- */}
           <Card className="mt-6">
-            <h3 className="mb-3 text-xs uppercase tracking-wide text-text-secondary">
+            <h3 className="mb-3 t-section">
               {t('project.timeline')}
             </h3>
             {timeline.length === 0 ? (

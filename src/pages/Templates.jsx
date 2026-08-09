@@ -194,7 +194,7 @@ function Row({ pair, access, setEditing, setPreviewing, setPickingFor, load, onE
   const unavailable = used.filter((f) => NOT_YET_AVAILABLE.has(f))
 
   return (
-    <div className={'rounded border border-border p-4 ' + (pair.active ? '' : 'opacity-60')}>
+    <div className={'rounded-card border border-separator p-4 ' + (pair.active ? '' : 'opacity-60')}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -237,9 +237,9 @@ function Row({ pair, access, setEditing, setPreviewing, setPickingFor, load, onE
       {/* Both languages side by side */}
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         {['ar', 'en'].map((lang) => (
-          <div key={lang} className="rounded border border-border bg-surface p-3">
+          <div key={lang} className="rounded-card border border-separator bg-surface p-3">
             <div className="mb-1 flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wide text-text-secondary">
+              <span className="t-section">
                 {t(lang === 'ar' ? 'templates.arabic' : 'templates.english')}
               </span>
               <button
@@ -277,7 +277,7 @@ function Row({ pair, access, setEditing, setPreviewing, setPickingFor, load, onE
                 ? 'border-danger text-danger'
                 : NOT_YET_AVAILABLE.has(name)
                   ? 'border-warning text-warning'
-                  : 'border-border text-text-secondary')
+                  : 'border-separator text-text-secondary')
             }
           >
             {name}

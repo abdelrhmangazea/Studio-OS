@@ -68,10 +68,10 @@ export default function LeadsKanban({ contacts, statuses, sources, onChanged }) 
             onDrop={(event) => handleDrop(event, status.id)}
             className={
               'flex w-64 shrink-0 flex-col rounded border bg-surface ' +
-              (isTarget ? 'border-accent' : 'border-border')
+              (isTarget ? 'border-accent' : 'border-separator')
             }
           >
-            <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
+            <div className="flex items-center justify-between border-b border-separator px-3 py-2.5">
               <span className="flex items-center gap-2 text-sm font-medium text-text">
                 <span
                   className="inline-block h-2 w-2 rounded-full"
@@ -97,7 +97,7 @@ export default function LeadsKanban({ contacts, statuses, sources, onChanged }) 
                     onDragEnd={() => setDraggingId(null)}
                     onClick={() => navigate(`/contacts/${contact.id}`)}
                     className={
-                      'cursor-pointer rounded border border-border bg-bg p-3 ' +
+                      'cursor-pointer rounded-card border border-separator bg-bg p-3 ' +
                       (draggingId === contact.id ? 'opacity-40' : 'hover:border-accent')
                     }
                   >

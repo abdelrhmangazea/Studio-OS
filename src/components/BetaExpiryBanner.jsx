@@ -33,7 +33,7 @@ export default function BetaExpiryBanner() {
       className={`border-b px-6 py-2 text-sm ${
         urgent
           ? 'border-warning/40 bg-warning/10 text-text'
-          : 'border-border bg-surface text-text-secondary'
+          : 'border-separator bg-surface text-text-secondary'
       }`}
     >
       <span>

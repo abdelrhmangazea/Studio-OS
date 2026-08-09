@@ -36,14 +36,14 @@ export default function DocumentsTab({ contact }) {
   return (
     <div className="max-w-3xl space-y-2">
       {documents.map((doc) => (
-        <div key={doc.id} className="rounded border border-border bg-surface p-4">
+        <div key={doc.id} className="rounded-card border border-separator bg-surface p-4">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-text">{doc.title}</span>
                 <DemoBadge on={doc} />
                 <Badge>{doc.language === 'ar' ? 'AR' : 'EN'}</Badge>
-                {doc.type && <Badge color="#0077B6">{doc.type}</Badge>}
+                {doc.type && <Badge>{doc.type}</Badge>}
               </div>
               <p className="mt-1 text-xs text-text-secondary">
                 {t('documents.generatedOn', { date: formatDateTime(doc.created_at, language) })}
@@ -63,7 +63,7 @@ export default function DocumentsTab({ contact }) {
       ))}
 
       <Modal open={Boolean(viewing)} title={viewing?.title || ''} onClose={() => setViewing(null)} wide>
-        <div className="rounded border border-border bg-white p-6">
+        <div className="rounded-card border border-separator bg-paper text-paper-text p-6">
           <div
             dir={viewing?.language === 'ar' ? 'rtl' : 'ltr'}
             className="studio-doc"

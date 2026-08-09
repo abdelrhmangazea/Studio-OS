@@ -64,7 +64,7 @@ export default function PrepSheet({ booking, open, onClose }) {
         </>
       }
     >
-      <div className="rounded border border-border bg-white p-6">
+      <div className="rounded-card border border-separator bg-paper text-paper-text p-6">
         <div
           dir={rtl ? 'rtl' : 'ltr'}
           className="studio-doc"

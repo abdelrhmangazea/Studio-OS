@@ -104,14 +104,14 @@ export default function Leads() {
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {/* View toggle */}
-        <div className="flex overflow-hidden rounded border border-border">
+        <div className="flex overflow-hidden rounded-card border border-separator">
           {['table', 'kanban'].map((mode) => (
             <button
               key={mode}
               onClick={() => setView(mode)}
               className={
                 'px-3 py-1.5 text-sm ' +
-                (view === mode ? 'bg-accent text-white' : 'bg-surface text-text-secondary')
+                (view === mode ? 'bg-accent text-on-accent' : 'bg-surface text-text-secondary')
               }
             >
               {t(mode === 'table' ? 'leads.tableView' : 'leads.kanbanView')}

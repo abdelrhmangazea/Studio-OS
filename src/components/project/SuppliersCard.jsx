@@ -61,7 +61,7 @@ export default function SuppliersCard({ project }) {
 
   return (
     <Card>
-      <h3 className="mb-1 text-xs uppercase tracking-wide text-text-secondary">
+      <h3 className="mb-1 t-section">
         {t('nav.suppliers')}
       </h3>
       <p className="mb-3 text-xs text-text-secondary">{t('suppliers.onProjectHelp')}</p>
@@ -73,7 +73,7 @@ export default function SuppliersCard({ project }) {
           {rows.map((row) => (
             <li
               key={row.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded border border-border p-3"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-separator p-3"
             >
               <div className="min-w-0">
                 <p className="text-sm text-text">{row.supplier?.name}</p>
@@ -103,7 +103,7 @@ export default function SuppliersCard({ project }) {
       )}
 
       {adding ? (
-        <div className="mt-3 space-y-3 border-t border-border pt-3">
+        <div className="mt-3 space-y-3 border-t border-separator pt-3">
           <Field label={t('suppliers.pick')}>
             <Select value={pick} onChange={(e) => setPick(e.target.value)}>
               <option value="">—</option>

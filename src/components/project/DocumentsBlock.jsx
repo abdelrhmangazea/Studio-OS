@@ -29,7 +29,7 @@ export default function DocumentsBlock({ definition, templates, project, questio
 
   if (rows.length === 0) {
     return (
-      <div className="rounded border border-dashed border-border p-5 text-center">
+      <div className="rounded-card border border-dashed border-separator p-5 text-center">
         <p className="text-sm text-text-secondary">
           {expected
             ? t('project.documentsExpected', { docs: expected })
@@ -56,7 +56,7 @@ export default function DocumentsBlock({ definition, templates, project, questio
       {rows.map((row) => (
         <div
           key={row.key}
-          className="flex items-center justify-between gap-3 rounded border border-border p-3"
+          className="flex items-center justify-between gap-3 rounded-card border border-separator p-3"
         >
           <span className="text-sm text-text">{row.title}</span>
           <Button

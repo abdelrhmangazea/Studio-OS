@@ -20,6 +20,19 @@ import { usePageTitle } from '../lib/usePageTitle'
  * Stages are shown by their client-facing titles. Internal keys like
  * '06_design_development' never reach this file.
  */
+
+/**
+ * Black or white, whichever can actually be read on the studio's own
+ * colour. Rec. 601 luma is enough here — this decides one pair of
+ * initials, not a colour system.
+ */
+function readableOn(hex) {
+  const value = String(hex ?? '').replace('#', '')
+  if (value.length !== 6) return '#ffffff'
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(value.slice(i, i + 2), 16))
+  return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? '#000000' : '#ffffff'
+}
+
 export default function Portal() {
   const { token } = useParams()
 
@@ -132,36 +145,51 @@ export default function Portal() {
       lang={language}
       style={{ '--pub-accent': accent }}
     >
-      <div className="mx-auto max-w-2xl px-5 py-10">
+      <div className="mx-auto max-w-2xl px-5 py-12">
         {/* ---------- White-label header ---------- */}
-        <header className="mb-8 flex items-center gap-3">
+        <header className="mb-8 flex items-center gap-4">
           {data.studio?.logo_url ? (
-            <img src={data.studio.logo_url} alt="" className="h-12 w-auto object-contain" />
+            <img src={data.studio.logo_url} alt="" className="h-14 w-auto object-contain" />
           ) : (
+            /* The ONE place the designer's own colour appears. Every
+               action below is black, because an accent belonging to one
+               studio clashes with the next studio's identity.
+
+               The initials pick black or white against whatever colour
+               the studio chose. That is not overriding their choice —
+               it is the only way their choice stays legible. */
             <div
-              className="flex h-12 w-12 items-center justify-center rounded text-sm font-semibold text-white"
-              style={{ background: accent }}
+              className="flex h-14 w-14 items-center justify-center rounded-[16px] text-base font-bold"
+              style={{ background: accent, color: readableOn(accent) }}
             >
               {(data.studio?.name ?? '?').slice(0, 2).toUpperCase()}
             </div>
           )}
-          <h1 className="text-lg font-semibold">{data.studio?.name}</h1>
+          <h1 className="pub-h2">{data.studio?.name}</h1>
         </header>
 
         {/* ---------- Where the project stands ---------- */}
-        <section className="pub-card mb-4 p-5">
-          <p className="pub-muted text-xs">{t('مشروعك', 'Your project')}</p>
-          <h2 className="mt-1 text-xl font-semibold">{data.project?.name}</h2>
-          <p className="pub-muted mt-1 font-mono text-xs" dir="ltr">
+        <section className="pub-card mb-4 p-6 sm:p-7">
+          <p className="pub-meta">{t('مشروعك', 'Your project')}</p>
+          <h2 className="pub-title mt-1.5">{data.project?.name}</h2>
+          <p className="pub-meta mt-2 font-mono" dir="ltr">
             {data.project?.code}
           </p>
 
           <div className="mt-5">
             <div className="flex items-baseline justify-between">
-              <span className="text-sm font-medium" style={{ color: accent }}>
+              <span className="text-[17px] font-bold">
                 {data.current_stage ? stageTitle(data.current_stage) : '—'}
+                {data.current_stage && (
+                  <span className="pub-muted ms-2 text-[15px] font-normal">
+                    {t(
+                      `المرحلة ${data.current_stage.number} من ${(data.stages ?? []).length}`,
+                      `stage ${data.current_stage.number} of ${(data.stages ?? []).length}`
+                    )}
+                  </span>
+                )}
               </span>
-              <span className="pub-muted text-xs">
+              <span className="pub-meta">
                 {t(
                   `${data.progress}% مكتمل`,
                   `${data.progress}% complete`
@@ -169,30 +197,34 @@ export default function Portal() {
               </span>
             </div>
 
-            <div className="mt-2 h-2 overflow-hidden rounded" style={{ background: 'var(--pub-border)' }}>
+            <div className="mt-3 h-2.5 overflow-hidden rounded-full" style={{ background: 'var(--pub-border)' }}>
               <div
-                className="h-full rounded"
-                style={{ width: `${data.progress}%`, background: accent }}
+                className="h-full rounded-full"
+                style={{ width: `${data.progress}%`, background: 'var(--pub-primary)' }}
               />
             </div>
 
             <ol className="mt-4 space-y-1.5">
               {(data.stages ?? []).map((stage) => (
-                <li key={stage.number} className="flex items-center gap-2 text-sm">
+                <li
+                  key={stage.number}
+                  className={
+                    'flex items-center gap-2.5 text-[15px] ' +
+                    (stage.status === 'locked' ? 'is-faded' : '')
+                  }
+                >
                   <span
                     className="inline-block h-2 w-2 shrink-0 rounded-full"
                     style={{
                       background:
                         stage.status === 'complete'
-                          ? accent
+                          ? 'var(--pub-primary)'
                           : stage.status === 'active'
                             ? 'var(--pub-muted)'
                             : 'var(--pub-border)',
                     }}
                   />
-                  <span className={stage.status === 'locked' ? 'pub-muted' : ''}>
-                    {stageTitle(stage)}
-                  </span>
+                  <span>{stageTitle(stage)}</span>
                 </li>
               ))}
             </ol>
@@ -200,11 +232,11 @@ export default function Portal() {
         </section>
 
         {/* ---------- Files the studio chose to share ---------- */}
-        <section className="pub-card mb-4 p-5">
-          <h3 className="text-sm font-semibold">{t('الملفات', 'Files')}</h3>
+        <section className="pub-card mb-4 p-6 sm:p-7">
+          <h3 className="pub-h2">{t('الملفات', 'Files')}</h3>
 
           {(data.files ?? []).length === 0 ? (
-            <p className="pub-muted mt-2 text-xs">
+            <p className="pub-meta mt-2">
               {t(
                 'لم تتم مشاركة أي ملفات بعد. ستظهر هنا فور مشاركتها.',
                 'No files have been shared yet. They will appear here once they are.'
@@ -215,20 +247,19 @@ export default function Portal() {
               {data.files.map((file) => (
                 <li
                   key={file.id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded border p-3"
-                  style={{ borderColor: 'var(--pub-border)', background: '#fff' }}
+                  className="flex flex-wrap items-center justify-between gap-3 border-b py-3.5 last:border-0"
+                  style={{ borderColor: 'var(--pub-border)' }}
                 >
                   <div>
-                    <p className="text-sm">{file.filename}</p>
-                    <p className="pub-muted text-xs">
+                    <p className="text-[16px] font-semibold">{file.filename}</p>
+                    <p className="pub-meta">
                       {rtl ? file.stage_title_ar : file.stage_title_en} ·{' '}
                       {dateFormatter.format(new Date(file.uploaded_at))}
                     </p>
                   </div>
                   <button
                     onClick={() => downloadPortalFile(file.path, file.filename)}
-                    className="rounded border px-3 py-1 text-xs"
-                    style={{ borderColor: accent, color: accent }}
+                    className="pub-btn pub-btn-secondary shrink-0 !px-4 !py-2 !text-[15px]"
                   >
                     {t('تنزيل', 'Download')}
                   </button>
@@ -239,18 +270,18 @@ export default function Portal() {
         </section>
 
         {/* ---------- Approve, or ask for changes ---------- */}
-        <section className="pub-card mb-4 p-5">
-          <h3 className="text-sm font-semibold">{t('المراجعة', 'Your review')}</h3>
+        <section className="pub-card mb-4 p-6 sm:p-7">
+          <h3 className="pub-h2">{t('المراجعة', 'Your review')}</h3>
 
           {stageApproval ? (
-            <p className="mt-2 text-sm" style={{ color: '#22C55E' }}>
+            <p className="mt-3 text-[16px] font-semibold">
               {t('تمت الموافقة في ', 'Approved on ')}
               {dateFormatter.format(new Date(stageApproval.decided_at))}
               {t('. الموافقة نهائية ولا يمكن تعديلها.', '. An approval is final and cannot be changed.')}
             </p>
           ) : (
             <>
-              <p className="pub-muted mt-1 text-xs">
+              <p className="pub-muted mt-2 text-[16px]">
                 {t(
                   'راجع ما تمت مشاركته، ثم وافق أو اطلب تعديلاً موضّحاً ما تريد تغييره.',
                   'Review what has been shared, then approve or request a change describing what you would like different.'
@@ -269,16 +300,14 @@ export default function Portal() {
                 <button
                   disabled={busy}
                   onClick={() => decide('approved')}
-                  className="rounded px-4 py-2 text-sm font-medium text-white disabled:opacity-40"
-                  style={{ background: accent }}
+                  className="pub-btn pub-btn-primary"
                 >
                   {t('أوافق على هذه المرحلة', 'Approve this stage')}
                 </button>
                 <button
                   disabled={busy || !comment.trim()}
                   onClick={() => decide('changes_requested')}
-                  className="rounded border px-4 py-2 text-sm disabled:opacity-40"
-                  style={{ borderColor: accent, color: accent }}
+                  className="pub-btn pub-btn-secondary"
                 >
                   {t('أطلب تعديلاً', 'Request a change')}
                 </button>
@@ -288,11 +317,11 @@ export default function Portal() {
 
           {/* Revisions. Stated plainly, and never used to block. */}
           <div
-            className="mt-4 border-t pt-3 text-xs"
+            className="mt-5 border-t pt-4 text-[15px]"
             style={{ borderColor: 'var(--pub-border)' }}
           >
             {exhausted ? (
-              <p style={{ color: '#B45309' }}>
+              <p className="pub-muted">
                 {t(
                   `استُخدمت جميع التعديلات المجانية (${revisions.free_allowance}). أي تعديل إضافي يُحتسب كعمل إضافي، ويمكنك طلبه في أي وقت.`,
                   `All ${revisions.free_allowance} free revisions have been used. Further changes are billable — you can still request them at any time.`
@@ -308,13 +337,9 @@ export default function Portal() {
             )}
           </div>
 
-          {note && (
-            <p className="mt-3 text-xs" style={{ color: accent }}>
-              {note}
-            </p>
-          )}
+          {note && <p className="mt-4 text-[15px] font-semibold">{note}</p>}
           {error && (
-            <p className="mt-3 text-xs" style={{ color: '#e11d3c' }}>
+            <p className="mt-4 text-[15px]" style={{ color: '#b3261e' }}>
               {error}
             </p>
           )}
@@ -322,23 +347,21 @@ export default function Portal() {
 
         {/* ---------- Decisions already recorded ---------- */}
         {(data.approvals ?? []).length > 0 && (
-          <section className="pub-card mb-4 p-5">
-            <h3 className="text-sm font-semibold">{t('سجل ردودك', 'Your responses')}</h3>
+          <section className="pub-card mb-4 p-6 sm:p-7">
+            <h3 className="pub-h2">{t('سجل ردودك', 'Your responses')}</h3>
             <ul className="mt-3 space-y-2">
               {data.approvals.map((row, index) => (
-                <li key={index} className="text-sm">
-                  <span
-                    style={{ color: row.decision === 'approved' ? '#22C55E' : '#B45309' }}
-                  >
+                <li key={index} className="border-b py-3 text-[16px] last:border-0" style={{ borderColor: 'var(--pub-border)' }}>
+                  <span className="font-semibold">
                     {row.decision === 'approved'
                       ? t('موافقة', 'Approved')
                       : t('طلب تعديل', 'Change requested')}
                   </span>
-                  <span className="pub-muted text-xs">
+                  <span className="pub-meta">
                     {' · '}
                     {dateFormatter.format(new Date(row.decided_at))}
                   </span>
-                  {row.comment && <p className="pub-muted mt-0.5 text-xs">{row.comment}</p>}
+                  {row.comment && <p className="pub-muted mt-1 text-[15px]">{row.comment}</p>}
                 </li>
               ))}
             </ul>
@@ -347,12 +370,12 @@ export default function Portal() {
 
         {/* ---------- Invoice and receipt: no gateway anywhere ---------- */}
         {data.invoice && (
-          <section className="pub-card mb-4 p-5">
-            <h3 className="text-sm font-semibold">{t('الدفعة', 'Payment')}</h3>
-            <p className="mt-1 text-2xl font-semibold">
+          <section className="pub-card mb-4 p-6 sm:p-7">
+            <h3 className="pub-h2">{t('الدفعة', 'Payment')}</h3>
+            <p className="pub-title mt-2">
               {data.invoice.amount} {data.invoice.currency}
             </p>
-            <p className="pub-muted mt-2 text-xs">
+            <p className="pub-muted mt-3 text-[15px]">
               {t(
                 'حوّل المبلغ بالبيانات التي أرسلها لك الاستوديو، ثم ارفع صورة الإيصال هنا. التأكيد يدوي من الاستوديو — لا يوجد خصم تلقائي ولا تُطلب أي بيانات بطاقة.',
                 'Transfer the amount using the details the studio sent you, then upload a photo of the receipt here. The studio confirms it manually — nothing is charged automatically and no card details are ever collected.'
@@ -360,7 +383,7 @@ export default function Portal() {
             </p>
 
             {data.receipt_uploaded ? (
-              <p className="mt-4 text-sm" style={{ color: '#22C55E' }}>
+              <p className="mt-4 text-[16px] font-semibold">
                 {t(
                   'تم استلام الإيصال. سيؤكده الاستوديو قريباً.',
                   'Receipt received. The studio will confirm it shortly.'
@@ -374,7 +397,7 @@ export default function Portal() {
                   onChange={handleReceipt}
                   disabled={receiptBusy}
                 />
-                <p className="pub-muted mt-2 text-xs">
+                <p className="pub-meta mt-2">
                   {t('صورة أو PDF، بحد أقصى ٥ ميجابايت.', 'JPG, PNG or PDF, up to 5MB.')}
                 </p>
                 {receiptBusy && <p className="mt-2 text-xs">{t('جارٍ الرفع…', 'Uploading…')}</p>}
@@ -384,12 +407,10 @@ export default function Portal() {
         )}
 
         <footer
-          className="pub-muted mt-10 border-t pt-4 text-center text-xs"
+          className="pub-muted mt-12 border-t pt-5 text-center text-[13px]"
           style={{ borderColor: 'var(--pub-border)' }}
         >
-          <a href="https://interiorzone.com" target="_blank" rel="noreferrer">
-            Powered by Interior Zone
-          </a>
+          Powered by Interior Studio OS
         </footer>
       </div>
     </div>

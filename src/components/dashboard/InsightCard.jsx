@@ -20,24 +20,22 @@ export default function InsightCard({ label, value, note, rows, render, t }) {
         disabled={count === 0}
         className="w-full text-start disabled:cursor-default"
       >
-        <p className="text-xs uppercase tracking-wide text-text-secondary">{label}</p>
-        <p
-          className={
-            'mt-1 text-2xl font-semibold ' + (count > 0 ? 'text-accent' : 'text-text')
-          }
-        >
-          {value}
-        </p>
-        {note && <p className="mt-1 text-xs text-text-secondary">{note}</p>}
+        <p className="t-section">{label}</p>
+        {/* RULE 2 — the value is NOT accented. Five accented numbers on
+            one dashboard is five things shouting, which is the same as
+            none of them shouting. The drill-in line below carries the
+            affordance instead. */}
+        <p className="t-metric mt-1.5 text-text">{value}</p>
+        {note && <p className="t-meta mt-1.5 text-text-secondary">{note}</p>}
         {count > 0 && (
-          <p className="mt-2 text-xs text-text-secondary">
+          <p className="t-meta mt-2 text-accent">
             {open ? t('insights.hideList') : t('insights.showList', { count })}
           </p>
         )}
       </button>
 
       {open && (
-        <ul className="mt-3 space-y-1 border-t border-border pt-3">
+        <ul className="mt-3 space-y-1 border-t border-separator-soft pt-3">
           {rows.map((row, index) => {
             const item = render(row)
             return (
