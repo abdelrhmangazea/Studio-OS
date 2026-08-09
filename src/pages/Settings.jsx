@@ -13,6 +13,7 @@ import PricingSettings from '../components/settings/PricingSettings'
 import SupplierCategories from '../components/settings/SupplierCategories'
 import DataSettings from '../components/settings/DataSettings'
 import DemoSettings from '../components/settings/DemoSettings'
+import SaveBar from '../components/settings/SaveBar'
 import SubscriptionSettings from '../components/settings/SubscriptionSettings'
 import {
   Button,
@@ -114,6 +115,18 @@ export default function Settings() {
   return (
     <div className="max-w-2xl">
       <PageTitle>{t('settings.title')}</PageTitle>
+
+      {/* The same control as the one at the foot of the form. This page
+          is long enough that changing something at the top and having
+          to hunt for a button at the bottom is real friction. */}
+      <SaveBar
+        place="top"
+        onSave={handleSave}
+        busy={busy}
+        saved={saved}
+        error={error}
+        disabled={uploading || !isOwner}
+      />
 
       {/* ---------- Studio Profile ---------- */}
       <Card className="mb-6">
@@ -303,13 +316,13 @@ export default function Settings() {
         </div>
       </Card>
 
-      <div className="mb-8 flex items-center gap-3">
-        <Button onClick={handleSave} disabled={busy || uploading || !isOwner}>
-          {busy ? t('common.saving') : t('common.save')}
-        </Button>
-        {saved && <span className="text-sm text-success">{t('common.saved')}</span>}
-        <ErrorText>{error}</ErrorText>
-      </div>
+      <SaveBar
+        onSave={handleSave}
+        busy={busy}
+        saved={saved}
+        error={error}
+        disabled={uploading || !isOwner}
+      />
 
       {/* ---------- Pricing ---------- */}
       <PricingSettings />
