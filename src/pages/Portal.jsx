@@ -8,6 +8,7 @@ import {
 } from '../lib/publicPortal'
 import { publicErrorMessage } from '../lib/errorMessage'
 import { usePageTitle } from '../lib/usePageTitle'
+import { readableOn } from '../lib/readableOn'
 
 /**
  * The client portal. One secret link, one project, no login.
@@ -84,18 +85,6 @@ function revisionMessage(revisions, rtl) {
   return rtl
     ? `بقي لك ${arabicRevisions(remaining)} من أصل ${allowance}.`
     : `${remaining} of your ${allowance} free revisions ${remaining === 1 ? 'is' : 'are'} left.`
-}
-
-/**
- * Black or white, whichever can actually be read on the studio's own
- * colour. Rec. 601 luma is enough here — this decides one pair of
- * initials, not a colour system.
- */
-function readableOn(hex) {
-  const value = String(hex ?? '').replace('#', '')
-  if (value.length !== 6) return '#ffffff'
-  const [r, g, b] = [0, 2, 4].map((i) => parseInt(value.slice(i, i + 2), 16))
-  return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? '#000000' : '#ffffff'
 }
 
 export default function Portal() {

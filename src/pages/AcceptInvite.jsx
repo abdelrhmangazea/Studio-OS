@@ -51,7 +51,7 @@ export default function AcceptInvite() {
     <div className="flex min-h-screen items-center justify-center bg-bg p-6">
       <div className="w-full max-w-sm">
         <Card>
-          <h1 className="text-xl font-semibold text-text">{t('invite.title')}</h1>
+          <h1 className="t-page-title text-text">{t('invite.title')}</h1>
 
           {info === null && (
             <p className="mt-3 text-sm text-text-secondary">{t('common.loading')}</p>

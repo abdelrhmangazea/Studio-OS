@@ -217,6 +217,11 @@ body {
   --pub-border: #e5e5ea;
   --pub-primary: #000000;
   --pub-on-primary: #ffffff;
+  /* Semantic colours for System 3. Fixed, because this page is always
+     light and is read by someone who has no theme and no account. */
+  --pub-danger: #b3261e;
+  --pub-danger-bg: #fdecea;
+  --pub-success: #1b6e33;
 
   min-height: 100vh;
   background: var(--pub-bg);

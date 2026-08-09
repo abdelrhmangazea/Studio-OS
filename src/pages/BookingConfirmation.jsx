@@ -66,12 +66,12 @@ export default function BookingConfirmation() {
     }).format(new Date(booking.slot_start))
   }, [booking, tz, rtl])
 
-  if (loading) return <div className="public-page p-10 text-sm">…</div>
+  if (loading) return <div className="public-page p-10 text-[16px]">…</div>
 
   if (!booking) {
     return (
       <div className="public-page flex min-h-screen items-center justify-center p-10">
-        <p className="text-sm">
+        <p className="text-[16px]">
           {t('ما لقيناش الحجز ده.', 'We could not find that booking.')}
         </p>
       </div>
@@ -135,7 +135,7 @@ export default function BookingConfirmation() {
         </header>
 
         <div className="pub-card p-5">
-          <p className="text-sm font-medium" style={{ color: accent }}>
+          <p className="text-[16px] font-medium" style={{ color: accent }}>
             {booking.status === 'confirmed'
               ? t('حجزك مؤكَّد', 'Your booking is confirmed')
               : t('حجزك محفوظ', 'Your booking is reserved')}
@@ -143,10 +143,10 @@ export default function BookingConfirmation() {
           <h2 className="mt-2 text-xl font-semibold">
             {rtl ? booking.session?.label_ar : booking.session?.label_en}
           </h2>
-          <p className="mt-1 text-sm">{when}</p>
-          <p className="pub-muted mt-1 text-xs" dir="ltr">{tz}</p>
+          <p className="mt-1 text-[16px]">{when}</p>
+          <p className="pub-muted mt-1 text-[14px]" dir="ltr">{tz}</p>
 
-          <dl className="mt-4 border-t pt-4 text-sm" style={{ borderColor: 'var(--pub-border)' }}>
+          <dl className="mt-4 border-t pt-4 text-[16px]" style={{ borderColor: 'var(--pub-border)' }}>
             <div className="flex justify-between py-1">
               <dt className="pub-muted">{t('الاسم', 'Name')}</dt>
               <dd>{booking.client_name}</dd>
@@ -161,8 +161,8 @@ export default function BookingConfirmation() {
         {/* ---------- Files the booking form asked for but never got ---------- */}
         {(booking.pending_files ?? []).length > 0 && (
           <div className="pub-card mt-4 p-5">
-            <h3 className="text-sm font-semibold">{t('ناقص', 'Still needed')}</h3>
-            <p className="pub-muted mt-1 text-xs">
+            <h3 className="pub-h2">{t('ناقص', 'Still needed')}</h3>
+            <p className="pub-muted mt-1 text-[14px]">
               {t(
                 'الملفات دي ما اترفعتش مع حجزك. حجزك سليم — ارفعها من هنا.',
                 'These files did not upload with your booking. Your booking is safe — please attach them here.'
@@ -172,7 +172,7 @@ export default function BookingConfirmation() {
             <div className="mt-4 space-y-4">
               {booking.pending_files.map((question) => (
                 <div key={question.id}>
-                  <p className="mb-1 text-sm">
+                  <p className="mb-1 text-[16px]">
                     {(rtl ? question.label_ar : question.label_en) ||
                       question.label_en ||
                       question.label_ar}
@@ -184,14 +184,14 @@ export default function BookingConfirmation() {
                     onChange={(event) => handleAnswerFile(question, event)}
                   />
                   {answerBusy === question.id && (
-                    <p className="mt-1 text-xs">{t('جاري الرفع…', 'Uploading…')}</p>
+                    <p className="mt-1 text-[14px]">{t('جاري الرفع…', 'Uploading…')}</p>
                   )}
                 </div>
               ))}
             </div>
 
             {answerError && (
-              <p className="mt-2 text-xs" style={{ color: '#e11d3c' }}>
+              <p className="mt-2 text-[15px]" style={{ color: 'var(--pub-danger)' }}>
                 {answerError}
               </p>
             )}
@@ -201,11 +201,11 @@ export default function BookingConfirmation() {
         {/* ---------- Invoice and receipt: no gateway anywhere ---------- */}
         {booking.invoice ? (
           <div className="pub-card mt-4 p-5">
-            <h3 className="text-sm font-semibold">{t('الدفع', 'Payment')}</h3>
+            <h3 className="pub-h2">{t('الدفع', 'Payment')}</h3>
             <p className="mt-1 text-2xl font-semibold" dir="ltr">
               {booking.invoice.amount} {booking.invoice.currency}
             </p>
-            <p className="pub-muted mt-2 text-xs">
+            <p className="pub-muted mt-2 text-[14px]">
               {t(
                 'حوّل المبلغ بالبيانات اللي بعتها لك الاستوديو، وبعدين ارفع صورة إيصال التحويل هنا. الاستوديو بيأكّده بنفسه — مفيش أي خصم تلقائي ومفيش بيانات كارت بتتاخد أبداً.',
                 'Transfer the amount using the details the studio sent you, then upload a photo of the transfer receipt here. The studio confirms it manually — nothing is charged automatically and no card details are ever collected.'
@@ -213,7 +213,7 @@ export default function BookingConfirmation() {
             </p>
 
             {booking.receipt_uploaded || uploaded ? (
-              <p className="mt-4 text-sm" style={{ color: '#22C55E' }}>
+              <p className="mt-4 text-[16px] font-semibold" style={{ color: 'var(--pub-success)' }}>
                 {t(
                   'وصلنا الإيصال. الاستوديو هيأكّده قريب.',
                   'Receipt received. The studio will confirm it shortly.'
@@ -228,12 +228,12 @@ export default function BookingConfirmation() {
                   onChange={handleUpload}
                   disabled={uploading}
                 />
-                <p className="pub-muted mt-2 text-xs">
+                <p className="pub-muted mt-2 text-[14px]">
                   {t('JPG أو PNG أو PDF، وحتى ٥ ميجابايت.', 'JPG, PNG or PDF, up to 5MB.')}
                 </p>
-                {uploading && <p className="mt-2 text-xs">{t('جاري الرفع…', 'Uploading…')}</p>}
+                {uploading && <p className="mt-2 text-[14px]">{t('جاري الرفع…', 'Uploading…')}</p>}
                 {error && (
-                  <p className="mt-2 text-xs" style={{ color: '#e11d3c' }}>
+                  <p className="mt-2 text-[15px]" style={{ color: 'var(--pub-danger)' }}>
                     {error}
                   </p>
                 )}
@@ -241,7 +241,7 @@ export default function BookingConfirmation() {
             )}
           </div>
         ) : (
-          <p className="pub-muted mt-4 text-sm">
+          <p className="pub-muted mt-4 text-[16px]">
             {t(
               'الاستوديو هيبعت لك فاتورة الاستشارة دي قريب.',
               'The studio will send you an invoice for this consultation shortly.'
@@ -250,7 +250,7 @@ export default function BookingConfirmation() {
         )}
 
         <footer
-          className="pub-muted mt-10 border-t pt-4 text-center text-xs"
+          className="pub-muted mt-10 border-t pt-4 text-center text-[14px]"
           style={{ borderColor: 'var(--pub-border)' }}
         >
           <a href="https://interiorzone.com" target="_blank" rel="noreferrer">

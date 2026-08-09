@@ -58,7 +58,7 @@ export default function Signup() {
         </div>
 
         <Card>
-          <h1 className="text-xl font-semibold text-text">{t('auth.signUpTitle')}</h1>
+          <h1 className="t-page-title text-text">{t('auth.signUpTitle')}</h1>
           <p className="mb-6 mt-1 text-sm text-text-secondary">{t('auth.signUpSubtitle')}</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

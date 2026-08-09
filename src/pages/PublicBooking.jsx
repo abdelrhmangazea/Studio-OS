@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { fetchBookingPage, fetchSlots, submitBooking, uploadAnswerFile } from '../lib/publicBooking'
 import { COUNTRIES } from '../data/countries'
 import { publicErrorMessage } from '../lib/errorMessage'
+import { readableOn } from '../lib/readableOn'
 import { usePageTitle } from '../lib/usePageTitle'
 
 /**
@@ -105,13 +106,13 @@ export default function PublicBooking() {
   }, [slots, dayFormatter])
 
   if (loading) {
-    return <div className="public-page p-10 text-sm">…</div>
+    return <div className="public-page p-10 text-[16px]">…</div>
   }
 
   if (!page) {
     return (
       <div className="public-page flex min-h-screen items-center justify-center p-10">
-        <p className="text-sm">
+        <p className="text-[16px]">
           {rtl ? 'صفحة الحجز هذه غير متاحة.' : 'This booking page is not available.'}
         </p>
       </div>
@@ -176,18 +177,18 @@ export default function PublicBooking() {
         {/* ---------- White-label header ---------- */}
         <header className="mb-8 flex items-center gap-3">
           {page.studio.logo_url ? (
-            <img src={page.studio.logo_url} alt="" className="h-12 w-auto object-contain" />
+            <img src={page.studio.logo_url} alt="" className="h-14 w-auto object-contain" />
           ) : (
             <div
-              className="flex h-11 w-11 items-center justify-center rounded text-sm font-bold text-white"
-              style={{ background: accent }}
+              className="flex h-14 w-14 items-center justify-center rounded-[16px] text-base font-bold"
+              style={{ background: accent, color: readableOn(accent) }}
             >
               {page.studio.name?.slice(0, 2).toUpperCase()}
             </div>
           )}
           <div>
-            <h1 className="text-lg font-semibold">{page.studio.name}</h1>
-            <p className="pub-muted text-xs">
+            <h1 className="pub-h2">{page.studio.name}</h1>
+            <p className="pub-meta">
               {rtl ? 'احجز استشارتك التصميمية' : 'Book your design consultation'}
             </p>
           </div>
@@ -207,8 +208,8 @@ export default function PublicBooking() {
                     : undefined
                 }
               >
-                <span className="block text-sm font-medium">{label(type)}</span>
-                <span className="pub-muted block text-xs">
+                <span className="block text-[16px] font-medium">{label(type)}</span>
+                <span className="pub-muted block text-[14px]">
                   {type.duration_minutes} {rtl ? 'دقيقة' : 'min'}
                   {type.fee ? ` · ${type.fee} ${page.currency}` : ''}
                 </span>
@@ -224,9 +225,9 @@ export default function PublicBooking() {
           hint={`${rtl ? 'كل المواعيد بتوقيت' : 'All times shown in'} ${tz}`}
         >
           {slotsLoading ? (
-            <p className="pub-muted text-sm">…</p>
+            <p className="pub-muted text-[16px]">…</p>
           ) : byDay.length === 0 ? (
-            <p className="pub-muted text-sm">
+            <p className="pub-muted text-[16px]">
               {rtl ? 'لا توجد مواعيد متاحة حالياً.' : 'No times are available right now.'}
             </p>
           ) : (
@@ -336,7 +337,7 @@ export default function PublicBooking() {
                           const list = value ? value.split(', ') : []
                           const on = list.includes(option)
                           return (
-                            <label key={option} className="flex items-center gap-2 text-sm">
+                            <label key={option} className="flex items-center gap-2 text-[16px]">
                               <input
                                 type="checkbox"
                                 className="!w-4"
@@ -368,7 +369,7 @@ export default function PublicBooking() {
                             set(chosen ? chosen.name : '')
                           }}
                         />
-                        <p className="mt-1 text-xs opacity-70">
+                        <p className="mt-1 text-[14px] opacity-70">
                           {rtl
                             ? 'صورة أو PDF، بحد أقصى ١٠ ميجابايت. يُرفع بعد تأكيد الحجز.'
                             : 'Image or PDF, up to 10MB. Uploaded once the booking is confirmed.'}
@@ -385,7 +386,10 @@ export default function PublicBooking() {
         )}
 
         {error && (
-          <p className="mb-4 rounded border p-3 text-sm" style={{ borderColor: '#e11d3c', color: '#e11d3c' }}>
+          <p
+            className="mb-4 rounded-[14px] p-4 text-[15px]"
+            style={{ background: 'var(--pub-danger-bg)', color: 'var(--pub-danger)' }}
+          >
             {error}
           </p>
         )}
@@ -393,7 +397,7 @@ export default function PublicBooking() {
         <button
           onClick={handleSubmit}
           disabled={!canSubmit || busy}
-          className="w-full rounded px-4 py-3 text-sm font-medium text-white disabled:opacity-40"
+          className="pub-btn pub-btn-primary w-full"
           style={{ background: accent }}
         >
           {busy
@@ -405,7 +409,7 @@ export default function PublicBooking() {
               : 'Confirm booking'}
         </button>
 
-        <footer className="pub-muted mt-10 border-t pt-4 text-center text-xs" style={{ borderColor: 'var(--pub-border)' }}>
+        <footer className="pub-muted mt-10 border-t pt-4 text-center text-[14px]" style={{ borderColor: 'var(--pub-border)' }}>
           <a href="https://interiorzone.com" target="_blank" rel="noreferrer">
             Powered by Interior Zone
           </a>
@@ -418,11 +422,11 @@ export default function PublicBooking() {
 function Section({ n, title, hint, children }) {
   return (
     <section className="mb-7">
-      <h2 className="mb-1 text-sm font-semibold">
+      <h2 className="mb-1 pub-h2">
         <span className="pub-muted me-2">{n}</span>
         {title}
       </h2>
-      {hint && <p className="pub-muted mb-2 text-xs">{hint}</p>}
+      {hint && <p className="pub-muted mb-2 text-[14px]">{hint}</p>}
       <div className="mt-2">{children}</div>
     </section>
   )
@@ -431,9 +435,9 @@ function Section({ n, title, hint, children }) {
 function Field({ label, required, children }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium">
+      <span className="mb-1 block text-[14px] font-medium">
         {label}
-        {required && <span style={{ color: '#e11d3c' }}> *</span>}
+        {required && <span style={{ color: 'var(--pub-danger)' }}> *</span>}
       </span>
       {children}
     </label>
