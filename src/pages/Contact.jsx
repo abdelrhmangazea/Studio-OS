@@ -13,6 +13,7 @@ import PaymentsTab from '../components/contact/PaymentsTab'
 import ProjectsTab from '../components/contact/ProjectsTab'
 import { Badge, Card, EmptyState, Tabs } from '../components/ui'
 import DeleteButton from '../components/DeleteButton'
+import DemoBadge from '../components/DemoBadge'
 
 /**
  * One contact, whether they are still a lead or already a client.
@@ -74,6 +75,8 @@ export default function Contact() {
             <Badge color={contact.is_client ? '#22C55E' : '#0077B6'}>
               {t(contact.is_client ? 'contact.client' : 'contact.lead')}
             </Badge>
+
+            <DemoBadge on={contact} />
 
             {contact.converted_at && (
               <span className="text-xs text-text-secondary">

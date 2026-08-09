@@ -917,6 +917,21 @@
     "tooltip": "This is a beta. Some of it is still rough — if something looks wrong, it may well be us. Please tell us.",
     "dismiss": "Hide this"
   },
+  "demo": {
+    "badge": "Demo",
+    "tooltip": "Teaching data, not a real client. Safe to change or delete — Settings can put it all back.",
+    "title": "Demo data",
+    "help": "Invented clients and projects for teaching. Loading it never touches your real records.",
+    "present": "Loaded: {contacts} contacts, {projects} projects, {suppliers} suppliers.",
+    "absent": "No demo data in this studio yet.",
+    "load": "Load demo data",
+    "reset": "Remove demo data",
+    "confirmLoad": "This replaces the current demo data with a fresh copy. Anything a student changed on a demo record will be lost. Your real clients and projects are not touched. Continue?",
+    "confirmReset": "This removes every demo record from this studio. Your real clients and projects are not touched. Continue?",
+    "loadedSummary": "Loaded {contacts} contacts, {projects} projects across {stages} stages, and {tasks} tasks.",
+    "resetDone": "Demo data removed.",
+    "safety": "Demo records carry a DEMO label everywhere they appear, and are the only records these two buttons can touch."
+  },
   "admin": {
     "title": "Internal",
     "subtitle": "Beta feedback and usage. Not visible to any studio.",

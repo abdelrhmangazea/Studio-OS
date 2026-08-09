@@ -6,6 +6,7 @@ import { formatDate, formatDateTime } from '../../lib/format'
 import { useAuth } from '../../lib/AuthContext'
 import { useI18n } from '../../i18n'
 import { Badge, Button, Card, EmptyState, Loadable } from '../ui'
+import DemoBadge from '../DemoBadge'
 
 /**
  * Every invoice raised against this contact, and the receipts against
@@ -105,8 +106,11 @@ export default function PaymentsTab({ contact }) {
         <Card key={invoice.id}>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <p className="text-sm text-text">
-                {invoice.amount} {invoice.currency}
+              <p className="flex items-center gap-2 text-sm text-text">
+                <span>
+                  {invoice.amount} {invoice.currency}
+                </span>
+                <DemoBadge on={invoice} />
               </p>
               <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-text-secondary">
                 {invoice.project && (

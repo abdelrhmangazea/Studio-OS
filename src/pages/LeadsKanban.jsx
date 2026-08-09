@@ -5,6 +5,7 @@ import { conversionPatch } from '../lib/conversion'
 import { daysSince, stalenessColor } from '../lib/phone'
 import { listLabel } from '../lib/useLists'
 import { useI18n } from '../i18n'
+import DemoBadge from '../components/DemoBadge'
 
 /**
  * One column per active status, in sort_order. Drag a card to another
@@ -100,7 +101,10 @@ export default function LeadsKanban({ contacts, statuses, sources, onChanged }) 
                       (draggingId === contact.id ? 'opacity-40' : 'hover:border-accent')
                     }
                   >
-                    <div className="text-sm text-text">{fullName(contact)}</div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm text-text">{fullName(contact)}</span>
+                      <DemoBadge on={contact} />
+                    </div>
                     <div className="mt-1 flex items-center justify-between text-xs">
                       <span className="text-text-secondary">
                         {listLabel(sourceById[contact.source_id], language) || t('common.none')}

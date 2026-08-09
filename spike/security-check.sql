@@ -130,4 +130,47 @@ from pg_policies
 where schemaname = 'public' and cmd = 'SELECT'
   and tablename in ('approvals','bookings','checklist_items','fee_calculations','files',
                     'generated_documents','invoices','notes','portal_links','project_stages',
-                    'project_suppliers','quotations','reminders','revisions','tasks','time_logs');
+                    'project_suppliers','quotations','reminders','revisions','tasks','time_logs')
+
+union all
+
+-- 9. THE SEEDER ASSERTS WHAT IT WROTE.
+--
+--    A write with a fixed, known row count must check that count and
+--    raise when it does not match. This is not style. The revisions
+--    upsert was originally an UPDATE against a row that did not exist
+--    yet: zero rows matched, Postgres returned success, the seeder
+--    reported a clean run, and the revision counter rendered blank.
+--    Nothing failed. That is the whole problem — an exit code says
+--    the statement ran, not that it did anything.
+--
+--    The rule this enforces: every table a seeder writes is covered by
+--    at least one demo_expect(). It caught its first gap immediately —
+--    receipts had two inserts and no assertion at all.
+select '9. seeder asserts its writes',
+       case when count(*) filter (where asserts < tables_written) = 0
+            then 'PASS — ' || sum(asserts) || ' assertions cover ' || sum(tables_written) || ' tables'
+            else 'FAIL — unasserted writes in: '
+                 || string_agg(proname, ', ') filter (where asserts < tables_written) end
+from (
+  select p.proname,
+         (length(p.prosrc) - length(replace(p.prosrc, 'demo_expect(', '')))
+           / length('demo_expect(') as asserts,
+         (select count(distinct m[1])
+            from regexp_matches(p.prosrc, 'insert into public\.(\w+)', 'g') m) as tables_written
+  from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+  where n.nspname = 'public' and p.proname like 'demo_seed%'
+) s
+
+union all
+
+-- 10. Loading demo data cannot touch a real record. The guarantee is
+--     only worth what it is checked against, so load_demo_data()
+--     counts real contacts before and after and refuses to return if
+--     the number moved. This check is that the guard is still there.
+select '10. demo load guards real data',
+       case when (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                   where n.nspname = 'public' and p.proname = 'load_demo_data'
+                     and p.prosrc like '%real_before%' and p.prosrc like '%real_after%') = 1
+            then 'PASS — before/after guard present'
+            else 'FAIL — load_demo_data no longer counts real records' end;

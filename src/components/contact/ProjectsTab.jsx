@@ -5,6 +5,7 @@ import { formatDate } from '../../lib/format'
 import { useI18n } from '../../i18n'
 import NewProjectPanel from '../project/NewProjectPanel'
 import { Badge, Button, EmptyState, Loadable } from '../ui'
+import DemoBadge from '../DemoBadge'
 
 /** Every project belonging to this contact. Replaces the placeholder. */
 export default function ProjectsTab({ contact }) {
@@ -75,6 +76,7 @@ export default function ProjectsTab({ contact }) {
                     {project.code}
                   </span>
                   <span className="text-sm text-text">{project.name}</span>
+                  <DemoBadge on={project} />
                   {project.is_archived && (
                     <Badge color="#22C55E">{t('project.delivered')}</Badge>
                   )}

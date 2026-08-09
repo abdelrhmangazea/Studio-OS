@@ -7,6 +7,7 @@ import { formatDate } from '../lib/format'
 import { listLabel, useLists } from '../lib/useLists'
 import { useI18n } from '../i18n'
 import { Badge, EmptyState, Input, PageTitle, Select } from '../components/ui'
+import DemoBadge from '../components/DemoBadge'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -109,9 +110,12 @@ export default function Clients() {
                     {country?.flag ? `${country.flag} ` : ''}
                     {fullName(contact)}
                   </span>
-                  {status && (
-                    <Badge color={status.color}>{listLabel(status, language)}</Badge>
-                  )}
+                  <span className="flex shrink-0 items-center gap-1.5">
+                    <DemoBadge on={contact} />
+                    {status && (
+                      <Badge color={status.color}>{listLabel(status, language)}</Badge>
+                    )}
+                  </span>
                 </div>
 
                 <div className="mt-2 space-y-0.5 text-xs text-text-secondary">

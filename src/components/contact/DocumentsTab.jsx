@@ -4,6 +4,7 @@ import { copyToClipboard, htmlToWhatsappText } from '../../lib/exportWhatsapp'
 import { formatDateTime } from '../../lib/format'
 import { useI18n } from '../../i18n'
 import { Badge, Button, EmptyState, Modal } from '../ui'
+import DemoBadge from '../DemoBadge'
 
 /**
  * Every document generated for this contact — the record of what was
@@ -40,6 +41,7 @@ export default function DocumentsTab({ contact }) {
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-text">{doc.title}</span>
+                <DemoBadge on={doc} />
                 <Badge>{doc.language === 'ar' ? 'AR' : 'EN'}</Badge>
                 {doc.type && <Badge color="#0077B6">{doc.type}</Badge>}
               </div>

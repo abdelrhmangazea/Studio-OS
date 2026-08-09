@@ -25,6 +25,7 @@ import FeeCalculator from '../components/project/FeeCalculator'
 import QuotationsCard from '../components/project/QuotationsCard'
 import TimeLogCard from '../components/project/TimeLogCard'
 import { Badge, Button, Card, EmptyState, Field, Input, Select, Textarea } from '../components/ui'
+import DemoBadge from '../components/DemoBadge'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -161,6 +162,7 @@ export default function ProjectWorkspace() {
                   {project.code}
                 </span>
                 {project.is_archived && <Badge color="#22C55E">{t('project.delivered')}</Badge>}
+                <DemoBadge on={project} />
               </div>
               <h1 className="text-2xl font-semibold text-text">{project.name}</h1>
               <p className="mt-1 text-sm">

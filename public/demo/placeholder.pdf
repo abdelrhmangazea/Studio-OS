@@ -1,0 +1,51 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 464 >>
+stream
+BT
+/F1 34 Tf
+1 0 0 1 72 700 Tm
+(DEMO PLACEHOLDER) Tj
+/F1 14 Tf
+1 0 0 1 72 650 Tm
+(This file stands in for a real project document.) Tj
+/F1 14 Tf
+1 0 0 1 72 626 Tm
+(It is teaching material for the Studio OS Academy course.) Tj
+/F1 12 Tf
+1 0 0 1 72 580 Tm
+(Every demo record carries a DEMO label in the app.) Tj
+/F1 12 Tf
+1 0 0 1 72 560 Tm
+(Loading or resetting demo data never touches real client work.) Tj
+/F1 11 Tf
+1 0 0 1 72 500 Tm
+(Studio OS - demo data) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000755 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+825
+%%EOF

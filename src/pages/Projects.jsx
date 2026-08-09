@@ -6,6 +6,7 @@ import { formatDate } from '../lib/format'
 import { useI18n } from '../i18n'
 import NewProjectPanel from '../components/project/NewProjectPanel'
 import { Badge, Button, EmptyState, PageTitle, Select } from '../components/ui'
+import DemoBadge from '../components/DemoBadge'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
@@ -150,7 +151,12 @@ export default function Projects() {
                   <td className="whitespace-nowrap px-3 py-2.5 font-mono text-text-secondary" dir="ltr">
                     {project.code}
                   </td>
-                  <td className="px-3 py-2.5 text-text">{project.name}</td>
+                  <td className="px-3 py-2.5 text-text">
+                    <span className="flex items-center gap-1.5">
+                      {project.name}
+                      <DemoBadge on={project} />
+                    </span>
+                  </td>
                   <td className="px-3 py-2.5 text-text">{fullName(project.contact)}</td>
                   <td className="px-3 py-2.5 text-text-secondary">
                     {stageTitle(project.current_stage)}

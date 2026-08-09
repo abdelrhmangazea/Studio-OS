@@ -7,6 +7,7 @@ import { formatDate } from '../lib/format'
 import { listLabel, selectableList } from '../lib/useLists'
 import { useI18n } from '../i18n'
 import { EmptyState, Input, Select } from '../components/ui'
+import DemoBadge from '../components/DemoBadge'
 
 /**
  * The spreadsheet view.
@@ -145,7 +146,7 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
                 className="cursor-pointer border-b border-border last:border-0 hover:bg-surface"
               >
                 <td className="px-3 py-1.5">
-                  <div className="flex gap-1">
+                  <div className="flex items-center gap-1">
                     <Input
                       className="px-2 py-1"
                       defaultValue={contact.first_name ?? ''}
@@ -156,6 +157,7 @@ export default function LeadsTable({ contacts, statuses, sources, onChanged }) {
                       defaultValue={contact.last_name ?? ''}
                       onBlur={(e) => saveField(contact, 'last_name', e.target.value.trim())}
                     />
+                    <DemoBadge on={contact} />
                   </div>
                 </td>
 

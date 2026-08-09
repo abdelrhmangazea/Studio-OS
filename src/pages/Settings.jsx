@@ -12,6 +12,7 @@ import LegalSettings from '../components/settings/LegalSettings'
 import PricingSettings from '../components/settings/PricingSettings'
 import SupplierCategories from '../components/settings/SupplierCategories'
 import DataSettings from '../components/settings/DataSettings'
+import DemoSettings from '../components/settings/DemoSettings'
 import SubscriptionSettings from '../components/settings/SubscriptionSettings'
 import {
   Button,
@@ -330,13 +331,13 @@ export default function Settings() {
       {/* ---------- Templates ---------- */}
       <ResetTemplates />
 
-      {/* ---------- Team ----------
-          No Subscription section: there is no billing anywhere in this
-          product, so a page about a plan would have nothing true to
-          say. Removed rather than left as a promise. */}
+      {/* ---------- Plan and team ---------- */}
       <SubscriptionSettings />
 
       <TeamSettings />
+
+      {/* ---------- Teaching data ---------- */}
+      <DemoSettings />
 
       {/* ---------- Your data: the bin, a copy, and the way out ---------- */}
       <DataSettings />
