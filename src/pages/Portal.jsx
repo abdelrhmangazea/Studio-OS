@@ -22,6 +22,71 @@ import { usePageTitle } from '../lib/usePageTitle'
  */
 
 /**
+ * Arabic counts nouns in five shapes, not two. Getting this wrong on
+ * the one screen a stranger reads makes the studio look careless in
+ * their own client's language.
+ */
+function arabicRevisions(n) {
+  if (n === 1) return 'تعديل واحد'
+  if (n === 2) return 'تعديلان'
+  if (n >= 3 && n <= 10) return `${n} تعديلات`
+  return `${n} تعديلاً`
+}
+
+/** The same counts as the object of a verb, which takes the accusative. */
+function arabicRevisionsObject(n) {
+  if (n === 1) return 'تعديلاً واحداً'
+  if (n === 2) return 'تعديلين'
+  if (n >= 3 && n <= 10) return `${n} تعديلات`
+  return `${n} تعديلاً`
+}
+
+/**
+ * What the revision counter says, in every state it can be in.
+ *
+ * The bug this replaces collapsed two unrelated situations into one
+ * test — `remaining === 0` was true both when the studio included no
+ * free revisions at all and when the client had used them all up. A
+ * client on a project with no allowance was told "All 0 free revisions
+ * have been used", which reads as a bill for a change they never
+ * asked for. On the only screen a stranger ever sees.
+ *
+ * Never phrased as pressure: every branch ends by saying a change can
+ * still be requested, because it can.
+ */
+function revisionMessage(revisions, rtl) {
+  const allowance = Number(revisions?.free_allowance ?? 0)
+  const used = Number(revisions?.used ?? 0)
+  const remaining = Math.max(0, allowance - used)
+
+  // No allowance was ever offered. Nothing has been "used up".
+  if (allowance === 0) {
+    return rtl
+      ? 'هذا المشروع لا يشمل تعديلات مجانية. أي تعديل تطلبه يُسعَّر كعمل إضافي، ويمكنك طلبه في أي وقت.'
+      : 'This project does not include free revisions. Any change you ask for is quoted as additional work — you can still request one at any time.'
+  }
+
+  // Offered and now spent.
+  if (remaining === 0) {
+    return rtl
+      ? `استُخدمت التعديلات المجانية كلها (${arabicRevisions(allowance)}). أي تعديل بعد ذلك يُسعَّر كعمل إضافي، ويمكنك طلبه في أي وقت.`
+      : `All ${allowance} free ${allowance === 1 ? 'revision has' : 'revisions have'} been used. Further changes are quoted as additional work — you can still request them at any time.`
+  }
+
+  // Offered, none spent yet — "remaining" would be an odd word here.
+  if (used === 0) {
+    return rtl
+      ? `يشمل هذا المشروع ${arabicRevisionsObject(allowance)} مجاناً.`
+      : `This project includes ${allowance} free ${allowance === 1 ? 'revision' : 'revisions'}.`
+  }
+
+  // Part-way through.
+  return rtl
+    ? `بقي لك ${arabicRevisions(remaining)} من أصل ${allowance}.`
+    : `${remaining} of your ${allowance} free revisions ${remaining === 1 ? 'is' : 'are'} left.`
+}
+
+/**
  * Black or white, whichever can actually be read on the studio's own
  * colour. Rec. 601 luma is enough here — this decides one pair of
  * initials, not a colour system.
@@ -91,8 +156,6 @@ export default function Portal() {
   const accent = data.studio?.accent_color || '#0077B6'
   const stageTitle = (s) => (rtl ? s.title_ar : s.title_en)
   const revisions = data.revisions ?? { free_allowance: 0, used: 0 }
-  const remaining = Math.max(0, revisions.free_allowance - revisions.used)
-  const exhausted = remaining === 0
 
   // A stage approval is the one that matters here; file decisions are
   // listed but do not close anything.
@@ -108,11 +171,20 @@ export default function Portal() {
       const result = await submitDecision(token, { decision, comment, fileId })
       setComment('')
       if (result?.billable) {
+        // Same split as the counter: a project with no allowance has
+        // not "used up" anything, and telling a client otherwise is
+        // how a reasonable quote starts an argument.
+        const noAllowance = Number(revisions?.free_allowance ?? 0) === 0
         setNote(
-          t(
-            'تم إرسال طلبك. عدد التعديلات المجانية انتهى، فهذا التعديل وما بعده يُحتسب كعمل إضافي — سيتواصل معك الاستوديو بالتفاصيل.',
-            'Your request has been sent. The free revisions are used up, so this change and any after it are billable — the studio will follow up with the details.'
-          )
+          noAllowance
+            ? t(
+                'تم إرسال طلبك. هذا المشروع لا يشمل تعديلات مجانية، فسيُسعَّر هذا التعديل كعمل إضافي — سيتواصل معك الاستوديو بالتفاصيل.',
+                'Your request has been sent. This project does not include free revisions, so this change will be quoted as additional work — the studio will follow up with the details.'
+              )
+            : t(
+                'تم إرسال طلبك. التعديلات المجانية انتهت، فهذا التعديل وما بعده يُسعَّر كعمل إضافي — سيتواصل معك الاستوديو بالتفاصيل.',
+                'Your request has been sent. The free revisions are used up, so this change and any after it are quoted as additional work — the studio will follow up with the details.'
+              )
         )
       } else {
         setNote(t('تم تسجيل ردّك.', 'Your response has been recorded.'))
@@ -320,21 +392,7 @@ export default function Portal() {
             className="mt-5 border-t pt-4 text-[15px]"
             style={{ borderColor: 'var(--pub-border)' }}
           >
-            {exhausted ? (
-              <p className="pub-muted">
-                {t(
-                  `استُخدمت جميع التعديلات المجانية (${revisions.free_allowance}). أي تعديل إضافي يُحتسب كعمل إضافي، ويمكنك طلبه في أي وقت.`,
-                  `All ${revisions.free_allowance} free revisions have been used. Further changes are billable — you can still request them at any time.`
-                )}
-              </p>
-            ) : (
-              <p className="pub-muted">
-                {t(
-                  `التعديلات المجانية المتبقية: ${remaining} من ${revisions.free_allowance}`,
-                  `Free revisions remaining: ${remaining} of ${revisions.free_allowance}`
-                )}
-              </p>
-            )}
+            <p className="pub-muted">{revisionMessage(revisions, rtl)}</p>
           </div>
 
           {note && <p className="mt-4 text-[15px] font-semibold">{note}</p>}
