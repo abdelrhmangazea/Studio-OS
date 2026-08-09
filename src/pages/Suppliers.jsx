@@ -270,7 +270,7 @@ export default function Suppliers() {
           <Field label={t('fields.phone')}>
             <div className="flex gap-2" dir="ltr">
               <Select
-                className="w-32"
+                className="w-28 shrink-0 px-2"
                 value={form.phone_country_code}
                 onChange={(e) => setForm({ ...form, phone_country_code: e.target.value })}
               >
@@ -283,6 +283,7 @@ export default function Suppliers() {
               <Input
                 value={form.phone_number}
                 onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
+                className="min-w-0 flex-1"
               />
             </div>
           </Field>

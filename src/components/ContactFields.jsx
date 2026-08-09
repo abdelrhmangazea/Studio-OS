@@ -42,10 +42,14 @@ export default function ContactFields({ form, errors, onChange, statuses, source
           dir="ltr" keeps "+20" from rendering as "20+" in Arabic. */}
       <Field label={t('fields.phone')}>
         <div dir="ltr" className="flex gap-2">
+          {/* Narrow on purpose: the dialing code is four characters and
+              the number needs the rest of the row. The country name
+              stays in the option text so the list is searchable by
+              name, and is simply clipped once the menu is closed. */}
           <Select
             value={form.phone_country_code}
             onChange={set('phone_country_code')}
-            className="w-40 shrink-0"
+            className="w-28 shrink-0 px-2"
           >
             <option value="">{t('fields.dialCode')}</option>
             {countries.map((country) => (
@@ -60,6 +64,7 @@ export default function ContactFields({ form, errors, onChange, statuses, source
             onChange={set('phone_number')}
             inputMode="numeric"
             placeholder={t('fields.phoneNumber')}
+            className="min-w-0 flex-1"
           />
         </div>
         <ErrorText>{errors.phone && t(errors.phone)}</ErrorText>

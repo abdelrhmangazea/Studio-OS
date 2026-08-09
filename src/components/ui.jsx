@@ -7,6 +7,23 @@ import { errorMessage } from '../lib/errorMessage'
  * and to RTL without any extra work in the pages that use them.
  */
 
+/**
+ * Fields fill their row unless the caller says otherwise.
+ *
+ * The "unless" is the whole point. Tailwind decides between two
+ * competing utilities by their order in the STYLESHEET, not by their
+ * order in the class attribute — so a caller writing className="w-40"
+ * on a control that already carries w-full does not get 40, it gets
+ * full, silently. That is what pushed the phone number box out of its
+ * row: the dialing-code select ate the line and the number was left
+ * with nothing.
+ *
+ * Passing a width means you meant it, so the default steps aside.
+ * Matches w-40 / w-1/2 / w-auto; deliberately does not match max-w-*,
+ * which is a ceiling rather than a width.
+ */
+const fillsRow = (className) => (/(^|\s)w-\S/.test(className) ? '' : 'w-full ')
+
 export function Button({ variant = 'primary', className = '', ...props }) {
   const base =
     'inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium ' +
@@ -27,7 +44,8 @@ export function Input({ className = '', ...props }) {
   return (
     <input
       className={
-        'w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
+        fillsRow(className) +
+        'rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
         'placeholder:text-text-secondary focus:border-accent focus:outline-none ' +
         `focus:ring-1 focus:ring-accent ${className}`
       }
@@ -40,7 +58,8 @@ export function Select({ className = '', children, ...props }) {
   return (
     <select
       className={
-        'w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
+        fillsRow(className) +
+        'rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
         `focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent ${className}`
       }
       {...props}
@@ -214,7 +233,8 @@ export const Textarea = forwardRef(function Textarea({ className = '', ...props 
     <textarea
       ref={ref}
       className={
-        'w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
+        fillsRow(className) +
+        'rounded border border-border bg-surface px-3 py-2 text-sm text-text ' +
         'placeholder:text-text-secondary focus:border-accent focus:outline-none ' +
         `focus:ring-1 focus:ring-accent ${className}`
       }
