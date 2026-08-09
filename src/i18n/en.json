@@ -627,7 +627,11 @@
     "offline": "No connection. Check your network and try again.",
     "fileTooBig": "That file is larger than the limit.",
     "fileType": "That file type is not supported.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "readOnly": "Your account can view this studio but not change it. Ask the studio owner to give you edit access.",
+    "limitReached": "This studio has reached its plan limit for this. The owner can raise it from Settings.",
+    "featureLocked": "This feature is not included in the studio’s current plan.",
+    "templateLocked": "This template is not included in the studio’s current plan."
   },
   "suppliers": {
     "subtitle": "{count} suppliers",

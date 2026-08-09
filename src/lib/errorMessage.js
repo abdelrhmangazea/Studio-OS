@@ -19,6 +19,24 @@
  */
 
 const PATTERNS = [
+  // --- the write guards, FIRST ---
+  //
+  // The database refuses a write by raising a tagged string:
+  // READ_ONLY / LIMIT_REACHED / FEATURE_LOCKED / TEMPLATE_LOCKED.
+  // planLimits.js parses these for the screens that show a rich
+  // notice, but every OTHER screen goes through this function — and
+  // none of these matched, so a viewer clicking "save for client" was
+  // told "something went wrong, try again". She had no permission and
+  // no amount of trying again was going to change that.
+  //
+  // These sit above the generic database patterns on purpose: a
+  // READ_ONLY refusal is also technically a permission error, and the
+  // specific message is the useful one.
+  [/READ_ONLY:/, 'errors.readOnly'],
+  [/LIMIT_REACHED:/, 'errors.limitReached'],
+  [/FEATURE_LOCKED:/, 'errors.featureLocked'],
+  [/TEMPLATE_LOCKED:/, 'errors.templateLocked'],
+
   // --- auth ---
   [/email.*not confirmed|not confirmed|confirm your email/i, 'errors.emailNotConfirmed'],
   [/invalid login credentials/i, 'errors.badCredentials'],
