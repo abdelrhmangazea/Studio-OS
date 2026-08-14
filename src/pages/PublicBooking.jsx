@@ -398,7 +398,6 @@ export default function PublicBooking() {
           onClick={handleSubmit}
           disabled={!canSubmit || busy}
           className="pub-btn pub-btn-primary w-full"
-          style={{ background: accent }}
         >
           {busy
             ? rtl

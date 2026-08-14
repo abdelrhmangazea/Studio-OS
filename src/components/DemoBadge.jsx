@@ -26,8 +26,11 @@ export default function DemoBadge({ on, className = '' }) {
     <span
       title={t('demo.tooltip')}
       className={
-        'inline-flex shrink-0 items-center rounded-card border border-separator ' +
-        'px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ' +
+        // 6px, not the 18px card radius: an 18px corner on a badge this
+        // small renders as an oval. The sweep that introduced the card
+        // radius caught this by pattern and it was wrong here.
+        'inline-flex shrink-0 items-center rounded-[6px] border border-separator ' +
+        'px-1.5 py-0.5 text-[11px] font-medium ' +
         `text-text-secondary ${className}`
       }
     >
