@@ -900,7 +900,7 @@
   "feedback": {
     "button": "Feedback",
     "title": "Tell us what happened",
-    "intro": "This is a beta. If something broke, looked wrong, or was slower than it should be, we want to hear it — the rougher the better.",
+    "intro": "If something broke, looked wrong, or was slower than it should be, we want to hear it — the rougher the better.",
     "kind": "What is this?",
     "kind_bug": "Something broke",
     "kind_idea": "An idea",
