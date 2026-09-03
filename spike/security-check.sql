@@ -24,7 +24,9 @@ with intended(name) as (
          ('public_booking_page'),
          ('public_booking_status'),
          ('public_create_booking'),
-         ('receipt_upload_allowed')
+         ('receipt_upload_allowed'),
+         -- 0041: the marketing page shows the plan table to visitors.
+         ('public_plans')
 ),
 actual as (
   select p.proname as name
@@ -34,12 +36,12 @@ actual as (
 )
 select '1. anon-callable surface' as check,
        case when not exists (select 1 from actual  except select 1 from intended)
-             and not exists (select 1 from intended except select 1 from actual)
-            then 'PASS — exactly the 12 intended'
+             and not exists (select name from intended except select name from actual)
+            then 'PASS — exactly the 13 intended'
             else 'FAIL — unexpected: '
-                 || coalesce((select string_agg(name, ', ') from (select 1 from actual except select 1 from intended) x), '(none)')
+                 || coalesce((select string_agg(name, ', ') from (select name from actual except select name from intended) x), '(none)')
                  || ' / missing: '
-                 || coalesce((select string_agg(name, ', ') from (select 1 from intended except select 1 from actual) y), '(none)')
+                 || coalesce((select string_agg(name, ', ') from (select name from intended except select name from actual) y), '(none)')
        end as result
 
 union all
