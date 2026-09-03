@@ -5,6 +5,8 @@ import { errorMessage } from '../lib/errorMessage'
 import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../components/ui'
+import PasswordInput from '../components/auth/PasswordInput'
+import ResendLink from '../components/auth/ResendLink'
 
 export default function Login() {
   const { session, signIn, resendConfirmation } = useAuth()
@@ -15,7 +17,6 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [unconfirmed, setUnconfirmed] = useState(false)
-  const [resent, setResent] = useState(false)
   const [busy, setBusy] = useState(false)
 
   if (session) return <Navigate to="/" replace />
@@ -66,8 +67,7 @@ export default function Login() {
             </Field>
 
             <Field label={t('auth.password')}>
-              <Input
-                type="password"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -77,19 +77,15 @@ export default function Login() {
 
             <ErrorText>{error}</ErrorText>
 
+            {/* No countdown to start with: the last send may be days old.
+                If it was seconds ago the server says so and the message
+                explains the wait. */}
             {unconfirmed && (
-              <button
-                type="button"
-                className="text-sm text-accent hover:underline disabled:opacity-50"
-                disabled={resent}
-                onClick={async () => {
-                  const { error: failure } = await resendConfirmation(email)
-                  if (failure) setError(errorMessage(failure, t))
-                  else setResent(true)
-                }}
-              >
-                {resent ? t('auth.resent') : t('auth.resend')}
-              </button>
+              <ResendLink
+                initialWait={0}
+                onResend={() => resendConfirmation(email)}
+                onError={setError}
+              />
             )}
 
             <Button type="submit" disabled={busy} className="w-full">

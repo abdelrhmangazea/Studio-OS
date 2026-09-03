@@ -65,11 +65,14 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "passwordHint": "At least 6 characters.",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
     "confirmPending": "The account was created and is waiting on an email confirmation. If the mail never arrives, the SMTP settings need attention.",
     "confirmSent": "We sent a confirmation link to {email}. Open it to activate your account.",
-    "checkSpam": "If it has not arrived within two minutes, check your spam folder.",
+    "checkSpam": "It can take up to five minutes. If it has not arrived by then, check your spam folder.",
     "resend": "Send the link again",
-    "resent": "Sent again",
+    "resendIn": "Send again in {s} s",
+    "resendNote": "Sending again replaces the earlier link — open the newest email.",
     "confirming": "Activating your account…",
     "linkDeadTitle": "This link is no longer valid",
     "linkDeadBody": "Confirmation links expire after a while. Ask for a new one.",
@@ -916,11 +919,6 @@
     "state_answered": "Answered",
     "state_closed": "Closed"
   },
-  "beta": {
-    "label": "Beta",
-    "tooltip": "This is a beta. Some of it is still rough — if something looks wrong, it may well be us. Please tell us.",
-    "dismiss": "Hide this"
-  },
   "demo": {
     "badge": "Demo",
     "tooltip": "Teaching data, not a real client. Safe to change or delete — Settings can put it all back.",
@@ -930,11 +928,14 @@
     "absent": "No demo data in this studio yet.",
     "load": "Load demo data",
     "reset": "Remove demo data",
+    "repair": "Restore sample files",
     "confirmLoad": "This replaces the current demo data with a fresh copy. Anything a student changed on a demo record will be lost. Your real clients and projects are not touched. Continue?",
     "confirmReset": "This removes every demo record from this studio. Your real clients and projects are not touched. Continue?",
     "loadedSummary": "Loaded {contacts} contacts, {projects} projects across {stages} stages, and {tasks} tasks.",
     "resetDone": "Demo data removed.",
-    "safety": "Demo records carry a DEMO label everywhere they appear, and are the only records these two buttons can touch."
+    "safety": "Demo records carry a DEMO label everywhere they appear, and are the only records these two buttons can touch.",
+    "repairHelp": "If a sample file will not download, this puts the two placeholder files back without touching any record.",
+    "repaired": "Sample files restored."
   },
   "admin": {
     "title": "Internal",
@@ -1047,7 +1048,7 @@
     "name_free": "Free",
     "name_pro": "Pro",
     "name_studio": "Studio",
-    "status_beta": "Beta access",
+    "status_beta": "Lifetime access",
     "status_trial": "Trial",
     "status_active": "Active",
     "status_past_due": "Payment failed — still working for now",
@@ -1072,7 +1073,7 @@
     "generator": "Document generator",
     "calculator": "Fee calculator",
     "reports": "Reports",
-    "betaUpgradeNote": "During the beta, upgrades are arranged by hand — send us a message and we will move you.",
+    "upgradeNote": "Checkout opens soon. Until then, upgrades are arranged by hand — send us a message and we will move you.",
     "locked": "Locked",
     "limit_contacts": "You are on {current}, which allows {limit} contacts. {plan} removes the limit.",
     "limit_projects": "You are on {current}, which allows {limit} active project. Archiving a finished one frees a slot, or {plan} removes the limit.",

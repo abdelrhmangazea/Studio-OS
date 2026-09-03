@@ -228,34 +228,28 @@ export default function Marketing() {
 
       {/* ---------------- 7 · pricing ---------------- */}
       <Section id="pricing" title={t.pricing.title} lead={t.pricing.lead}>
-        <div className="mb-6 rounded border border-accent/50 bg-accent/10 p-5">
-          <p className="text-sm font-medium">{t.pricing.betaTitle}</p>
-          <p className="mt-1 text-sm text-text-secondary">{t.pricing.betaBody}</p>
-        </div>
-
         <div className="grid gap-4 md:grid-cols-3">
           {plans.map((p) => (
             <div key={p.key} className="rounded border border-border p-6">
               <p className="text-sm font-medium">{rtl ? p.name_ar : p.name_en}</p>
 
-              {/* No price is hardcoded anywhere. Until a plan is
-                  reconciled with the processor it says so rather than
-                  showing a number nobody has confirmed. */}
+              {/* No price is hardcoded anywhere: the number comes from
+                  the plans table. A paid tier with a 0 there is one whose
+                  price has not been decided, and it says so — a
+                  placeholder of 0 must never read as "this tier costs
+                  nothing". is_live is a different question (can it be
+                  bought yet) and gates checkout, not the price. */}
               <p className="mt-2 text-3xl font-semibold" dir="ltr">
-                {/* The free plan is free. Everything else shows a
-                    number ONLY once it has been reconciled with the
-                    processor — a placeholder of 0 must never read as
-                    "this tier costs nothing". */}
                 {p.key === 'free'
                   ? t.pricing.free
-                  : p.is_live
+                  : Number(p.price_monthly) > 0
                     ? `${p.currency} ${p.price_monthly}`
                     : t.pricing.soon}
-                {p.key !== 'free' && p.is_live && (
+                {p.key !== 'free' && Number(p.price_monthly) > 0 && (
                   <span className="text-sm text-text-secondary">{t.pricing.month}</span>
                 )}
               </p>
-              {p.key !== 'free' && p.is_live && (
+              {p.key !== 'free' && Number(p.price_monthly) > 0 && (
                 <p className="mt-1 text-xs text-text-secondary" dir="ltr">
                   {p.currency} {yearlyPrice(p)}/year
                 </p>

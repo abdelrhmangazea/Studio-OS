@@ -5,6 +5,8 @@ import { errorMessage } from '../lib/errorMessage'
 import { usePrefs } from '../lib/PrefsContext'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../components/ui'
+import PasswordInput from '../components/auth/PasswordInput'
+import ResendLink from '../components/auth/ResendLink'
 
 export default function Signup() {
   const { session, signUp, resendConfirmation } = useAuth()
@@ -17,7 +19,6 @@ export default function Signup() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
-  const [resent, setResent] = useState(false)
   const [busy, setBusy] = useState(false)
 
   if (session) return <Navigate to="/" replace />
@@ -85,8 +86,7 @@ export default function Signup() {
             </Field>
 
             <Field label={t('auth.password')} hint={t('auth.passwordHint')}>
-              <Input
-                type="password"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -101,18 +101,8 @@ export default function Signup() {
               <div className="rounded-card border border-separator p-3">
                 <p className="text-sm text-text">{t('auth.confirmSent', { email })}</p>
                 <p className="mt-1 text-xs text-text-secondary">{t('auth.checkSpam')}</p>
-                <button
-                  type="button"
-                  className="mt-2 text-sm text-accent hover:underline disabled:opacity-50"
-                  disabled={resent}
-                  onClick={async () => {
-                    const { error: failure } = await resendConfirmation(email)
-                    if (failure) setError(errorMessage(failure, t))
-                    else setResent(true)
-                  }}
-                >
-                  {resent ? t('auth.resent') : t('auth.resend')}
-                </button>
+                {/* The mail was sent a moment ago, so the wait starts full. */}
+                <ResendLink onResend={() => resendConfirmation(email)} onError={setError} />
               </div>
             )}
 

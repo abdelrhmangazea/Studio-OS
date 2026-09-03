@@ -15,6 +15,20 @@
  * not handed a colon-separated token.
  */
 
+import { recordFeatureUse } from './feedback'
+
+/**
+ * A refusal is a signal worth counting. The page-open counters cannot
+ * tell "used the generator" from "opened it and was refused" — three
+ * Free studios opened it twenty-one times during the beta and every
+ * one of those was a refusal. This records the refusal itself, under
+ * its own key, so the two are never confused again.
+ */
+function noted(refusal) {
+  recordFeatureUse(`locked_${refusal.what}`)
+  return refusal
+}
+
 /** The plan a workspace should move to for each restriction. */
 const LIFTED_BY = {
   contacts: 'pro',
@@ -37,35 +51,35 @@ export function parsePlanRefusal(failure) {
 
   let match = raw.match(/LIMIT_REACHED:(\w+):(\d+):(\w+)/)
   if (match) {
-    return {
+    return noted({
       kind: 'limit',
       what: match[1],
       limit: Number(match[2]),
       planKey: match[3],
       liftedBy: LIFTED_BY[match[1]] ?? 'pro',
-    }
+    })
   }
 
   match = raw.match(/FEATURE_LOCKED:(\w+):(\w+)/)
   if (match) {
-    return {
+    return noted({
       kind: 'feature',
       what: match[1],
       limit: null,
       planKey: match[2],
       liftedBy: LIFTED_BY[match[1]] ?? 'pro',
-    }
+    })
   }
 
   match = raw.match(/TEMPLATE_LOCKED:([\w]+):(\w+)/)
   if (match) {
-    return {
+    return noted({
       kind: 'template',
       what: match[1],
       limit: null,
       planKey: match[2],
       liftedBy: 'pro',
-    }
+    })
   }
 
   if (/READ_ONLY:/.test(raw)) {

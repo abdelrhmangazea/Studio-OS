@@ -105,8 +105,6 @@ export const copy = {
 
     pricing: {
       title: 'Pricing', lead: 'Start free. Move when the studio does.',
-      betaTitle: 'Beta',
-      betaBody: 'Studio OS is in beta. Prices are not final and checkout is not open yet — if you have an access code from us or from your Academy cohort, enter it after signing up and it will apply straight away.',
       codeLabel: 'Have a code? Enter it after you sign up, in Settings → Plan.',
       month: '/month', free: 'Free', soon: 'Price to be announced',
       cta: 'Start free',
@@ -138,7 +136,7 @@ export const copy = {
 
     footer: { rights: 'Studio OS', terms: 'Terms', privacy: 'Privacy', built: 'Built for interior designers in Egypt and the Gulf.' },
     placeholder: 'PLACEHOLDER — real screenshot to be added',
-    testimonialPlaceholder: 'PLACEHOLDER — real beta-user quotes go here. Nothing invented.',
+    testimonialPlaceholder: 'Quotes from the studios using it are coming. Nothing here is invented.',
   },
 
   ar: {
@@ -230,8 +228,6 @@ export const copy = {
 
     pricing: {
       title: 'الأسعار', lead: 'ابدأ مجاناً. واتحرك لما الاستوديو يتحرك.',
-      betaTitle: 'نسخة تجريبية',
-      betaBody: 'استوديو أو إس لسه في مرحلة تجريبية. الأسعار مش نهائية والدفع لسه مش مفتوح — لو معاك كود وصول مننا أو من دفعتك في الأكاديمية، اكتبه بعد التسجيل وهيتفعّل على طول.',
       codeLabel: 'معاك كود؟ اكتبه بعد التسجيل من الإعدادات ← الخطة.',
       month: '/شهر', free: 'مجاني', soon: 'السعر هيتحدد',
       cta: 'ابدأ مجاناً',
@@ -263,6 +259,6 @@ export const copy = {
 
     footer: { rights: 'استوديو أو إس', terms: 'الشروط', privacy: 'الخصوصية', built: 'مبني لمصممي الديكور في مصر والخليج.' },
     placeholder: 'مكان محجوز — صورة حقيقية من التطبيق هتتحط هنا',
-    testimonialPlaceholder: 'مكان محجوز — آراء حقيقية من مستخدمي النسخة التجريبية. مفيش حاجة مخترعة.',
+    testimonialPlaceholder: 'آراء الاستوديوهات اللي بتستخدمه جاية قريب. مفيش حاجة هنا مخترعة.',
   },
 }

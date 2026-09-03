@@ -61,6 +61,7 @@ export default function DemoSettings() {
   const [busy, setBusy] = useState('')
   const [error, setError] = useState('')
   const [result, setResult] = useState(null)
+  const [repaired, setRepaired] = useState(false)
 
   async function refreshStatus() {
     const { data, error: failed } = await supabase.rpc('demo_status')
@@ -100,7 +101,31 @@ export default function DemoSettings() {
       setResult({ action, counts: data })
       await refreshStatus()
     } catch (caught) {
-      setError(errorMessage(caught, 'errors.generic'))
+      // errorMessage(failure, t) — the second argument is the
+      // translator, not the fallback key. Passing the key here made
+      // every failure throw inside the catch and show nothing.
+      setError(errorMessage(caught, t))
+    } finally {
+      setBusy('')
+    }
+  }
+
+  /**
+   * The placeholders alone, for a studio whose demo records exist
+   * but whose files 404. That is exactly the state a load by SQL
+   * leaves behind — the seeder runs in the database, the upload runs
+   * in the browser, and only one of them happened.
+   */
+  async function repair() {
+    setBusy('repair')
+    setError('')
+    setResult(null)
+    setRepaired(false)
+    try {
+      await uploadPlaceholders(workspace.id)
+      setRepaired(true)
+    } catch (caught) {
+      setError(errorMessage(caught, t))
     } finally {
       setBusy('')
     }
@@ -136,7 +161,20 @@ export default function DemoSettings() {
         >
           {busy === 'reset' ? t('common.saving') : t('demo.reset')}
         </Button>
+
+        {loaded && (
+          <Button
+            variant="secondary"
+            disabled={!isOwner || busy !== ''}
+            onClick={repair}
+            title={t('demo.repairHelp')}
+          >
+            {busy === 'repair' ? t('common.saving') : t('demo.repair')}
+          </Button>
+        )}
       </div>
+
+      {repaired && <p className="mt-3 text-sm text-success">{t('demo.repaired')}</p>}
 
       {result?.action === 'load' && (
         <p className="mt-4 text-sm text-success">

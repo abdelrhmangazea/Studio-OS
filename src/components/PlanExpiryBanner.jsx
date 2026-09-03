@@ -16,7 +16,7 @@ import { useI18n } from '../i18n'
  * away, and it stops appearing on its own the moment there is
  * nothing to warn about.
  */
-export default function BetaExpiryBanner() {
+export default function PlanExpiryBanner() {
   const { t } = useI18n()
   const [sub, setSub] = useState(null)
 

@@ -5,6 +5,7 @@ import { consumeAuthLink, landedOnLocalhost } from '../lib/authLink'
 import { errorMessage } from '../lib/errorMessage'
 import { useI18n } from '../i18n'
 import { Button, Card, ErrorText, Field, Input } from '../components/ui'
+import PasswordInput from '../components/auth/PasswordInput'
 
 /**
  * Where the reset link lands.
@@ -95,8 +96,7 @@ export default function ResetPassword() {
           {ready === true && (
             <form onSubmit={submit} className="mt-4 space-y-4">
               <Field label={t('auth.newPassword')} hint={t('auth.passwordHint')}>
-                <Input
-                  type="password"
+                <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

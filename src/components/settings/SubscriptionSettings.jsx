@@ -9,7 +9,7 @@ import { Button, Card, ErrorText, Field, Input, SectionTitle } from '../ui'
  * The plan, what it includes, and the code field.
  *
  * There is no purchase button yet and this screen does not pretend
- * otherwise — during the beta it says plainly that upgrades are
+ * otherwise — until checkout opens it says plainly that upgrades are
  * arranged by hand. A button that opens nothing is worse than no
  * button, because it costs somebody a click and their trust.
  */
@@ -161,7 +161,7 @@ export default function SubscriptionSettings() {
         ))}
       </div>
 
-      <p className="mt-4 text-xs text-text-secondary">{t('plan.betaUpgradeNote')}</p>
+      <p className="mt-4 text-xs text-text-secondary">{t('plan.upgradeNote')}</p>
     </Card>
   )
 }
