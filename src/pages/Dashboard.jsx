@@ -1,88 +1,48 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { listTasks, setTaskDone, today, withinDays } from '../lib/tasks'
-import { datelessOccasions, listReminders } from '../lib/reminders'
-import { listBookings, setBookingStatus } from '../lib/booking'
-import { listProjects, listStageDefinitions, listChecklistItems, projectProgress } from '../lib/projects'
-import { listProjectStages } from '../lib/projects'
-import { listContacts, fullName } from '../lib/contacts'
-import { listTemplates, pairByKey } from '../lib/templates'
-import { loadInsights } from '../lib/insights'
+import { setTaskDone, today, withinDays } from '../lib/tasks'
+import { setBookingStatus } from '../lib/booking'
 import { STATE_COLOR } from '../lib/projects'
+import { fullName } from '../lib/contacts'
 import { formatDate, formatDateTime } from '../lib/format'
+import { computeDashboard, loadDashboardData } from '../lib/dashboardStats'
+import { useAuth } from '../lib/AuthContext'
 import { useI18n } from '../i18n'
-import ProgressRing from '../components/project/ProgressRing'
-import InsightCard from '../components/dashboard/InsightCard'
 import ReminderRow from '../components/dashboard/ReminderRow'
-import { Badge, Button, Card, EmptyState, Loadable, PageTitle } from '../components/ui'
+import {
+  ColumnChart, HBars, Meter, StackedBar, StatTile,
+  compactNumber, formatNumber, monthLabel,
+} from '../components/dashboard/charts'
+import { Badge, Button, Card, Loadable, PageTitle } from '../components/ui'
 import { useFeatureUse } from '../lib/useFeatureUse'
 
 /**
  * The dashboard, and the screen the app opens on.
  *
- * Five sections, in the order the spec fixes them. Every row links to
- * the record behind it — there is no text here that leads nowhere,
- * including the five insight numbers, each of which opens its own list.
+ * Top to bottom: the five numbers, every project's progress, where the
+ * work stands, money and pipeline, then the day's agenda. What needs
+ * attention sits LAST — the first thing a studio sees is its business,
+ * not its problems. Every figure still links to the rows behind it.
  */
 export default function Dashboard() {
   useFeatureUse('dashboard')
-  const { t, language } = useI18n()
+  const { t } = useI18n()
 
-  const [tasks, setTasks] = useState([])
-  const [reminders, setReminders] = useState([])
-  const [bookings, setBookings] = useState([])
-  const [projects, setProjects] = useState([])
-  const [stages, setStages] = useState([])
-  const [items, setItems] = useState([])
-  const [contacts, setContacts] = useState([])
-  const [pairs, setPairs] = useState([])
-  const [insights, setInsights] = useState(null)
-  const [occasionGaps, setOccasionGaps] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
   const [loadFailure, setLoadFailure] = useState(null)
 
   async function load() {
-    // Reset both, or a successful retry leaves the old error
-    // sitting on screen underneath fresh data.
-    setLoading(true)
+    // A refetch after "done" holds the previous render, faded — the
+    // screen never flashes back to a spinner.
+    if (data) setRefreshing(true)
     setLoadFailure(null)
     try {
-      const [
-        taskRows, reminderRows, bookingRows, projectRows,
-        contactRows, templateRows, insightData,
-      ] = await Promise.all([
-        listTasks(),
-        listReminders(),
-        listBookings(),
-        listProjects(),
-        listContacts(),
-        listTemplates(),
-        loadInsights(),
-      ])
-
-      // Progress rings need each active project's stages and checklist.
-      const active = projectRows.filter((p) => !p.is_archived)
-      const [stageRows, itemRows] = await Promise.all([
-        Promise.all(active.map((p) => listProjectStages(p.id))).then((r) => r.flat()),
-        Promise.all(active.map((p) => listChecklistItems(p.id))).then((r) => r.flat()),
-      ])
-
-      setTasks(taskRows)
-      setReminders(reminderRows)
-      setBookings(bookingRows)
-      setProjects(projectRows)
-      setStages(stageRows)
-      setItems(itemRows)
-      setContacts(contactRows)
-      setPairs(pairByKey(templateRows))
-      setInsights(insightData)
-      setOccasionGaps(datelessOccasions(reminderRows))
+      setData(await loadDashboardData())
     } catch (caught) {
       setLoadFailure(caught)
     } finally {
-      // Always. A failed load must never leave the
-      // screen spinning with no way out.
-      setLoading(false)
+      setRefreshing(false)
     }
   }
 
@@ -90,16 +50,38 @@ export default function Dashboard() {
     load()
   }, [])
 
-  const now = today()
+  if (!data || loadFailure) {
+    return <Loadable loading={!data && !loadFailure} failure={loadFailure} onRetry={load} t={t} />
+  }
 
-  const definitions = useDefinitions()
+  return <DashboardView data={data} onChanged={load} refreshing={refreshing} />
+}
+
+const PROGRESS_ROWS = 8
+const ORDINAL = ['var(--chart-ordinal-1)', 'var(--chart-ordinal-2)', 'var(--chart-ordinal-3)', 'var(--chart-ordinal-4)']
+const LOCALE = { ar: 'ar-EG-u-nu-latn', en: 'en-GB' }
+
+/** Pure: renders from rows already loaded, so a fixture can drive it. */
+export function DashboardView({ data, onChanged, refreshing }) {
+  const { t, language } = useI18n()
+  const { settings } = useAuth()
+  const currency = settings?.currency ?? ''
+
+  const now = today()
+  const stats = useMemo(() => computeDashboard(data), [data])
+  const { tasks, reminders, bookings, projects, pairs, occasionGaps, definitions } = data
 
   const stageTitle = (key) => {
     const d = definitions.find((x) => x.stage_key === key)
     return (language === 'ar' ? d?.title_ar : d?.title_en) ?? key
   }
+  const money = (n) => `${formatNumber(n, language)}${currency ? ` ${currency}` : ''}`
+  const monthTitle = new Intl.DateTimeFormat(LOCALE[language] ?? LOCALE.en, {
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date())
 
-  // ---------- section inputs ----------
+  // ---------- agenda inputs ----------
   const todaysBookings = bookings.filter(
     (b) => b.slot_start?.slice(0, 10) === now && b.status !== 'cancelled'
   )
@@ -115,14 +97,10 @@ export default function Dashboard() {
     for (const booking of bookings) {
       if (booking.status === 'cancelled') continue
       const date = booking.slot_start?.slice(0, 10)
-      if (date && date > now && withinDays(date, 7)) {
-        rows.push({ kind: 'booking', date, row: booking })
-      }
+      if (date && date > now && withinDays(date, 7)) rows.push({ kind: 'booking', date, row: booking })
     }
     for (const task of tasks) {
-      if (task.due_date > now && withinDays(task.due_date, 7)) {
-        rows.push({ kind: 'task', date: task.due_date, row: task })
-      }
+      if (task.due_date > now && withinDays(task.due_date, 7)) rows.push({ kind: 'task', date: task.due_date, row: task })
     }
     for (const reminder of reminders) {
       if (reminder.due_date > now && withinDays(reminder.due_date, 7)) {
@@ -132,37 +110,290 @@ export default function Dashboard() {
     return rows.sort((a, b) => a.date.localeCompare(b.date))
   }, [bookings, tasks, reminders, now])
 
-  const activeClients = useMemo(() => {
-    return projects
-      .filter((p) => !p.is_archived && p.state !== 'closed')
-      .map((project) => {
-        const contact = contacts.find((c) => c.id === project.contact_id)
-        const ownStages = stages.filter((s) => s.project_id === project.id)
-        const ownItems = items.filter((i) => i.project_id === project.id)
-        return {
-          project,
-          contact,
-          progress: projectProgress(ownStages, ownItems),
-          daysSince: contact?.last_contact_at
-            ? Math.floor((Date.now() - new Date(contact.last_contact_at)) / 86400000)
-            : null,
-        }
-      })
-  }, [projects, contacts, stages, items])
+  const revenuePoints = stats.invoicedByMonth.map((m) => ({
+    key: m.key,
+    label: monthLabel(m.date, language),
+    longLabel: new Intl.DateTimeFormat(LOCALE[language] ?? LOCALE.en, { month: 'long', year: 'numeric' }).format(m.date),
+    value: m.value,
+  }))
 
-  if (loading || loadFailure) {
-    return (
-      <Loadable loading={loading} failure={loadFailure} onRetry={load} t={t} />
-    )
-  }
+  const attentionCount = overdueTasks.length + overdueReminders.length + needsAttention.length
 
   return (
-    <div>
-      <PageTitle>{t('nav.dashboard')}</PageTitle>
+    <div className={refreshing ? 'is-faded' : ''}>
+      <PageTitle subtitle={t('dashboard.subtitle', { month: monthTitle })}>{t('nav.dashboard')}</PageTitle>
+
+      {/* ---------- 1. THE FIVE NUMBERS ---------- */}
+      <div className="mb-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+        <StatTile
+          label={t('dashboard.kpiActive')}
+          value={stats.activeCount}
+          note={t('dashboard.kpiActiveNote', { n: stats.onTrackCount })}
+          to="/projects"
+        />
+        <StatTile
+          label={t('dashboard.kpiPortfolio')}
+          value={stats.valuedCount ? compactNumber(stats.portfolioValue, language) : '—'}
+          suffix={stats.valuedCount ? currency : null}
+          note={t('dashboard.kpiPortfolioNote', { n: stats.valuedCount, total: stats.activeCount })}
+          to="/projects"
+        />
+        <StatTile
+          label={t('dashboard.kpiInvoiced')}
+          value={compactNumber(stats.invoiced.thisMonth, language)}
+          suffix={currency}
+          delta={stats.invoiced.delta}
+          deltaLabel={t('dashboard.vsLastMonth')}
+          trend={stats.invoicedByMonth.map((m) => m.value)}
+          to="/reports"
+        />
+        <StatTile
+          label={t('dashboard.kpiLeads')}
+          value={stats.leads.thisMonth}
+          delta={stats.leads.delta}
+          deltaLabel={t('dashboard.vsLastMonth')}
+          trend={stats.leadsByMonth.map((m) => m.value)}
+          to="/leads"
+        />
+        <StatTile
+          label={t('dashboard.kpiConversion')}
+          value={stats.conversion.percent === null ? '—' : `${stats.conversion.percent}%`}
+          note={t('dashboard.kpiConversionNote', {
+            a: stats.conversion.numerator,
+            b: stats.conversion.denominator,
+          })}
+          to="/reports"
+        />
+      </div>
+
+      {/* ---------- 2. EVERY PROJECT'S PROGRESS · WHERE THEY STAND ---------- */}
+      <div className="mb-4 grid gap-4 xl:grid-cols-5">
+        <Card className="xl:col-span-3">
+          <CardHeader
+            title={t('dashboard.progressTitle')}
+            hint={
+              stats.avgProgress === null
+                ? null
+                : t('dashboard.progressHint', { percent: stats.avgProgress, n: stats.portfolio.length })
+            }
+          />
+          {stats.portfolio.length === 0 ? (
+            <p className="t-body text-text-secondary">{t('dashboard.progressEmpty')}</p>
+          ) : (
+            <div className="divide-y divide-separator-soft">
+              {stats.portfolio.slice(0, PROGRESS_ROWS).map(({ project, contact, progress, daysSince }) => (
+                <Link
+                  key={project.id}
+                  to={`/projects/${project.id}`}
+                  className="grid items-center gap-x-4 gap-y-1.5 py-3 hover:opacity-80 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1.4fr)_3rem_auto]"
+                >
+                  <div className="min-w-0">
+                    <p className="t-row-label truncate text-text">{project.name}</p>
+                    <p className="t-meta truncate text-text-secondary">
+                      {contact ? fullName(contact) : project.code}
+                      {' · '}
+                      {stageTitle(project.current_stage)}
+                      {daysSince !== null && daysSince > 7 && ` · ${t('dashboard.daysSince', { days: daysSince })}`}
+                    </p>
+                  </div>
+                  <Meter percent={progress} />
+                  <span className="tabular t-meta text-end font-medium text-text">{progress}%</span>
+                  <span className="justify-self-start sm:justify-self-end">
+                    <Badge color={STATE_COLOR[project.state]}>{t(`project.state_${project.state}`)}</Badge>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+          {stats.portfolio.length > PROGRESS_ROWS && (
+            <Link to="/projects" className="t-meta mt-3 inline-block text-accent hover:underline">
+              {t('dashboard.seeAllProjects', { n: stats.portfolio.length })}
+            </Link>
+          )}
+        </Card>
+
+        <Card className="xl:col-span-2">
+          <CardHeader title={t('dashboard.stageTitle')} hint={t('dashboard.stageHint')} />
+          <HBars
+            rows={stats.byStage
+              // Delivered and follow-up hold archived work, so they are
+              // shown only when something is actually sitting there.
+              .filter((s, index) => index < 8 || s.count > 0)
+              .map((s) => ({
+                key: s.key,
+                label: language === 'ar' ? s.title_ar : s.title_en,
+                value: s.count,
+              }))}
+            labelClass="w-36 sm:w-40"
+          />
+          <div className="mt-5 border-t border-separator-soft pt-4">
+            <p className="t-section mb-3">{t('dashboard.stateTitle')}</p>
+            <StackedBar
+              segments={stats.byState.map((s) => ({
+                key: s.key,
+                label: t(`project.state_${s.key}`),
+                count: s.count,
+                color: STATE_COLOR[s.key],
+              }))}
+            />
+          </div>
+        </Card>
+      </div>
+
+      {/* ---------- 3. MONEY · PIPELINE ---------- */}
+      <div className="mb-4 grid gap-4 xl:grid-cols-5">
+        <Card className="xl:col-span-3">
+          <CardHeader
+            title={t('dashboard.revenueTitle')}
+            hint={t('dashboard.revenueHint', { total: formatNumber(stats.invoiced.twelveMonths, language), currency })}
+          />
+          <ColumnChart
+            points={revenuePoints}
+            language={language}
+            format={money}
+            highlightIndex={revenuePoints.length - 1}
+            height={280}
+            tableLabel={t('dashboard.showTable')}
+            chartLabel={t('dashboard.showChart')}
+            periodLabel={t('dashboard.month')}
+            valueLabel={t('dashboard.invoiced')}
+            emptyLabel={t('dashboard.revenueEmpty')}
+          />
+        </Card>
+
+        <Card className="xl:col-span-2">
+          <CardHeader title={t('dashboard.funnelTitle')} hint={t('dashboard.funnelHint')} />
+          <HBars
+            rows={stats.funnel.map((step) => ({
+              key: step.key,
+              label: t(`reports.funnel_${step.key}`),
+              value: step.count,
+              hint: step.percent === null ? null : t('dashboard.ofPrevious', { percent: step.percent }),
+            }))}
+            colorFor={(row, index) => ORDINAL[index]}
+            labelClass="w-36 sm:w-40"
+          />
+          <div className="mt-5 border-t border-separator-soft pt-4">
+            <p className="t-section mb-3">{t('dashboard.sourcesTitle')}</p>
+            <HBars
+              rows={stats.bySource.map((s) => ({
+                key: s.id,
+                label: language === 'ar' ? s.label_ar : s.label_en,
+                value: s.count,
+              }))}
+              labelClass="w-36 sm:w-40"
+              emptyLabel={t('dashboard.sourcesEmpty')}
+            />
+          </div>
+        </Card>
+      </div>
+
+      {/* ---------- 4. TODAY · THE NEXT 7 DAYS ---------- */}
+      <div className="mb-4 grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader title={t('dashboard.today')} />
+          {todaysBookings.length === 0 && todaysTasks.length === 0 && todaysReminders.length === 0 ? (
+            <p className="t-body text-text-secondary">{t('dashboard.todayEmpty')}</p>
+          ) : (
+            <div className="divide-y divide-separator-soft">
+              {todaysBookings.map((booking) => (
+                <div key={booking.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                  <div>
+                    <p className="t-row-label text-text">{booking.client_name}</p>
+                    <p className="t-meta text-text-secondary">
+                      {formatDateTime(booking.slot_start, language)}
+                      {booking.project && (
+                        <>
+                          {' · '}
+                          <Link to={`/projects/${booking.project.id}`} className="font-mono text-accent hover:underline" dir="ltr">
+                            {booking.project.code}
+                          </Link>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                  <Button
+                    variant="secondary"
+                    className="px-2 py-1"
+                    onClick={async () => {
+                      await setBookingStatus(booking.id, 'completed')
+                      onChanged()
+                    }}
+                  >
+                    {t('dashboard.markDone')}
+                  </Button>
+                </div>
+              ))}
+              {todaysTasks.map((task) => (
+                <DashTask key={task.id} task={task} onChanged={onChanged} language={language} t={t} />
+              ))}
+              {todaysReminders.map((reminder) => (
+                <ReminderRow key={reminder.id} reminder={reminder} pairs={pairs} language={language} t={t} onChanged={onChanged} />
+              ))}
+            </div>
+          )}
+        </Card>
+
+        <Card>
+          <CardHeader title={t('dashboard.upcoming')} />
+          {upcoming.length === 0 ? (
+            <p className="t-body text-text-secondary">{t('dashboard.upcomingEmpty')}</p>
+          ) : (
+            <ol className="divide-y divide-separator-soft">
+              {upcoming.map((entry, index) => (
+                <li key={index} className="flex flex-wrap items-center gap-3 py-2.5 t-body">
+                  <time className="t-meta w-28 shrink-0 text-text-secondary">{formatDate(entry.date, language)}</time>
+                  {entry.kind === 'booking' && (
+                    <Link to="/booking-setup" className="text-accent hover:underline">
+                      {t('dashboard.consultationWith', { name: entry.row.client_name })}
+                    </Link>
+                  )}
+                  {entry.kind === 'task' && (
+                    <Link to={entry.row.project ? `/projects/${entry.row.project.id}` : '/tasks'} className="text-text hover:text-accent">
+                      {entry.row.title}
+                    </Link>
+                  )}
+                  {entry.kind === 'reminder' && (
+                    <Link to={`/contacts/${entry.row.contact_id}`} className="text-text hover:text-accent">
+                      {t(`reminders.kind_${entry.row.kind}`)}
+                      {entry.row.contact && ` · ${fullName(entry.row.contact)}`}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
+        </Card>
+      </div>
+
+      {/* ---------- 5. NEEDS ATTENTION — last, on purpose ---------- */}
+      {attentionCount > 0 && (
+        <Card className="mb-4 border-transparent bg-warning-bg">
+          <h2 className="t-card-title mb-1 text-warning-text">{t('dashboard.needsAttention')}</h2>
+          <p className="t-meta mb-3 text-warning-text">{t('dashboard.needsAttentionHint', { n: attentionCount })}</p>
+          <div className="divide-y divide-separator-soft">
+            {needsAttention.map((project) => (
+              <Link key={project.id} to={`/projects/${project.id}`} className="flex items-center justify-between gap-3 py-3 hover:opacity-80">
+                <span className="t-row-label text-text">
+                  <span className="font-mono t-meta text-text-secondary" dir="ltr">{project.code}</span>{' '}
+                  {project.name}
+                </span>
+                <Badge color={STATE_COLOR[project.state]}>{t(`project.state_${project.state}`)}</Badge>
+              </Link>
+            ))}
+            {overdueTasks.map((task) => (
+              <DashTask key={task.id} task={task} onChanged={onChanged} language={language} t={t} overdue />
+            ))}
+            {overdueReminders.map((reminder) => (
+              <ReminderRow key={reminder.id} reminder={reminder} pairs={pairs} language={language} t={t} onChanged={onChanged} overdue />
+            ))}
+          </div>
+        </Card>
+      )}
 
       {/* Occasion dates missing — said out loud, never skipped quietly. */}
       {occasionGaps.length > 0 && (
-        <Card className="mb-6 border-transparent bg-warning-bg">
+        <Card className="mb-4 border-transparent bg-warning-bg">
           {occasionGaps.map(({ year, kinds }) => (
             <div key={year} className="mb-2">
               <p className="t-body text-warning-text">
@@ -173,280 +404,22 @@ export default function Dashboard() {
               </p>
             </div>
           ))}
-          <Link
-            to="/settings?tab=occasions"
-            className="t-body mt-2 inline-block text-accent hover:underline"
-          >
+          <Link to="/settings?tab=occasions" className="t-body mt-2 inline-block text-accent hover:underline">
             {t('dashboard.occasionsEnter')}
           </Link>
         </Card>
-      )}
-
-      {/* ---------- 2. NEEDS ATTENTION (pinned to the top) ---------- */}
-      {(overdueTasks.length > 0 || overdueReminders.length > 0 || needsAttention.length > 0) && (
-        <Card className="mb-6 border-transparent bg-warning-bg">
-          <h2 className="t-section mb-3 text-warning-text">
-            {t('dashboard.needsAttention')}
-          </h2>
-
-          <div className="divide-y divide-separator-soft">
-            {needsAttention.map((project) => (
-              <Link
-                key={project.id}
-                to={`/projects/${project.id}`}
-                className="flex items-center justify-between gap-3 py-3 hover:opacity-80"
-              >
-                <span className="t-row-label text-text">
-                  <span className="font-mono t-meta text-text-secondary" dir="ltr">
-                    {project.code}
-                  </span>{' '}
-                  {project.name}
-                </span>
-                <Badge color={STATE_COLOR[project.state]}>
-                  {t(`project.state_${project.state}`)}
-                </Badge>
-              </Link>
-            ))}
-
-            {overdueTasks.map((task) => (
-              <DashTask key={task.id} task={task} onChanged={load} language={language} t={t} overdue />
-            ))}
-
-            {overdueReminders.map((reminder) => (
-              <ReminderRow
-                key={reminder.id}
-                reminder={reminder}
-                pairs={pairs}
-                language={language}
-                t={t}
-                onChanged={load}
-                overdue
-              />
-            ))}
-          </div>
-        </Card>
-      )}
-
-      {/* ---------- 1. TODAY ---------- */}
-      <Card className="mb-6">
-        <h2 className="t-section mb-3">
-          {t('dashboard.today')}
-        </h2>
-
-        {todaysBookings.length === 0 && todaysTasks.length === 0 && todaysReminders.length === 0 ? (
-          <p className="t-body text-text-secondary">{t('dashboard.todayEmpty')}</p>
-        ) : (
-          <div className="divide-y divide-separator-soft">
-            {todaysBookings.map((booking) => (
-              <div
-                key={booking.id}
-                className="flex flex-wrap items-center justify-between gap-3 py-3"
-              >
-                <div>
-                  <p className="t-row-label text-text">{booking.client_name}</p>
-                  <p className="t-meta text-text-secondary">
-                    {formatDateTime(booking.slot_start, language)}
-                    {booking.project && (
-                      <>
-                        {' · '}
-                        <Link
-                          to={`/projects/${booking.project.id}`}
-                          className="font-mono text-accent hover:underline"
-                          dir="ltr"
-                        >
-                          {booking.project.code}
-                        </Link>
-                      </>
-                    )}
-                  </p>
-                </div>
-                <Button
-                  variant="secondary"
-                  className="px-2 py-1"
-                  onClick={async () => {
-                    await setBookingStatus(booking.id, 'completed')
-                    load()
-                  }}
-                >
-                  {t('dashboard.markDone')}
-                </Button>
-              </div>
-            ))}
-
-            {todaysTasks.map((task) => (
-              <DashTask key={task.id} task={task} onChanged={load} language={language} t={t} />
-            ))}
-
-            {todaysReminders.map((reminder) => (
-              <ReminderRow
-                key={reminder.id}
-                reminder={reminder}
-                pairs={pairs}
-                language={language}
-                t={t}
-                onChanged={load}
-              />
-            ))}
-          </div>
-        )}
-      </Card>
-
-      {/* ---------- 3. UPCOMING — the next 7 days ---------- */}
-      <Card className="mb-6">
-        <h2 className="t-section mb-3">
-          {t('dashboard.upcoming')}
-        </h2>
-
-        {upcoming.length === 0 ? (
-          <p className="t-body text-text-secondary">{t('dashboard.upcomingEmpty')}</p>
-        ) : (
-          <ol className="divide-y divide-separator-soft">
-            {upcoming.map((entry, index) => (
-              <li key={index} className="flex flex-wrap items-center gap-3 py-2.5 t-body">
-                <time className="t-meta w-32 shrink-0 text-text-secondary">
-                  {formatDate(entry.date, language)}
-                </time>
-                {entry.kind === 'booking' && (
-                  <Link
-                    to="/booking-setup"
-                    className="text-accent hover:underline"
-                  >
-                    {t('dashboard.consultationWith', { name: entry.row.client_name })}
-                  </Link>
-                )}
-                {entry.kind === 'task' && (
-                  <Link
-                    to={entry.row.project ? `/projects/${entry.row.project.id}` : '/tasks'}
-                    className="text-text hover:text-accent"
-                  >
-                    {entry.row.title}
-                  </Link>
-                )}
-                {entry.kind === 'reminder' && (
-                  <Link
-                    to={`/contacts/${entry.row.contact_id}`}
-                    className="text-text hover:text-accent"
-                  >
-                    {t(`reminders.kind_${entry.row.kind}`)}
-                    {entry.row.contact && ` · ${fullName(entry.row.contact)}`}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ol>
-        )}
-      </Card>
-
-      {/* ---------- 4. ACTIVE CLIENTS ---------- */}
-      <Card className="mb-6">
-        <h2 className="t-section mb-3">
-          {t('dashboard.activeClients')}
-        </h2>
-
-        {activeClients.length === 0 ? (
-          <p className="t-body text-text-secondary">{t('dashboard.activeClientsEmpty')}</p>
-        ) : (
-          <div className="divide-y divide-separator-soft">
-            {activeClients.map(({ project, contact, progress, daysSince }) => (
-              <Link
-                key={project.id}
-                to={`/projects/${project.id}`}
-                className="flex flex-wrap items-center gap-4 py-3 hover:opacity-80"
-              >
-                <ProgressRing percent={progress} size={40} />
-                <div className="min-w-0 flex-1">
-                  <p className="t-row-label text-text">
-                    {contact ? fullName(contact) : project.name}
-                  </p>
-                  <p className="t-meta text-text-secondary">
-                    {stageTitle(project.current_stage)}
-                    {daysSince !== null && ` · ${t('dashboard.daysSince', { days: daysSince })}`}
-                  </p>
-                </div>
-                <Badge color={STATE_COLOR[project.state]}>
-                  {t(`project.state_${project.state}`)}
-                </Badge>
-              </Link>
-            ))}
-          </div>
-        )}
-      </Card>
-
-      {/* ---------- 5. INSIGHTS — every number opens its list ---------- */}
-      {insights && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <InsightCard
-            label={t('insights.leadsThisMonth')}
-            value={insights.leadsThisMonth.count}
-            rows={insights.leadsThisMonth.rows}
-            render={(c) => ({ to: `/contacts/${c.id}`, text: fullName(c) })}
-            t={t}
-          />
-
-          <InsightCard
-            label={t('insights.toConsultation')}
-            value={insights.toConsultation.percent === null ? '—' : `${insights.toConsultation.percent}%`}
-            note={t('insights.ratio', {
-              a: insights.toConsultation.numerator,
-              b: insights.toConsultation.denominator,
-            })}
-            rows={insights.toConsultation.rows}
-            render={(c) => ({ to: `/contacts/${c.id}`, text: fullName(c) })}
-            t={t}
-          />
-
-          <InsightCard
-            label={t('insights.toContract')}
-            value={insights.toContract.percent === null ? '—' : `${insights.toContract.percent}%`}
-            // Not a monthly figure: projects past the contract gate
-            // over every client, so it needs its own wording.
-            note={t('insights.ratioClients', {
-              a: insights.toContract.numerator,
-              b: insights.toContract.denominator,
-            })}
-            rows={insights.toContract.rows}
-            render={(p) => ({ to: `/projects/${p.id}`, text: `${p.code} · ${p.name}` })}
-            t={t}
-          />
-
-          <InsightCard
-            label={t('insights.activeProjects')}
-            value={insights.activeProjects.count}
-            rows={insights.activeProjects.rows}
-            render={(p) => ({ to: `/projects/${p.id}`, text: `${p.code} · ${p.name}` })}
-            t={t}
-          />
-
-          <InsightCard
-            label={t('insights.averageValue')}
-            value={insights.value.average === null ? '—' : insights.value.average.toLocaleString()}
-            // How much of this number the designer set themselves.
-            note={t('insights.valueCoverage', {
-              covering: insights.value.covering,
-              entered: insights.value.fromEntered,
-              invoices: insights.value.fromInvoices,
-            })}
-            rows={insights.value.rows}
-            render={(p) => ({
-              to: `/projects/${p.id}`,
-              text: `${p.code} · ${p.resolved.toLocaleString()}`,
-              hint: t(`insights.basis_${p.basis}`),
-            })}
-            t={t}
-          />
-        </div>
       )}
     </div>
   )
 }
 
-/** Stage definitions, loaded once for the labels on the client rows. */
-function useDefinitions() {
-  const [definitions, setDefinitions] = useState([])
-  useEffect(() => {
-    listStageDefinitions().then(setDefinitions)
-  }, [])
-  return definitions
+function CardHeader({ title, hint }) {
+  return (
+    <div className="mb-4">
+      <h2 className="t-card-title text-text">{title}</h2>
+      {hint && <p className="t-meta mt-0.5 text-text-secondary">{hint}</p>}
+    </div>
+  )
 }
 
 function DashTask({ task, onChanged, language, t, overdue }) {
@@ -474,9 +447,7 @@ function DashTask({ task, onChanged, language, t, overdue }) {
             </Link>
           )}
           {task.due_date && (
-            <span className={overdue ? 'font-medium text-warning' : ''}>
-              {formatDate(task.due_date, language)}
-            </span>
+            <span className={overdue ? 'font-medium text-warning' : ''}>{formatDate(task.due_date, language)}</span>
           )}
         </p>
       </div>

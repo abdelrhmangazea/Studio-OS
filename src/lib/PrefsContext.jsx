@@ -58,13 +58,16 @@ export function PrefsProvider({ children }) {
     language,
     theme,
     isRtl: language === 'ar',
-    setLanguage: (next) => {
+    // `persist: false` changes the screen without touching the profile —
+    // the dev preview uses it so looking at a layout never rewrites a
+    // real account's preferences.
+    setLanguage: (next, { persist: save = true } = {}) => {
       setLanguageState(next)
-      persist('language', next)
+      if (save) persist('language', next)
     },
-    setTheme: (next) => {
+    setTheme: (next, { persist: save = true } = {}) => {
       setThemeState(next)
-      persist('theme', next)
+      if (save) persist('theme', next)
     },
     toggleLanguage: () => {
       const next = language === 'ar' ? 'en' : 'ar'

@@ -43,6 +43,11 @@ const Portal = lazy(() => import('./pages/Portal'))
 const PublicBooking = lazy(() => import('./pages/PublicBooking'))
 const BookingConfirmation = lazy(() => import('./pages/BookingConfirmation'))
 
+// The dashboard on fixture rows, for checking layout without an
+// account. `import.meta.env.DEV` is a build-time constant, so a
+// production bundle contains neither the route nor the chunk.
+const DashboardPreview = import.meta.env.DEV ? lazy(() => import('./dev/DashboardPreview')) : null
+
 function Loading() {
   const { t } = useI18n()
   return (
@@ -129,6 +134,8 @@ export default function App() {
       {/* An invite link. Peeking does not consume it, so signing up
           and coming back to the same link works. */}
       <Route path="/invite/:token" element={<AcceptInvite />} />
+
+      {DashboardPreview && <Route path="/dev/dashboard" element={<DashboardPreview />} />}
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />

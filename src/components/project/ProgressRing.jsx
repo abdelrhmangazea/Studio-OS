@@ -13,7 +13,7 @@ export default function ProgressRing({ percent, size = 56 }) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="var(--border)"
+          stroke="var(--chart-track)"
           strokeWidth={stroke}
         />
         <circle

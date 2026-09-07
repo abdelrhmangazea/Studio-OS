@@ -71,6 +71,18 @@
      deliberate rather than a missed literal. */
   --paper: #ffffff;
   --paper-text: #1d191a;
+
+  /* Charts. One hue — the accent — stepped for the light surface and
+     validated (dataviz six checks). Status colours are never a series. */
+  --chart-1: #0077b6;          /* the series colour */
+  --chart-1-strong: #004f7a;   /* the emphasised mark (this month) */
+  --chart-track: #dcebf5;      /* the unfilled part of a meter, same hue */
+  --chart-ordinal-1: #6fb0d6;  /* funnel steps, light → dark */
+  --chart-ordinal-2: #3b93c4;
+  --chart-ordinal-3: #0077b6;
+  --chart-ordinal-4: #004f7a;
+  --chart-grid: #ebebf0;       /* hairline gridlines, one step off white */
+  --chart-muted: #c7c7cc;      /* de-emphasised series (sparkline history) */
 }
 
 :root[data-theme='dark'] {
@@ -111,6 +123,16 @@
   /* Unchanged by theme, on purpose. See the note in the light block. */
   --paper: #ffffff;
   --paper-text: #1d191a;
+
+  --chart-1: #3f97cc;
+  --chart-1-strong: #9ad3f0;
+  --chart-track: #24343f;
+  --chart-ordinal-1: #25668f;
+  --chart-ordinal-2: #3a8fc2;
+  --chart-ordinal-3: #4aa8e0;
+  --chart-ordinal-4: #9ad3f0;
+  --chart-grid: #2c2c2e;
+  --chart-muted: #48484a;
 }
 
 /* Kept so `border-border` keeps working everywhere it is already
