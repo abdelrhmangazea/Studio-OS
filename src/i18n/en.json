@@ -594,7 +594,8 @@
     "month": "Month",
     "invoiced": "Invoiced",
     "needsAttentionHint": "{n} items are overdue or flagged. Everything above them is running.",
-    "ofPrevious": "{percent}% of previous"
+    "ofPrevious": "{percent}% of previous",
+    "moreOverdue": "{n} more overdue tasks — open Tasks"
   },
   "insights": {
     "leadsThisMonth": "Leads this month",

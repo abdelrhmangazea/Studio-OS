@@ -594,7 +594,8 @@
     "month": "الشهر",
     "invoiced": "المفوتر",
     "needsAttentionHint": "{n} عناصر متأخرة أو مُعلَّمة. كل ما فوقها يسير.",
-    "ofPrevious": "{percent}٪ من السابق"
+    "ofPrevious": "{percent}٪ من السابق",
+    "moreOverdue": "{n} مهام متأخرة أخرى — افتح المهام"
   },
   "insights": {
     "leadsThisMonth": "عملاء محتملون هذا الشهر",

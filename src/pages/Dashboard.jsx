@@ -58,6 +58,7 @@ export default function Dashboard() {
 }
 
 const PROGRESS_ROWS = 8
+const OVERDUE_ROWS = 6
 const ORDINAL = ['var(--chart-ordinal-1)', 'var(--chart-ordinal-2)', 'var(--chart-ordinal-3)', 'var(--chart-ordinal-4)']
 const LOCALE = { ar: 'ar-EG-u-nu-latn', en: 'en-GB' }
 
@@ -168,7 +169,7 @@ export function DashboardView({ data, onChanged, refreshing }) {
 
       {/* ---------- 2. EVERY PROJECT'S PROGRESS · WHERE THEY STAND ---------- */}
       <div className="mb-4 grid gap-4 xl:grid-cols-5">
-        <Card className="xl:col-span-3">
+        <Card className="min-w-0 xl:col-span-3">
           <CardHeader
             title={t('dashboard.progressTitle')}
             hint={
@@ -212,7 +213,7 @@ export function DashboardView({ data, onChanged, refreshing }) {
           )}
         </Card>
 
-        <Card className="xl:col-span-2">
+        <Card className="min-w-0 xl:col-span-2">
           <CardHeader title={t('dashboard.stageTitle')} hint={t('dashboard.stageHint')} />
           <HBars
             rows={stats.byStage
@@ -242,7 +243,7 @@ export function DashboardView({ data, onChanged, refreshing }) {
 
       {/* ---------- 3. MONEY · PIPELINE ---------- */}
       <div className="mb-4 grid gap-4 xl:grid-cols-5">
-        <Card className="xl:col-span-3">
+        <Card className="min-w-0 xl:col-span-3">
           <CardHeader
             title={t('dashboard.revenueTitle')}
             hint={t('dashboard.revenueHint', { total: formatNumber(stats.invoiced.twelveMonths, language), currency })}
@@ -261,14 +262,14 @@ export function DashboardView({ data, onChanged, refreshing }) {
           />
         </Card>
 
-        <Card className="xl:col-span-2">
+        <Card className="min-w-0 xl:col-span-2">
           <CardHeader title={t('dashboard.funnelTitle')} hint={t('dashboard.funnelHint')} />
           <HBars
             rows={stats.funnel.map((step) => ({
               key: step.key,
               label: t(`reports.funnel_${step.key}`),
               value: step.count,
-              hint: step.percent === null ? null : t('dashboard.ofPrevious', { percent: step.percent }),
+              hint: step.percent === null || step.percent > 100 ? null : t('dashboard.ofPrevious', { percent: step.percent }),
             }))}
             colorFor={(row, index) => ORDINAL[index]}
             labelClass="w-36 sm:w-40"
@@ -381,13 +382,18 @@ export function DashboardView({ data, onChanged, refreshing }) {
                 <Badge color={STATE_COLOR[project.state]}>{t(`project.state_${project.state}`)}</Badge>
               </Link>
             ))}
-            {overdueTasks.map((task) => (
+            {overdueTasks.slice(0, OVERDUE_ROWS).map((task) => (
               <DashTask key={task.id} task={task} onChanged={onChanged} language={language} t={t} overdue />
             ))}
             {overdueReminders.map((reminder) => (
               <ReminderRow key={reminder.id} reminder={reminder} pairs={pairs} language={language} t={t} onChanged={onChanged} overdue />
             ))}
           </div>
+          {overdueTasks.length > OVERDUE_ROWS && (
+            <Link to="/tasks" className="t-meta mt-3 inline-block text-accent hover:underline">
+              {t('dashboard.moreOverdue', { n: overdueTasks.length - OVERDUE_ROWS })}
+            </Link>
+          )}
         </Card>
       )}
 

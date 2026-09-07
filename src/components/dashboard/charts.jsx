@@ -39,7 +39,15 @@ function useWidth(ref, fallback = 600) {
   useEffect(() => {
     const el = ref.current
     if (!el) return undefined
-    const update = () => setWidth(el.clientWidth || fallback)
+    // Only on a real change, and never to a width the SVG itself could
+    // have caused: inside a flex or grid track with an auto minimum, an
+    // SVG with an intrinsic width widens its container, which widens
+    // the SVG — a resize loop that hangs the tab. The SVG is drawn at
+    // 100% of the container (see below) so it can never push it.
+    const update = () => {
+      const next = el.clientWidth || fallback
+      setWidth((prev) => (Math.abs(prev - next) > 1 ? next : prev))
+    }
     update()
     const observer = new ResizeObserver(update)
     observer.observe(el)
@@ -273,8 +281,16 @@ export function ColumnChart({
           </tbody>
         </table>
       ) : (
-        <div ref={ref} className="relative" dir="ltr">
-          <svg width={width} height={height} role="img" aria-label={valueLabel} className="block">
+        <div ref={ref} className="relative min-w-0" dir="ltr">
+          <svg
+            viewBox={`0 0 ${width} ${height}`}
+            width="100%"
+            height={height}
+            preserveAspectRatio="none"
+            role="img"
+            aria-label={valueLabel}
+            className="block max-w-full"
+          >
             {ticks.map((tick) => (
               <g key={tick}>
                 <line x1={pad.left} x2={width - pad.right} y1={y(tick)} y2={y(tick)} stroke="var(--chart-grid)" strokeWidth="1" />
