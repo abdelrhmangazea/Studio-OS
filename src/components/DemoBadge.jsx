@@ -1,4 +1,5 @@
 import { useI18n } from '../i18n'
+import { useAuth } from '../lib/AuthContext'
 
 /**
  * The DEMO mark.
@@ -19,8 +20,12 @@ import { useI18n } from '../i18n'
  */
 export default function DemoBadge({ on, className = '' }) {
   const { t } = useI18n()
+  const { settings } = useAuth()
 
   if (!on?.is_demo) return null
+  // A workspace that exists to show the product off — not a classroom —
+  // has the mark switched off in studio_settings (by hand, no UI).
+  if (settings?.hide_demo_badge) return null
 
   return (
     <span
